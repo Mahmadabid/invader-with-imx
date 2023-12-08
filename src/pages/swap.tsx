@@ -1,5 +1,6 @@
 import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Swap = () => {
   const [buyAmount, setBuyAmount] = useState<number>(0);
@@ -20,16 +21,21 @@ const Swap = () => {
   };
 
   const handleBuySubmit = () => {
+    // Implement your buy submit logic here
   };
 
   const handleSellSubmit = () => {
+    // Implement your sell submit logic here
   };
 
+  const headerHeight = 4.6;
+
   return (
-    <div className="bg-black flex flex-col items-center h-screen">
+    <div className="bg-gray-950 flex flex-col items-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
+      <h1 className='text-white text-6xl my-8 font-extrabold'>$IPX Swap</h1>
       {mint ? (
         <>
-          <div className='flex rounded flex-col break-all items-center justify-center mt-8'>
+          <div className='flex rounded flex-col break-all items-center justify-center'>
             <div
               className="opacity-70 bg-gray-300 p-5 max-w-2xl"
             >
@@ -87,7 +93,7 @@ const Swap = () => {
         </>
       ) : (
         <>
-          <div className="flex xse:w-64 w-96 mt-20">
+          <div className="flex xse:w-64 w-96">
             <button
               className={`font-bold py-2 xse:w-32 w-48 px-4 rounded ${activeTab === 'buy' ? 'bg-green-500 text-white' : 'bg-green-900 text-white'
                 }`}
@@ -105,12 +111,21 @@ const Swap = () => {
           </div>
           <form
             onSubmit={activeTab === 'buy' ? handleBuySubmit : handleSellSubmit}
-            className="xse:w-64 w-96 rounded bg-green-800 p-4 relative"
+            className="xse:w-64 w-96 rounded bg-[#2f4f4f] p-4 relative"
           >
             {activeTab === 'buy' ? (
               <div>
-                <div className='font-extrabold text-white ml-2'>
-                  tIMX
+                <div className='flex flex-row mb-1 mt-3'>
+                  <Image
+                    src="/tIMX.svg"
+                    alt="tIMX Logo"
+                    width={22}
+                    height={22}
+                    priority
+                  />
+                  <div className='font-extrabold text-white ml-1'>
+                    tIMX
+                  </div>
                 </div>
                 <div className="mb-2">
                   <input
@@ -121,15 +136,35 @@ const Swap = () => {
                     required
                   />
                 </div>
-                <h1 className='font-extrabold text-white ml-2'>IPX</h1>
+                <div className='flex flex-row mb-1 mt-3'>
+                  <Image
+                    src="/IPX.png"
+                    alt="IPX Logo"
+                    width={28}
+                    height={28}
+                    priority
+                  />
+                  <div className='font-extrabold text-white ml-1'>
+                    IPX
+                  </div>
+                </div>
                 <div className='bg-white rounded p-2 font-medium'>
                   {buyAmount ? buyAmount * 99 : 0}
                 </div>
               </div>
             ) : (
               <div>
-                <div className='font-extrabold text-white ml-2'>
-                  IPX
+                <div className='flex flex-row mb-1 mt-3'>
+                  <Image
+                    src="/IPX.png"
+                    alt="IPX Logo"
+                    width={28}
+                    height={28}
+                    priority
+                  />
+                  <div className='font-extrabold text-white ml-1'>
+                    IPX
+                  </div>
                 </div>
                 <div className="mb-2">
                   <input
@@ -140,7 +175,18 @@ const Swap = () => {
                     required
                   />
                 </div>
-                <h1 className='font-extrabold text-white ml-2'>tIMX</h1>
+                <div className='flex flex-row mb-1 mt-3'>
+                  <Image
+                    src="/tIMX.svg"
+                    alt="tIMX Logo"
+                    width={22}
+                    height={22}
+                    priority
+                  />
+                  <div className='font-extrabold text-white ml-1'>
+                    tIMX
+                  </div>
+                </div>
                 <div className='bg-white rounded p-2 font-medium'>
                   {sellAmount ? (sellAmount / 100) * (99 / 100) : 0}
                 </div>
