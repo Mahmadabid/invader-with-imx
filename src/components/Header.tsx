@@ -33,8 +33,11 @@ const Header = () => {
           </svg>
         </button>
         <div className={`absolute right-0 mr-4 mt-2 w-48 bg-white shadow-md rounded-md ${menuOpen ? 'block' : 'hidden'}`} onClick={closeMenu}>
-          <Link href="/">
+        <Link href="/">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Home</h1>
+          </Link>
+          <Link href="/profile">
+            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Profile</h1>
           </Link>
           <Link href="/ipx">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">$IPX</h1>

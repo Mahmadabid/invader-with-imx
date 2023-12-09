@@ -1,8 +1,11 @@
 import { fetchAuth } from "@/utils/immutable";
 import React, { useState } from "react";
+import Load from "./utils/Load";
+import { useRouter } from "next/router";
 
 function Login() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const headerHeight = 4.6;
   
@@ -16,10 +19,10 @@ function Login() {
           onClick={async () => {
             setLoading(true);
             await fetchAuth();
-            setLoading(false);
+            router.reload();
           }}
         >
-          {loading ? "Loading..." : "Log in with Passport"}
+          {loading ? <Load/> : "Log in with Passport"}
         </button>
       </div>
     </div>
