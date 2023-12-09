@@ -1,3 +1,4 @@
+import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { config, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
 
@@ -24,16 +25,25 @@ const fetchAuth = async () => {
     });
     console.log("connected", accounts);
   } catch (error) {
-    console.error(error, 'asdasd');
+    console.error(error, 'not found');
   } finally {
     window.location.reload();
   }
 };
 
+async function signerFetch() {
+  const provider = new ethers.providers.Web3Provider(passportProvider);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+
+  return signer;
+}
+
 async function getWalletInfo() {
   try {
-    const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
-    const walletAddress = accounts[0];
+
+    const signer = await signerFetch();
+    const walletAddress = await signer.getAddress();
 
     const balance = await passportProvider.request({
       method: 'eth_getBalance',
@@ -41,17 +51,24 @@ async function getWalletInfo() {
     });
     const balanceInEther = ethers.utils.formatEther(balance);
 
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    const tokenBalance = await tokenContract.balanceOf(walletAddress);
+
     return {
       walletAddress,
       balanceInEther,
+      tokenBalance: tokenBalance.toString()
     };
   } catch (error) {
     console.error("Error getting wallet info:", error);
     return {
       walletAddress: null,
       balanceInEther: null,
+      tokenBalance: null
     };
   }
 }
 
-export { passportInstance, passportProvider, fetchAuth, getWalletInfo };
+async function getTokenSupply() {}
+
+export { passportInstance, passportProvider, fetchAuth, getWalletInfo, signerFetch };

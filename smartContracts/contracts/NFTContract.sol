@@ -15,7 +15,7 @@ contract NFTContract is ERC721, Ownable {
     // Burn tokens and mint NFT to user
     function burnAndMint(address to, uint256 tokenAmount) external onlyOwner {
         require(gameToken.balanceOf(msg.sender) >= tokenAmount, "Not enough tokens to burn");
-        gameToken.burnFromUser(msg.sender, tokenAmount);
+//        gameToken.burnFromUser(msg.sender, tokenAmount);
         _safeMint(to, tokenAmount);
     }
 }

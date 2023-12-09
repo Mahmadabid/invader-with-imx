@@ -1,21 +1,16 @@
 import { ethers } from 'hardhat';
 
 async function main() {
-  // Deploy GameToken
-  const GameToken = await ethers.deployContract('GameToken');
+
+  const deploymentOptions = { gasPrice: ethers.parseUnits('100', 'gwei') };
+
+  const GameToken = await ethers.deployContract('GameToken', deploymentOptions);
 
   await GameToken.waitForDeployment();
-  console.log('GameToken deployed to:', GameToken.getAddress());
 
-  // Deploy Market
-  const Market = await ethers.getContractFactory('Market');
-  const market = await Market.deploy(GameToken.getAddress());
-
-  await market.waitForDeployment();
-  console.log('Market deployed to:', market.getAddress());
+  console.log('GameToken deployed to:', await GameToken.getAddress());
 }
 
-// Run the deployment script
 main()
   .then(() => process.exit(0))
   .catch((error) => {

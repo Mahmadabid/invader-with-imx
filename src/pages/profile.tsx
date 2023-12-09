@@ -6,6 +6,7 @@ export default function Profile() {
     const [user, setUser] = useState<{ Email: string | undefined } | undefined>(undefined);
     const [walletAddress, setWalletAddress] = useState('');
     const [walletBalance, setWalletBalance] = useState('');
+    const [walletIPX, setWalletIPX] = useState('');
 
     const fetchUser = async () => {
         try {
@@ -28,8 +29,9 @@ export default function Profile() {
         if (user) {
             const fetchWalletInfo = async () => {
                 const info = await getWalletInfo();
-                setWalletAddress(info.walletAddress);
+                setWalletAddress(info.walletAddress ? info.walletAddress : '');
                 setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
+                setWalletIPX(info.tokenBalance ? info.tokenBalance : '')
             };
 
             fetchWalletInfo();
@@ -47,11 +49,11 @@ export default function Profile() {
                 <>
                     <div className="flex ml-5 my-2 flex-row justify-center">
                         <p className='font-bold p-1'>Email: &nbsp;</p>
-                        <div className='text-center truncate whitespace-normal break-words w-full xsm:w-96 mx-1 h-10 py-2 bg-black rounded opacity-70'>
+                        <div className='px-1 text-center truncate break-words w-full xsm:w-96 mx-1 h-10 py-2 bg-black rounded opacity-70'>
                             {user.Email}
                         </div>
                     </div>
-                    <WalletInfo address={walletAddress} balance={walletBalance} />
+                    <WalletInfo address={walletAddress} balance={walletBalance} IPXBalance={walletIPX} />
                 </>
             )}
         </div>

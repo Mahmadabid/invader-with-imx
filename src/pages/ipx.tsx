@@ -1,11 +1,65 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import Link from 'next/link';
+import { signerFetch } from '@/utils/immutable';
+import { ethers } from 'ethers';
+import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
+import Load from '@/components/utils/Load';
+
+async function getTotalSupply(signer: ethers.Signer | ethers.providers.Provider | undefined) {
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    return await tokenContract.totalSupply();
+}
+
+async function getBurnSupply(signer: ethers.Signer | ethers.providers.Provider | undefined) {
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    return await tokenContract.totalBurned();
+}
 
 const IPXPage = () => {
     const headerHeight = 4.6;
     const chartRef = useRef<HTMLCanvasElement>(null);
+    const [total, settotal] = useState(false);
+    const [burn, setburn] = useState(false);
+    const [totalLoading, setTotalLoading] = useState(false);
+    const [burnLoading, setBurnLoading] = useState(false);
+    const [burnSupply, setBurnSupply] = useState('');
+    const [totalSupply, setTotalSupply] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setTotalLoading(true);
+                const signer = await signerFetch();
+                const totalSupplyResult = await getTotalSupply(signer);
+                setTotalSupply(totalSupplyResult.toString());
+            } catch (error) {
+                console.error('Error fetching totalSupply:', error);
+            } finally {
+                setTotalLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [total]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setBurnLoading(true);
+                const signer = await signerFetch();
+                const burnSupplyResult = await getBurnSupply(signer);
+                setBurnSupply(burnSupplyResult.toString());
+            } catch (error) {
+                console.error('Error fetching burnSupply:', error);
+            } finally {
+                setBurnLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [burn]);
 
     useEffect(() => {
         if (!chartRef.current) {
@@ -65,12 +119,12 @@ const IPXPage = () => {
                 </div>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='flex flex-row m-1'>
-                        <button className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300">IPX in Circulation</button>
-                        <div className='text-center mx-3 py-3 h-12 w-10 bg-black rounded opacity-70'>12</div>
+                        <button onClick={() => settotal(prev => !prev)} className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300">IPX in Circulation</button>
+                        <div className='text-center mx-3 flex justify-center py-3 h-12 w-10 bg-black rounded opacity-70'>{totalLoading ? <Load /> : totalSupply}</div>
                     </div>
                     <div className='flex flex-row m-1'>
-                        <button className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition duration-300"> IPX Burned</button>
-                        <div className='text-center mx-3 py-3 h-12 w-10 bg-black rounded opacity-70'>12</div>
+                        <button onClick={() => setburn(prev => !prev)} className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition duration-300"> IPX Burned</button>
+                        <div className='text-center flex justify-center mx-3 py-3 h-12 w-10 bg-black rounded opacity-70'>{burnLoading ? <Load /> : burnSupply}</div>
                     </div>
                 </div>
             </div>
@@ -117,7 +171,7 @@ const IPXPage = () => {
             </div>
 
             <p className="text-lg my-2">
-                Contract Address: <span className="font-mono">0x1234567890abcdef</span>
+                Contract Address: <span className="font-mono">{gameTokenAddress}</span>
             </p>
         </div>
     );
