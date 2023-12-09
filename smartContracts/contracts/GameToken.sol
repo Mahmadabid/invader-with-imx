@@ -22,13 +22,13 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     }
 
     function burn(uint256 amount) public override {
-        super.burn(amount);
-        totalBurned += amount;
+        super.burn(amount * 10 ** 18);
+        totalBurned += amount * 10 ** 18;
     }
 
     function burnFrom(address account, uint256 amount) public override {
-        super.burnFrom(account, amount);
-        totalBurned += amount;
+        super.burnFrom(account, amount * 10 ** 18);
+        totalBurned += amount * 10 ** 18;
     }
 
     address public swapContract;
