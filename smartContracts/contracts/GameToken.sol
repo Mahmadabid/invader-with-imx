@@ -9,26 +9,26 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     uint256 public totalBurned;
 
     constructor() ERC20("Invader Pixel Token", "IPX") Ownable(msg.sender) {
-        _mint(msg.sender, 0);
+        _mint(msg.sender, 0 * 10 ** 18);
     }
 
     function mintBySwapContract(address to, uint256 amount) external {
         require(msg.sender == swapContract, "Not authorized to mint");
-        _mint(to, amount * 10 ** 18);
+        _mint(to, amount);
     }
 
     function mintByOwner(address to, uint256 amount) external onlyOwner {
-        _mint(to, amount * 10 ** 18);
+        _mint(to, amount);
     }
 
     function burn(uint256 amount) public override {
-        super.burn(amount * 10 ** 18);
-        totalBurned += amount * 10 ** 18;
+        super.burn(amount);
+        totalBurned += amount;
     }
 
     function burnFrom(address account, uint256 amount) public override {
-        super.burnFrom(account, amount * 10 ** 18);
-        totalBurned += amount * 10 ** 18;
+        super.burnFrom(account, amount);
+        totalBurned += amount;
     }
 
     address public swapContract;

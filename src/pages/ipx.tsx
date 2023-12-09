@@ -33,7 +33,7 @@ const IPXPage = () => {
                 setTotalLoading(true);
                 const signer = await signerFetch();
                 const totalSupplyResult = await getTotalSupply(signer);
-                setTotalSupply(totalSupplyResult.toString());
+                setTotalSupply(ethers.utils.formatEther(totalSupplyResult));
             } catch (error) {
                 console.error('Error fetching totalSupply:', error);
             } finally {
@@ -50,7 +50,7 @@ const IPXPage = () => {
                 setBurnLoading(true);
                 const signer = await signerFetch();
                 const burnSupplyResult = await getBurnSupply(signer);
-                setBurnSupply(burnSupplyResult.toString());
+                setBurnSupply(ethers.utils.formatEther(burnSupplyResult));
             } catch (error) {
                 console.error('Error fetching burnSupply:', error);
             } finally {
@@ -119,12 +119,12 @@ const IPXPage = () => {
                 </div>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='flex flex-row m-1'>
-                        <button onClick={() => settotal(prev => !prev)} className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300">IPX in Circulation</button>
-                        <div className='text-center mx-3 flex justify-center py-3 h-12 w-10 bg-black rounded opacity-70'>{totalLoading ? <Load /> : totalSupply}</div>
+                        <button onClick={() => settotal(prev => !prev)} className="bg-blue-500 text-white px-6 rounded-full hover:bg-blue-600 transition duration-300" disabled={totalLoading}>IPX in Circulation</button>
+                        <div className='text-center mx-3 flex justify-center p-2 h-10 w-min-fit bg-black rounded opacity-70'>{totalLoading ? <Load /> : totalSupply}</div>
                     </div>
                     <div className='flex flex-row m-1'>
-                        <button onClick={() => setburn(prev => !prev)} className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition duration-300"> IPX Burned</button>
-                        <div className='text-center flex justify-center mx-3 py-3 h-12 w-10 bg-black rounded opacity-70'>{burnLoading ? <Load /> : burnSupply}</div>
+                        <button onClick={() => setburn(prev => !prev)} className="bg-orange-500 text-white px-6 rounded-full hover:bg-orange-600 transition duration-300" disabled={burnLoading}> IPX Burned</button>
+                        <div className='text-center flex justify-center mx-3 p-2 h-10 w-min-fit bg-black rounded opacity-70'>{burnLoading ? <Load /> : burnSupply}</div>
                     </div>
                 </div>
             </div>

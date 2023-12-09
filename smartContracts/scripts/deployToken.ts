@@ -2,7 +2,7 @@ import { ethers } from 'hardhat';
 
 async function main() {
 
-  const deploymentOptions = { gasPrice: ethers.parseUnits('100', 'gwei') };
+  const deploymentOptions = { gasPrice: ethers.parseUnits('10', 'gwei') };
 
   const GameToken = await ethers.deployContract('GameToken', deploymentOptions);
 

@@ -1,14 +1,12 @@
 import { fetchAuth } from "@/utils/immutable";
 import React, { useState } from "react";
 import Load from "./utils/Load";
-import { useRouter } from "next/router";
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const headerHeight = 4.6;
-  
+
   return (
     <div className="flex items-center justify-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
       <div className="text-center">
@@ -19,10 +17,9 @@ function Login() {
           onClick={async () => {
             setLoading(true);
             await fetchAuth();
-            router.reload();
           }}
         >
-          {loading ? <Load/> : "Log in with Passport"}
+          {loading ? <Load /> : "Log in with Passport"}
         </button>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Load from '@/components/utils/Load';
+import Burn from '@/components/Burn';
 
 const Swap = () => {
   const [buyAmount, setBuyAmount] = useState<number>(0);
@@ -21,19 +22,18 @@ const Swap = () => {
     setSellAmount(parseFloat(e.target.value));
   };
 
-  const handleBuySubmit = () => {
-    // Implement your buy submit logic here
+  const handleBuySubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
 
-  const handleSellSubmit = () => {
-    // Implement your sell submit logic here
+  const handleSellSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
 
   const headerHeight = 4.6;
 
   return (
     <div className="bg-gray-950 flex flex-col items-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      <h1 className='text-white text-6xl my-8 font-extrabold'>$IPX Swap</h1>
       {mint ? (
         <>
           <div className='flex rounded flex-col break-all items-center justify-center'>
@@ -84,6 +84,7 @@ const Swap = () => {
         </>
       ) : (
         <>
+          <h1 className='text-white text-6xl my-8 font-extrabold'>$IPX Swap</h1>
           <div className="flex xse:w-64 w-96">
             <button
               className={`font-bold py-2 xse:w-32 w-48 px-4 rounded ${activeTab === 'buy' ? 'bg-green-500 text-white' : 'bg-green-950 text-white'
@@ -201,6 +202,7 @@ const Swap = () => {
               {activeTab === 'buy' ? 'Buy' : 'Sell'}
             </button>
           </form>
+          <Burn setMint={setMint} />
         </>
       )}
     </div>

@@ -1,4 +1,4 @@
-export const gameTokenAddress = '0x3d73F3A7648a9D3e84255aA706e73c24456e58d8'
+export const gameTokenAddress = '0x3f92e80433424fc84b21B6158ef69d46E0f8b884';
 
 export const gameTokenABI = [
     {
