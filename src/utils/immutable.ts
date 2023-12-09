@@ -19,7 +19,6 @@ const passportProvider = passportInstance.connectEvm();
 
 const fetchAuth = async () => {
   try {
-    const passportProvider = passportInstance.connectEvm();
     const accounts = await passportProvider.request({
       method: "eth_requestAccounts",
     });
@@ -68,7 +67,5 @@ async function getWalletInfo() {
     };
   }
 }
-
-async function getTokenSupply() {}
 
 export { passportInstance, passportProvider, fetchAuth, getWalletInfo, signerFetch };

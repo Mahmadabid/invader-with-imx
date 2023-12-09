@@ -7,12 +7,12 @@ import { ethers } from 'ethers';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import Load from '@/components/utils/Load';
 
-async function getTotalSupply(signer: ethers.Signer | ethers.providers.Provider | undefined) {
+async function getTotalSupply(signer: ethers.Signer): Promise<string>  {
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     return await tokenContract.totalSupply();
 }
 
-async function getBurnSupply(signer: ethers.Signer | ethers.providers.Provider | undefined) {
+async function getBurnSupply(signer: ethers.Signer): Promise<string>  {
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     return await tokenContract.totalBurned();
 }
