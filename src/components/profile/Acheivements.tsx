@@ -31,9 +31,9 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance }) => {
             {badgeCount < 3 && (
                 <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">
                     {parseInt(burnBalance) < 50 ?
-                        `Burn ${50 - parseInt(burnBalance)} more $IPX for level 1` : parseInt(burnBalance) < 150 ?
-                            `Burn ${150 - parseInt(burnBalance)} more $IPX for level 2` : parseInt(burnBalance) < 300 ?
-                                `Burn ${300 - parseInt(burnBalance)} more $IPX for level 3` : null}
+                        `Burn ${50 - parseInt(burnBalance)} $IPX for level 1` : parseInt(burnBalance) < 150 ?
+                            `Burn ${150 - parseInt(burnBalance)} $IPX for level 2` : parseInt(burnBalance) < 300 ?
+                                `Burn ${300 - parseInt(burnBalance)} $IPX for level 3` : null}
                 </div>
             )}
 

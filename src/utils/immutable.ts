@@ -1,4 +1,3 @@
-import { burnContractABI, burnContractAddress } from '@/components/Contracts/BurnContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { config, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
@@ -53,8 +52,7 @@ async function getProfileInfo() {
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
-    const burnContract = new ethers.Contract(burnContractAddress, burnContractABI, signer);
-    const burnBalance = await burnContract.getBurnRecordsByAddress(walletAddress);
+    const burnBalance = await tokenContract.getBurnedAmount(walletAddress);
 
     return {
       walletAddress,

@@ -1,7 +1,6 @@
 import { getWalletInfo, signerFetch } from "@/utils/immutable";
 import { ethers } from "ethers";
 import { ChangeEvent, useEffect, useState } from "react"
-import { burnContractAddress } from "./Contracts/BurnContract";
 import Load from "./utils/Load";
 import { gameTokenABI, gameTokenAddress } from "./Contracts/TokenContract";
 
@@ -45,6 +44,7 @@ const Burn: React.FC<BurnProps> = ({ setMint, setHash, setSuccess, setTxnError }
             setTxnError('Your dont have any tIMX')
             return;
         }
+
         try {
 
             const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
@@ -52,11 +52,11 @@ const Burn: React.FC<BurnProps> = ({ setMint, setHash, setSuccess, setTxnError }
             const tokenAmount = ethers.utils.parseEther(burnAmount.toString());
             const gasLimit = ethers.utils.parseUnits('10', 'gwei');
     
-            const transferTx = await tokenContract.transfer(burnContractAddress, tokenAmount, {
+            const BurnTx = await tokenContract.burn(tokenAmount, {
                 gasLimit: gasLimit,
             });
 
-            const receipt = await transferTx.wait();
+            const receipt = await BurnTx.wait();
             setHash(await receipt.transactionHash)
  
             setSuccess(true);

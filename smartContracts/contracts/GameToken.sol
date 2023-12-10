@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract GameToken is ERC20, ERC20Burnable, Ownable {
     uint256 public totalBurned;
 
+    mapping(address => uint256) private burnedAmounts;
+
     constructor() ERC20("Invader Pixel Token", "IPX") Ownable(msg.sender) {
         _mint(msg.sender, 0 * 10 ** 18);
     }
@@ -24,11 +26,18 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     function burn(uint256 amount) public override {
         super.burn(amount);
         totalBurned += amount;
+        // Update burn data for the sender
+        burnedAmounts[msg.sender] += amount;
     }
 
     function burnFrom(address account, uint256 amount) public override {
         super.burnFrom(account, amount);
         totalBurned += amount;
+        burnedAmounts[account] += amount;
+    }
+
+    function getBurnedAmount(address account) external view returns (uint256) {
+        return burnedAmounts[account];
     }
 
     address public swapContract;
