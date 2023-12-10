@@ -1,11 +1,13 @@
+import Acheivements from '@/components/profile/Acheivements';
 import WalletInfo from '@/components/profile/WalletInfo';
-import { getWalletInfo, passportInstance } from '@/utils/immutable';
+import { getProfileInfo, passportInstance } from '@/utils/immutable';
 import React, { useState, useEffect } from 'react'
 
 export default function Profile() {
     const [user, setUser] = useState<{ Email: string | undefined } | undefined>(undefined);
     const [walletAddress, setWalletAddress] = useState('');
     const [walletBalance, setWalletBalance] = useState('');
+    const [burnBalance, setBurnBalance] = useState('');
     const [walletIPX, setWalletIPX] = useState('');
 
     const fetchUser = async () => {
@@ -28,10 +30,11 @@ export default function Profile() {
     useEffect(() => {
         if (user) {
             const fetchWalletInfo = async () => {
-                const info = await getWalletInfo();
+                const info = await getProfileInfo();
                 setWalletAddress(info.walletAddress ? info.walletAddress : '');
                 setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
                 setWalletIPX(info.tokenBalance ? info.tokenBalance : '')
+                setBurnBalance(info.burnBalance ? info.burnBalance : '')
             };
 
             fetchWalletInfo();
@@ -53,9 +56,13 @@ export default function Profile() {
                             {user.Email}
                         </div>
                     </div>
-                    <WalletInfo address={walletAddress} balance={walletBalance} IPXBalance={walletIPX} />
+                    <WalletInfo address={walletAddress} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
                 </>
             )}
+            <div className='my-6 border-b-2 border-white mx-6'/>
+            <div>
+                <Acheivements burnBalance={burnBalance} />
+            </div>
         </div>
     );
 }

@@ -4,7 +4,7 @@ async function main() {
 
     const deploymentOptions = { gasPrice: ethers.parseUnits('10', 'gwei') };
 
-    const BurnContract = await ethers.deployContract('BurnContract', ['0x3f92e80433424fc84b21B6158ef69d46E0f8b884'], deploymentOptions);
+    const BurnContract = await ethers.deployContract('BurnContract', ['0x1c99e067B7DF2eac2385692445B14d7F24c0ecF3'], deploymentOptions);
 
     await BurnContract.waitForDeployment();
 

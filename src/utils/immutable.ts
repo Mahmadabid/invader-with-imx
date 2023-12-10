@@ -1,3 +1,4 @@
+import { burnContractABI, burnContractAddress } from '@/components/Contracts/BurnContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { config, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
@@ -38,6 +39,39 @@ async function signerFetch() {
   return signer;
 }
 
+async function getProfileInfo() {
+  try {
+    const signer = await signerFetch();
+    const walletAddress = await signer.getAddress();
+
+    const balance = await passportProvider.request({
+      method: 'eth_getBalance',
+      params: [walletAddress, 'latest']
+    });
+    const balanceInEther = ethers.utils.formatEther(balance);
+
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    const tokenBalance = await tokenContract.balanceOf(walletAddress);
+
+    const burnContract = new ethers.Contract(burnContractAddress, burnContractABI, signer);
+    const burnBalance = await burnContract.getBurnRecordsByAddress(walletAddress);
+
+    return {
+      walletAddress,
+      balanceInEther,
+      tokenBalance: ethers.utils.formatEther(tokenBalance),
+      burnBalance: ethers.utils.formatEther(burnBalance)
+    };
+  } catch (error) {
+    console.error("Error getting wallet info:", error);
+    return {
+      walletAddress: null,
+      balanceInEther: null,
+      tokenBalance: null
+    };
+  }
+}
+
 async function getWalletInfo() {
   try {
 
@@ -54,18 +88,16 @@ async function getWalletInfo() {
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
     return {
-      walletAddress,
       balanceInEther,
       tokenBalance: ethers.utils.formatEther(tokenBalance)
     };
   } catch (error) {
     console.error("Error getting wallet info:", error);
     return {
-      walletAddress: null,
       balanceInEther: null,
       tokenBalance: null
     };
   }
 }
 
-export { passportInstance, passportProvider, fetchAuth, getWalletInfo, signerFetch };
+export { passportInstance, passportProvider, fetchAuth, getProfileInfo, getWalletInfo, signerFetch };

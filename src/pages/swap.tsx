@@ -36,7 +36,7 @@ const Swap = () => {
     <div className="bg-gray-950 flex flex-col items-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
       {mint ? (
         <>
-          <div className='flex rounded flex-col break-all items-center justify-center'>
+          <div className='flex rounded mt-20 flex-col break-all items-center justify-center'>
             <div
               className="opacity-70 bg-gray-300 p-5 max-w-2xl"
             >
@@ -64,9 +64,9 @@ const Swap = () => {
                     {success ? (
                       <div className="flex flex-col text-center justify-center mt-2">
                         <p className="text-green-700 text-xl font-bold my-2">Success</p>
-                        <Link href="/">
+                        <Link href="/profile">
                           <button className="bg-yellow-500 text-white font-bold px-4 py-2 rounded mt-2">
-                            View in main page
+                            View in Profile page
                           </button>
                         </Link>
                       </div>
@@ -202,7 +202,7 @@ const Swap = () => {
               {activeTab === 'buy' ? 'Buy' : 'Sell'}
             </button>
           </form>
-          <Burn setMint={setMint} />
+          <Burn setMint={setMint} setHash={setHash} setTxnError={setTxnError} setSuccess={setSuccess} />
         </>
       )}
     </div>
