@@ -1,18 +1,105 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
+import { ethers } from "ethers";
 import Link from 'next/link';
 import Image from 'next/image';
 import Load from '@/components/utils/Load';
 import Burn from '@/components/Burn';
+import { getWalletInfo } from "@/utils/immutable";
+import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
+import { gameTokenABI, gameTokenAddress } from '@/components/Contracts/TokenContract';
 
 const Swap = () => {
   const [buyAmount, setBuyAmount] = useState<number>(0);
   const [sellAmount, setSellAmount] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const feePercentage: number = 1;
-  const [mint, setMint] = useState(false);
+  const [Txn, setTxn] = useState(false);
   const [Hash, setHash] = useState('');
+  const [Approve, setApprove] = useState(false);
   const [TxnError, setTxnError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [walletBalance, setWalletBalance] = useState('');
+  const [walletIPX, setWalletIPX] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
+
+  const fetchWalletInfo = async () => {
+    try {
+      const info = await getWalletInfo();
+      setWalletBalance(info.balanceInEther || '');
+      setWalletIPX(info.tokenBalance || '');
+      setSigner(info.signer);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching wallet info:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWalletInfo();
+  }, []);
+
+  const handleBuySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setTxn(true);
+
+    if (!signer) {
+      console.error('Signer not available');
+      return;
+    }
+
+    try {
+      const buyToken = ethers.utils.parseEther(buyAmount.toString())
+      const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+
+      const transaction = await signer.sendTransaction({
+        to: swapAddress,
+        value: buyToken,
+        gasLimit: gasLimit,
+      })
+      const receipt = await transaction.wait();
+
+      setHash(receipt.transactionHash)
+
+      console.log('Buy successful!');
+    } catch (error: any) {
+      setTxnError(error.message)
+    }
+  };
+
+  const handleSellSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setTxn(true);
+
+    if (!signer) {
+      console.error('Signer not available');
+      return;
+    }
+
+    try {
+      const contract = new ethers.Contract(swapAddress, swapABI, signer);
+      const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+
+      const sellToken = ethers.utils.parseEther(sellAmount.toString())
+      const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+
+      setApprove(true);
+      const approveTx = await gameToken.approve(swapAddress, sellToken);
+      await approveTx.wait();
+      setApprove(false);
+
+      const transaction = await contract.sellTokens(sellToken, {
+        gasLimit: gasLimit,
+      });
+      const receipt = await transaction.wait();
+
+      setHash(await receipt.transactionHash)
+
+      console.log('Sell successful!');
+    } catch (error: any) {
+      setTxnError(error.message)
+    }
+  };
 
   const handleBuyAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     setBuyAmount(parseFloat(e.target.value));
@@ -22,19 +109,11 @@ const Swap = () => {
     setSellAmount(parseFloat(e.target.value));
   };
 
-  const handleBuySubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  const handleSellSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
   const headerHeight = 4.6;
 
   return (
     <div className="bg-gray-950 flex flex-col items-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      {mint ? (
+      {Txn ? (
         <>
           <div className='flex rounded mt-20 flex-col break-all items-center justify-center'>
             <div
@@ -47,12 +126,16 @@ const Swap = () => {
                       <p className="text-xl text-red-600">{TxnError}</p>
                       <p className="mt-4 text-blue-800 text-xl">Please Try Again</p>
                     </div>
-                  ) : (
+                  ) : !Approve ? (
                     <div className="flex flex-col font-bold items-center mb-2">
                       <h3 className="text-xl text-gray-600 mb-2">Waiting for Transaction</h3>
                       <Load className='w-7 h-7 mt-6 fill-gray-800' />
                     </div>
-                  )
+                  ) : (
+                    <div className="flex flex-col font-bold items-center mb-2 px-10">
+                      <h3 className="text-xl text-gray-600 mb-2">Approving</h3>
+                      <Load className='w-7 h-7 mt-6 fill-gray-800' />
+                    </div>)
                 ) : (
                   <>
                     <div className="flex flex-col font-bold items-center mb-2">
@@ -61,21 +144,14 @@ const Swap = () => {
                         <span className="font-bold flex flex-row items-center">Hash:&nbsp;{Hash}</span>
                       </p>
                     </div>
-                    {success ? (
-                      <div className="flex flex-col text-center justify-center mt-2">
-                        <p className="text-green-700 text-xl font-bold my-2">Success</p>
-                        <Link href="/profile">
-                          <button className="bg-yellow-500 text-white font-bold px-4 py-2 rounded mt-2">
-                            View in Profile page
-                          </button>
-                        </Link>
-                      </div>
-                    ) : (
-                      <div className="flex text-xl font-bold text-green-800 justify-center mt-2">
-                        Finalizing
-                        <Load className='w-7 h-7 mr-3 fill-gray-800' />
-                      </div>
-                    )}
+                    <div className="flex flex-col text-center justify-center mt-2">
+                      <p className="text-green-700 text-xl font-bold my-2">Success</p>
+                      <Link href="/profile">
+                        <button className="bg-yellow-500 hover:bg-yellow-400 text-white font-bold px-4 py-2 rounded mt-2">
+                          View in Profile page
+                        </button>
+                      </Link>
+                    </div>
                   </>
                 )}
               </div>
@@ -195,14 +271,14 @@ const Swap = () => {
             </div>
             <button
               type='submit'
-              className={`bg-yellow-500 text-white font-bold w-full rounded py-2 px-4 mt-4 ${(activeTab === 'buy' ? buyAmount <= 0 || isNaN(buyAmount) : sellAmount <= 0 || isNaN(sellAmount)) ? 'opacity-50 cursor-not-allowed' : ''
+              className={`bg-yellow-500 text-white font-bold w-full rounded py-2 px-4 mt-4 ${loading ? 'justify-center flex' : (activeTab === 'buy' ? buyAmount <= 0 || isNaN(buyAmount) : sellAmount <= 0 || isNaN(sellAmount)) ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
-              disabled={(activeTab === 'buy' ? buyAmount <= 0 || isNaN(buyAmount) : sellAmount <= 0 || isNaN(sellAmount))}
+              disabled={(activeTab === 'buy' ? buyAmount <= 0 || isNaN(buyAmount) : sellAmount <= 0 || isNaN(sellAmount)) || loading}
             >
-              {activeTab === 'buy' ? 'Buy' : 'Sell'}
+              {loading ? <Load /> : activeTab === 'buy' ? 'Buy' : 'Sell'}
             </button>
           </form>
-          <Burn setMint={setMint} setHash={setHash} setTxnError={setTxnError} setSuccess={setSuccess} />
+          <Burn walletIPX={walletIPX} walletBalance={walletBalance} setTxn={setTxn} setHash={setHash} setTxnError={setTxnError} loading={loading} />
         </>
       )}
     </div>

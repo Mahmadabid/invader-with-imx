@@ -9,6 +9,7 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     uint256 public totalBurned;
 
     mapping(address => uint256) private burnedAmounts;
+    address[] private allBurnedAddresses;
 
     constructor() ERC20("Invader Pixel Token", "IPX") Ownable(msg.sender) {
         _mint(msg.sender, 0 * 10 ** 18);
@@ -26,18 +27,33 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     function burn(uint256 amount) public override {
         super.burn(amount);
         totalBurned += amount;
-        // Update burn data for the sender
         burnedAmounts[msg.sender] += amount;
-    }
 
-    function burnFrom(address account, uint256 amount) public override {
-        super.burnFrom(account, amount);
-        totalBurned += amount;
-        burnedAmounts[account] += amount;
+        if (burnedAmounts[msg.sender] == amount) {
+            allBurnedAddresses.push(msg.sender);
+        }
     }
 
     function getBurnedAmount(address account) external view returns (uint256) {
         return burnedAmounts[account];
+    }
+
+    function getBurnedAmounts() external view returns (address[] memory, uint256[] memory) {
+        uint256 length = allBurnedAddresses.length;
+        address[] memory addresses = new address[](length);
+        uint256[] memory amounts = new uint256[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            address account = allBurnedAddresses[i];
+            addresses[i] = account;
+            amounts[i] = burnedAmounts[account];
+        }
+
+        return (addresses, amounts);
+    }
+
+    function getAllBurnedAddresses() external view returns (address[] memory) {
+        return allBurnedAddresses;
     }
 
     address public swapContract;

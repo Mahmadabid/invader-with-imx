@@ -27,12 +27,12 @@ const Header = () => {
         <Link href='/'>Pixels Invader</Link>
       </h1>
       <div>
-        <button onClick={toggleMenu} className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-200">
+        <button onClick={toggleMenu} className="inline-flex z-50 items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg hover:bg-gray-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-gray-200">
           <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
           </svg>
         </button>
-        <div className={`absolute right-0 mr-4 mt-2 w-48 bg-white shadow-md rounded-md ${menuOpen ? 'block' : 'hidden'}`} onClick={closeMenu}>
+        <div className={`absolute right-0 mr-4 mt-2 z-50 w-48 bg-white shadow-md rounded-md ${menuOpen ? 'block' : 'hidden'}`} onClick={closeMenu}>
         <Link href="/">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Home</h1>
           </Link>

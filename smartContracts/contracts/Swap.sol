@@ -1,67 +1,72 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "./GameToken.sol";
 
-contract SwapContract is Ownable {
+contract Swap {
     GameToken public gameToken;
 
-    uint256 public conversionRate = 100;
-    uint256 public feePercentage = 1;
-    uint256 public accumulatedLiquidity;
+    uint256 public tokensPertIMX = 100;
 
-    uint8 public constant tokenDecimals = 18; // Assuming 18 decimals for tokens
-    uint8 public constant tIMXDecimals = 18;  // Assuming 18 decimals for tIMX
-
-    event TokensConverted(
-        address indexed user,
-        uint256 tokensSent,
-        uint256 tIMXReceived
+    event BuyTokens(address buyer, uint256 amountOftIMX, uint256 amountOfTokens);
+    event SellTokens(
+        address seller,
+        uint256 amountOfTokens,
+        uint256 amountOftIMX
     );
-    event TIMXConverted(
-        address indexed user,
-        uint256 tIMXSent,
-        uint256 tokensReceived
-    );
+    event TokensPertIMXChanged(uint256 newTokensPertIMX);
 
-    constructor(address _gameTokenAddress) Ownable(msg.sender) {
-        gameToken = GameToken(_gameTokenAddress);
+    constructor(address tokenAddress) {
+        gameToken = GameToken(tokenAddress);
     }
 
-    function setConversionRate(uint256 _newRate) external onlyOwner {
-        conversionRate = _newRate;
+    receive() external payable {
+
+        uint256 amountToBuy = msg.value * tokensPertIMX;
+        gameToken.mintBySwapContract(msg.sender, amountToBuy);
+        emit BuyTokens(msg.sender, msg.value, amountToBuy);
     }
 
-    function convertToTIMX(uint256 _tokens) external {
-        require(_tokens > 0, "Invalid token amount");
+    function sellTokens(uint256 tokenAmountToSell) public {
+        require(
+            tokenAmountToSell > 0,
+            "Specify an amount of token greater than zero"
+        );
 
-        uint256 tIMXToReceive = (_tokens * conversionRate * (10**tIMXDecimals) * (100 - feePercentage)) / 100;
-        uint256 feeAmount = (_tokens * feePercentage) / 100;
+        uint256 userBalance = gameToken.balanceOf(msg.sender);
+        require(
+            userBalance >= tokenAmountToSell,
+            "Your balance is lower than the amount of tokens you want to sell"
+        );
 
-        gameToken.mintBySwapContract(msg.sender, _tokens);
+        uint256 amountOftIMXToTransfer = tokenAmountToSell / tokensPertIMX;
+        uint256 ownertIMXBalance = address(this).balance;
+        require(
+            ownertIMXBalance >= amountOftIMXToTransfer,
+            "Vendor has not enough funds to accept the sell request"
+        );
 
-        emit TokensConverted(msg.sender, _tokens, tIMXToReceive);
+        gameToken.burnFrom(msg.sender, tokenAmountToSell);
+
+        (bool sent, ) = msg.sender.call{value: amountOftIMXToTransfer}("");
+        require(sent, "Failed to send tIMX to the user");
     }
 
-    function convertToTokensAndMint(uint256 _tIMX) external {
-        require(_tIMX > 0, "Invalid tIMX amount");
-
-        uint256 tokensToMint = (_tIMX * (10**tokenDecimals) * conversionRate) / (10**tIMXDecimals);
-        uint256 feeAmount = (tokensToMint * feePercentage) / 100;
-        uint256 netTokensToMint = tokensToMint - feeAmount;
-
-        emit TIMXConverted(msg.sender, _tIMX, netTokensToMint);
-
-        gameToken.mintBySwapContract(msg.sender, netTokensToMint);
+    function setTokensPertIMX(uint256 newTokensPertIMX) public {
+        require(msg.sender == owner(), "Only owner can change tokensPertIMX");
+        tokensPertIMX = newTokensPertIMX;
+        emit TokensPertIMXChanged(newTokensPertIMX);
     }
 
-    function addTIMX(uint256 _amount) external {
-        require(_amount > 0, "Invalid tIMX amount");
-        accumulatedLiquidity += _amount;
+    function owner() internal view returns (address) {
+        return gameToken.owner();
     }
 
-    function viewAccumulatedLiquidity() external view returns (uint256) {
-        return accumulatedLiquidity;
+    function getTotalTokens() public view returns (uint256) {
+        return gameToken.balanceOf(address(this));
+    }
+
+    function gettIMXBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 }

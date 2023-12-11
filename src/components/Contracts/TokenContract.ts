@@ -1,4 +1,4 @@
-export const gameTokenAddress = '0x76cc52c2FA6e1Fb7B27cdA6a7d2fA359704dF071';
+export const gameTokenAddress = '0xEAEdae741E7F591476ddb0fDF21dD6Dcfa492891';
 
 export const gameTokenABI = [
   {
@@ -272,7 +272,7 @@ export const gameTokenABI = [
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "value",
         "type": "uint256"
       }
     ],
@@ -295,6 +295,19 @@ export const gameTokenABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getAllBurnedAddresses",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -308,6 +321,24 @@ export const gameTokenABI = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBurnedAmounts",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",

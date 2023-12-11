@@ -1,37 +1,25 @@
-import { getWalletInfo, signerFetch } from "@/utils/immutable";
+import { signerFetch } from "@/utils/immutable";
 import { ethers } from "ethers";
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import Load from "./utils/Load";
 import { gameTokenABI, gameTokenAddress } from "./Contracts/TokenContract";
 
 interface BurnProps {
-    setMint: (value: React.SetStateAction<boolean>) => void;
+    setTxn: (value: React.SetStateAction<boolean>) => void;
     setHash: (value: React.SetStateAction<string>) => void;
     setTxnError: (value: React.SetStateAction<string>) => void;
-    setSuccess: (value: React.SetStateAction<boolean>) => void;
+    walletIPX: string;
+    walletBalance: string;
+    loading: boolean;
 }
 
-const Burn: React.FC<BurnProps> = ({ setMint, setHash, setSuccess, setTxnError }) => {
+const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance, walletIPX, loading }) => {
 
     const [burnAmount, setBurnAmount] = useState(0);
-    const [walletBalance, setWalletBalance] = useState('');
-    const [walletIPX, setWalletIPX] = useState('');
-    const [loading, setLoading] = useState(true);
 
     const handleBurnAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
         setBurnAmount(parseFloat(e.target.value));
     };
-
-    const fetchWalletInfo = async () => {
-        const info = await getWalletInfo();
-        setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
-        setWalletIPX(info.tokenBalance ? info.tokenBalance : '');
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        fetchWalletInfo();
-    }, [])
 
     async function sendBurnTransaction() {
         const signer = await signerFetch();
@@ -59,7 +47,6 @@ const Burn: React.FC<BurnProps> = ({ setMint, setHash, setSuccess, setTxnError }
             const receipt = await BurnTx.wait();
             setHash(await receipt.transactionHash)
  
-            setSuccess(true);
             return receipt.transactionHash;
         } catch (error: any) {
             setTxnError(error.message)
@@ -68,7 +55,7 @@ const Burn: React.FC<BurnProps> = ({ setMint, setHash, setSuccess, setTxnError }
 
     const handleBurn = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setMint(true);
+        setTxn(true);
         sendBurnTransaction();
     }
 

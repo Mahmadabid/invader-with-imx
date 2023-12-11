@@ -87,7 +87,8 @@ async function getWalletInfo() {
 
     return {
       balanceInEther,
-      tokenBalance: ethers.utils.formatEther(tokenBalance)
+      tokenBalance: ethers.utils.formatEther(tokenBalance),
+      signer
     };
   } catch (error) {
     console.error("Error getting wallet info:", error);
