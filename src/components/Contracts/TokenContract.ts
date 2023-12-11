@@ -1,4 +1,4 @@
-export const gameTokenAddress = '0xEAEdae741E7F591476ddb0fDF21dD6Dcfa492891';
+export const gameTokenAddress = '0xBC1B90037EC05B0931CfC2e35E4e15dB71F2738F';
 
 export const gameTokenABI = [
   {
@@ -272,7 +272,7 @@ export const gameTokenABI = [
       },
       {
         "internalType": "uint256",
-        "name": "value",
+        "name": "amount",
         "type": "uint256"
       }
     ],

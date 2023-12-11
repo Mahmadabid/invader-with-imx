@@ -1,4 +1,4 @@
-export const swapAddress = '0x3dB3470cf865e19D8043905DdC52FE20a5B2e4B1';
+export const swapAddress = '0x60455BD921E37b7B305884A5BBfb7eC9A81087B4';
 
 export const swapABI = [
     {

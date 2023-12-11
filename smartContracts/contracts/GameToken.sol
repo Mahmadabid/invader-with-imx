@@ -34,6 +34,11 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
         }
     }
 
+    function burnFrom(address account, uint256 amount) public override {
+        super.burnFrom(account, amount);
+        totalBurned += amount;
+    }
+
     function getBurnedAmount(address account) external view returns (uint256) {
         return burnedAmounts[account];
     }
