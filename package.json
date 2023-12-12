@@ -12,6 +12,7 @@
     "@imtbl/sdk": "^0.35.6",
     "chart.js": "^4.4.1",
     "ethers": "^5.7.2",
+    "mongoose": "^8.0.3",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18"

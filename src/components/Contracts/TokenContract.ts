@@ -1,4 +1,4 @@
-export const gameTokenAddress = '0xBC1B90037EC05B0931CfC2e35E4e15dB71F2738F';
+export const gameTokenAddress = '0xc9729c9fB7eFb4508864141Fa80E0694e3D97658';
 
 export const gameTokenABI = [
   {
@@ -283,6 +283,19 @@ export const gameTokenABI = [
   },
   {
     "inputs": [],
+    "name": "claimAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "decimals",
     "outputs": [
       {
@@ -357,6 +370,24 @@ export const gameTokenABI = [
         "type": "uint256"
       }
     ],
+    "name": "mintByClaimAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
     "name": "mintByOwner",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -409,6 +440,19 @@ export const gameTokenABI = [
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_claimAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setClaimAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

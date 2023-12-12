@@ -39,6 +39,16 @@ const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance
     
             const tokenAmount = ethers.utils.parseEther(burnAmount.toString());
             const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+
+            if (parseFloat(walletIPX) < burnAmount) {
+                setTxnError('You dont have enough IPX');
+                return;
+              }
+        
+              if (parseFloat(walletBalance) < 0.013) {
+                setTxnError('You dont have enough tIMX');
+                return;
+              }
     
             const BurnTx = await tokenContract.burn(tokenAmount, {
                 gasLimit: gasLimit,
@@ -62,14 +72,16 @@ const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance
     return (
         <div className='mt-8 mb-6 text-center'>
             <h1 className='font-bold text-5xl text-white'>Burn</h1>
+            <p className="my-3 flex flex-row text-white text-xl font-medium">You have {walletIPX? walletIPX: <Load className="w-5 h-5 fill-white mx-2 mt-1" />} $IPX</p>
             <form onSubmit={handleBurn} className='flex flex-row space-x-2 mt-4'>
                 <input value={burnAmount} onChange={handleBurnAmountChange} className='px-2 text-white mx-1 h-10 py-1 bg-black rounded opacity-70' type='number' required />
                 {loading ?
                     <div className="bg-orange-500 font-bold text-white px-4 py-2 rounded-full hover:bg-orange-600 transition duration-300"><Load /></div> :
-                    <button type="submit" disabled={loading || burnAmount === 0} className="bg-orange-500 font-bold text-white px-4 rounded-full hover:bg-orange-600 transition duration-300">Burn</button>
+                    <button type="submit" disabled={loading || burnAmount === 0 || burnAmount > parseFloat(walletIPX)} className="bg-orange-500 font-bold text-white px-4 rounded-full hover:bg-orange-600 transition duration-300">Burn</button>
                 }
             </form>
             {burnAmount === 0 ? <p className="my-2 font-bold text-red-500">Value should be greator then zero</p> : null}
+            {burnAmount > parseFloat(walletIPX) ? <p className="my-2 font-bold text-red-500">You dont have enough Tokens</p> : null}
         </div>
     )
 }

@@ -1,14 +1,18 @@
 import Acheivements from '@/components/profile/Acheivements';
+import Claim from '@/components/profile/Claim';
 import WalletInfo from '@/components/profile/WalletInfo';
+import Load from '@/components/utils/Load';
 import { getProfileInfo, passportInstance } from '@/utils/immutable';
 import React, { useState, useEffect } from 'react'
 
 export default function Profile() {
-    const [user, setUser] = useState<{ Email: string | undefined } | undefined>(undefined);
+    const [user, setUser] = useState<{ Email: string | undefined; Sub: string | undefined } | undefined>(undefined);
     const [walletAddress, setWalletAddress] = useState('');
     const [walletBalance, setWalletBalance] = useState('');
     const [burnBalance, setBurnBalance] = useState('');
     const [walletIPX, setWalletIPX] = useState('');
+    const [claimTxn, setClaimTxn] = useState(false);
+    const [claimLoad, setClaimLoad] = useState(false);
 
     const fetchUser = async () => {
         try {
@@ -16,6 +20,7 @@ export default function Profile() {
 
             setUser({
                 Email: userProfile?.email,
+                Sub: userProfile?.sub,
             });
 
         } catch (error) {
@@ -28,18 +33,25 @@ export default function Profile() {
     }, []);
 
     useEffect(() => {
+        if (claimTxn) {
+            return;
+        };
+        setClaimLoad(true);
+
         if (user) {
             const fetchWalletInfo = async () => {
                 const info = await getProfileInfo();
                 setWalletAddress(info.walletAddress ? info.walletAddress : '');
                 setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
-                setWalletIPX(info.tokenBalance ? info.tokenBalance : '')
-                setBurnBalance(info.burnBalance ? info.burnBalance : '')
+                setWalletIPX(info.tokenBalance ? info.tokenBalance : '');
+                setBurnBalance(info.burnBalance ? info.burnBalance : '');
+                setClaimLoad(false);
             };
 
             fetchWalletInfo();
         }
-    }, [user]);
+        
+    }, [user, claimTxn]);
 
     const headerHeight = 4.6;
 
@@ -56,10 +68,15 @@ export default function Profile() {
                             {user.Email}
                         </div>
                     </div>
-                    <WalletInfo address={walletAddress} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
+                    <WalletInfo address={walletAddress} claimLoad={claimLoad} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
                 </>
             )}
-            <div className='my-6 border-b-2 border-white mx-6'/>
+            <div className='my-6 border-b-2 border-white mx-6' />
+            <div>
+                {claimTxn ? <div className='justify-center flex'><Load /></div> :
+                    <Claim Sub={user?.Sub} walletAddress={walletAddress} setClaimTxn={setClaimTxn} ClaimTxn={claimTxn} />}
+            </div>
+            <div className='my-6 border-b-2 border-white mx-6' />
             <div>
                 <Acheivements burnBalance={burnBalance} />
             </div>

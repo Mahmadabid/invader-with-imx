@@ -19,6 +19,7 @@ const Swap = () => {
   const [TxnError, setTxnError] = useState('');
   const [walletBalance, setWalletBalance] = useState('');
   const [walletIPX, setWalletIPX] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
   const [loading, setLoading] = useState(true);
   const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
 
@@ -28,6 +29,7 @@ const Swap = () => {
       setWalletBalance(info.balanceInEther || '');
       setWalletIPX(info.tokenBalance || '');
       setSigner(info.signer);
+      setWalletAddress(info.walletAddress || '')
       setLoading(false);
     } catch (error) {
       console.error('Error fetching wallet info:', error);
@@ -51,6 +53,11 @@ const Swap = () => {
     try {
       const buyToken = ethers.utils.parseEther(buyAmount.toString())
       const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+
+      if (parseFloat(walletBalance) < buyAmount + 0.013) {
+        setTxnError('You dont have enough tIMX');
+        return;
+      }
 
       const transaction = await signer.sendTransaction({
         to: swapAddress,
@@ -83,9 +90,25 @@ const Swap = () => {
       const sellToken = ethers.utils.parseEther(sellAmount.toString())
       const gasLimit = ethers.utils.parseUnits('10', 'gwei');
 
+      if (parseFloat(walletIPX) < sellAmount) {
+        setTxnError('You dont have enough IPX');
+        return;
+      }
+
+      if (parseFloat(walletBalance) < 0.013) {
+        setTxnError('You dont have enough tIMX');
+        return;
+      }
+
       setApprove(true);
-      const approveTx = await gameToken.approve(swapAddress, sellToken);
-      await approveTx.wait();
+      const allowance = await gameToken.allowance(walletAddress, swapAddress);
+
+      if (parseFloat(ethers.utils.formatEther(allowance)) < parseFloat(ethers.utils.formatEther((sellToken)))) {
+        const approveTx = await gameToken.approve(swapAddress, ethers.constants.MaxUint256);
+        await approveTx.wait();
+
+        console.log('Approval successful!');
+      }
       setApprove(false);
 
       const transaction = await contract.sellTokens(sellToken, {
@@ -183,17 +206,20 @@ const Swap = () => {
           >
             {activeTab === 'buy' ? (
               <div>
-                <div className='flex flex-row mb-1 mt-3'>
-                  <Image
-                    src="/tIMX.svg"
-                    alt="tIMX Logo"
-                    width={22}
-                    height={22}
-                    priority
-                  />
-                  <div className='font-extrabold text-white ml-1'>
-                    tIMX
+                <div className='flex flex-row justify-between'>
+                  <div className='flex flex-row mb-1 mt-3'>
+                    <Image
+                      src="/tIMX.svg"
+                      alt="tIMX Logo"
+                      width={22}
+                      height={22}
+                      priority
+                    />
+                    <div className='font-extrabold text-white ml-1'>
+                      tIMX
+                    </div>
                   </div>
+                  <p className='text-white ml-5 mt-3 truncate'>{walletBalance? walletBalance: <Load />}</p>
                 </div>
                 <div className="mb-2">
                   <input
@@ -222,17 +248,20 @@ const Swap = () => {
               </div>
             ) : (
               <div>
-                <div className='flex flex-row mb-1 mt-3'>
-                  <Image
-                    src="/IPX.png"
-                    alt="IPX Logo"
-                    width={28}
-                    height={28}
-                    priority
-                  />
-                  <div className='font-extrabold text-white ml-1'>
-                    IPX
+                <div className='flex flex-row justify-between'>
+                  <div className='flex flex-row mb-1 mt-3'>
+                    <Image
+                      src="/IPX.png"
+                      alt="IPX Logo"
+                      width={28}
+                      height={28}
+                      priority
+                    />
+                    <div className='font-extrabold text-white ml-1'>
+                      IPX
+                    </div>
                   </div>
+                  <p className='text-white ml-5 mt-3 truncate'>{walletIPX? walletIPX: <Load />}</p>
                 </div>
                 <div className="mb-2">
                   <input

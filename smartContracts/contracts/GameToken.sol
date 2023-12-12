@@ -66,4 +66,16 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     function setSwapContract(address _swapContract) external onlyOwner {
         swapContract = _swapContract;
     }
+
+    address public claimAddress;
+
+    function setClaimAddress(address _claimAddress) external onlyOwner {
+        claimAddress = _claimAddress;
+    }
+
+    function mintByClaimAddress(address to, uint256 amount) external {
+        require(msg.sender == claimAddress, "Not authorized to mint");
+        _mint(to, amount);
+    }
+
 }

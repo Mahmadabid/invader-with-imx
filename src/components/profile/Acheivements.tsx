@@ -27,8 +27,8 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance }) => {
     return (
         <div>
             <h1 className='text-3xl font-bold'>Achievements</h1>
-            <h1 className='text-2xl mt-4 font-bold'>Burn Badge</h1>
-            {!burnBalance ? <div className='flex justify-center mt-8'><Load className='fill-white w-10 h-10'/></div> : 
+            <h1 className="text-2xl mt-4 font-bold text-orange-500">Burn Badge</h1>
+            {!burnBalance ? <div className='flex justify-center mt-8 pb-8'><Load className='fill-white w-10 h-10'/></div> : 
             <>
                 {badgeCount < 3 && (
                     <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">

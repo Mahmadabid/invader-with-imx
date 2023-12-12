@@ -47,13 +47,14 @@ async function getProfileInfo() {
       method: 'eth_getBalance',
       params: [walletAddress, 'latest']
     });
+
     const balanceInEther = ethers.utils.formatEther(balance);
 
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
     const burnBalance = await tokenContract.getBurnedAmount(walletAddress);
-
+    
     return {
       walletAddress,
       balanceInEther,
@@ -71,8 +72,8 @@ async function getProfileInfo() {
 }
 
 async function getWalletInfo() {
-  try {
 
+  try {
     const signer = await signerFetch();
     const walletAddress = await signer.getAddress();
 
@@ -88,13 +89,14 @@ async function getWalletInfo() {
     return {
       balanceInEther,
       tokenBalance: ethers.utils.formatEther(tokenBalance),
-      signer
+      signer,
+      walletAddress
     };
   } catch (error) {
     console.error("Error getting wallet info:", error);
     return {
       balanceInEther: null,
-      tokenBalance: null
+      tokenBalance: null,
     };
   }
 }

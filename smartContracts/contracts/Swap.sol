@@ -7,24 +7,63 @@ contract Swap {
     GameToken public gameToken;
 
     uint256 public tokensPertIMX = 100;
+    uint256 public feePercentage = 1;
 
-    event BuyTokens(address buyer, uint256 amountOftIMX, uint256 amountOfTokens);
+    mapping(address => uint256) public totalAmountBought;
+    address[] public buyersList;
+
+    event BuyTokens(
+        address buyer,
+        uint256 amountOftIMX,
+        uint256 amountOfTokens
+    );
     event SellTokens(
         address seller,
         uint256 amountOfTokens,
         uint256 amountOftIMX
     );
     event TokensPertIMXChanged(uint256 newTokensPertIMX);
+    event FeePercentageChanged(uint256 newFeePercentage);
+    event TotalAmountBought(address buyer, uint256 totalAmountBought);
+    event DebugLog(string message);
 
     constructor(address tokenAddress) {
         gameToken = GameToken(tokenAddress);
     }
 
     receive() external payable {
-
         uint256 amountToBuy = msg.value * tokensPertIMX;
-        gameToken.mintBySwapContract(msg.sender, amountToBuy);
+        uint256 fee = (amountToBuy * feePercentage) / 100;
+        uint256 totalAmount = amountToBuy - fee;
+
+        gameToken.mintBySwapContract(msg.sender, totalAmount);
+        totalAmountBought[msg.sender] += totalAmount;
+
+        if (totalAmountBought[msg.sender] == totalAmount) {
+            buyersList.push(msg.sender);
+        }
+
         emit BuyTokens(msg.sender, msg.value, amountToBuy);
+        emit TotalAmountBought(msg.sender, totalAmountBought[msg.sender]);
+    }
+
+    function getAllBuyers() public view returns (BuyerInfo[] memory) {
+        BuyerInfo[] memory buyersInfo = new BuyerInfo[](buyersList.length);
+
+        for (uint256 i = 0; i < buyersList.length; i++) {
+            address buyer = buyersList[i];
+            buyersInfo[i] = BuyerInfo({
+                buyerAddress: buyer,
+                totalAmountBought: totalAmountBought[buyer]
+            });
+        }
+
+        return buyersInfo;
+    }
+
+    struct BuyerInfo {
+        address buyerAddress;
+        uint256 totalAmountBought;
     }
 
     function sellTokens(uint256 tokenAmountToSell) public {
@@ -39,7 +78,9 @@ contract Swap {
             "Your balance is lower than the amount of tokens you want to sell"
         );
 
-        uint256 amountOftIMXToTransfer = tokenAmountToSell / tokensPertIMX;
+        uint256 fee = (tokenAmountToSell * feePercentage) / 100;
+        uint256 amountOftIMXToTransfer = (tokenAmountToSell - fee) / tokensPertIMX;
+
         uint256 ownertIMXBalance = address(this).balance;
         require(
             ownertIMXBalance >= amountOftIMXToTransfer,
@@ -58,12 +99,14 @@ contract Swap {
         emit TokensPertIMXChanged(newTokensPertIMX);
     }
 
-    function owner() internal view returns (address) {
-        return gameToken.owner();
+    function setFeePercentage(uint256 newFeePercentage) public {
+        require(msg.sender == owner(), "Only owner can change feePercentage");
+        feePercentage = newFeePercentage;
+        emit FeePercentageChanged(newFeePercentage);
     }
 
-    function getTotalTokens() public view returns (uint256) {
-        return gameToken.balanceOf(address(this));
+    function owner() internal view returns (address) {
+        return gameToken.owner();
     }
 
     function gettIMXBalance() public view returns (uint256) {

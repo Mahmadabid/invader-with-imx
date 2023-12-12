@@ -4,7 +4,7 @@ async function main() {
 
   const deploymentOptions = { gasPrice: ethers.parseUnits('10', 'gwei') };
 
-  const Swap = await ethers.deployContract('Swap', ['0xBC1B90037EC05B0931CfC2e35E4e15dB71F2738F'], deploymentOptions);
+  const Swap = await ethers.deployContract('Swap', ['0xc9729c9fB7eFb4508864141Fa80E0694e3D97658'], deploymentOptions);
 
   await Swap.waitForDeployment();
 
