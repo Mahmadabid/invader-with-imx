@@ -1,5 +1,5 @@
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
-import { config, passport } from '@imtbl/sdk';
+import { config, blockchainData, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
 
 const passportConfig = {
@@ -13,9 +13,37 @@ const passportConfig = {
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
 };
 
+const configs = {
+  baseConfig: new config.ImmutableConfiguration({
+    environment: config.Environment.SANDBOX,
+  }),
+};
+
+const client = new blockchainData.BlockchainData(configs);
+
+async function getNftByAddress(accountAddress: string) {
+  try {
+    const response = await client.listNFTsByAccountAddress({
+      chainName: "imtbl-zkevm-testnet",
+      accountAddress,
+      contractAddress: "0x8b5924d9740d2158e1a482c30fc49004d5947efb"
+    });
+
+    return response.result;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const passportInstance = new passport.Passport(passportConfig);
 
 const passportProvider = passportInstance.connectEvm();
+
+const getAddress = async () => {
+  const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
+  const walletAddress = accounts[0];
+  return walletAddress;
+}
 
 const fetchAuth = async () => {
   try {
@@ -101,4 +129,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, fetchAuth, getProfileInfo, getWalletInfo, signerFetch };
+export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getWalletInfo, getNftByAddress, signerFetch, client };

@@ -7,9 +7,10 @@ interface WalletProps {
     IPXBalance: string;
     burnBalance: string;
     claimLoad: boolean;
+    PointsIPX: number | undefined;
 }
 
-const WalletInfo: React.FC<WalletProps> = ({ address, balance, IPXBalance, burnBalance, claimLoad }) => {
+const WalletInfo: React.FC<WalletProps> = ({ address, balance, IPXBalance, burnBalance, claimLoad, PointsIPX }) => {
 
     return (
         <>
@@ -35,6 +36,12 @@ const WalletInfo: React.FC<WalletProps> = ({ address, balance, IPXBalance, burnB
                 <p className='font-bold p-1'>Burned: &nbsp;</p>
                 <div className='truncate text-center flex justify-center break-words w-full h-10 xsm:w-96 mx-1 p-2 bg-black rounded opacity-70'>
                     {burnBalance ? burnBalance : <Load />}
+                </div>
+            </div>
+            <div className="flex flex-row my-2 ml-2 justify-center">
+                <p className='font-bold p-1'>Points: &nbsp;</p>
+                <div className='truncate text-center flex justify-center break-words w-full h-10 xsm:w-96 mx-1 p-2 bg-black rounded opacity-70'>
+                    {PointsIPX != undefined ? PointsIPX : <Load />}
                 </div>
             </div>
         </>

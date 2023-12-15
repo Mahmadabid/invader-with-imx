@@ -6,6 +6,8 @@ type InvaderEntry = {
     userId: string;
     data: {
         IPX: number;
+        Address: string;
+        TotalPoints: number;
     }
 };
 

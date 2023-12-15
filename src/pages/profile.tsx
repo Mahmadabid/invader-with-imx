@@ -11,6 +11,7 @@ export default function Profile() {
     const [walletBalance, setWalletBalance] = useState('');
     const [burnBalance, setBurnBalance] = useState('');
     const [walletIPX, setWalletIPX] = useState('');
+    const [PointsIPX, setPointsIPX] = useState<number | undefined>(undefined);
     const [claimTxn, setClaimTxn] = useState(false);
     const [claimLoad, setClaimLoad] = useState(false);
 
@@ -68,17 +69,17 @@ export default function Profile() {
                             {user.Email}
                         </div>
                     </div>
-                    <WalletInfo address={walletAddress} claimLoad={claimLoad} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
+                    <WalletInfo address={walletAddress} PointsIPX={PointsIPX} claimLoad={claimLoad} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
                 </>
             )}
             <div className='my-6 border-b-2 border-white mx-6' />
             <div>
                 {claimTxn ? <div className='justify-center flex'><Load /></div> :
-                    <Claim Sub={user?.Sub} walletAddress={walletAddress} setClaimTxn={setClaimTxn} ClaimTxn={claimTxn} />}
+                    <Claim Sub={user?.Sub} setPointsIPX={setPointsIPX} setClaimTxn={setClaimTxn} ClaimTxn={claimTxn} />}
             </div>
             <div className='my-6 border-b-2 border-white mx-6' />
             <div>
-                <Acheivements burnBalance={burnBalance} />
+                <Acheivements burnBalance={burnBalance} TotalPoints={PointsIPX} walletIPX={walletIPX} />
             </div>
         </div>
     );

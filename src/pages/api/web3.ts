@@ -38,18 +38,18 @@ export default async function handler(
 
         try {
             const existingEntry = await Invader.findOne({ userId });
-            
-            const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
-            const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
-
-            const contract = new ethers.Contract(gameTokenAddress, gameTokenABI, wallet);
-
-            const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
-
-            const transaction = await contract.mintByClaimAddress(data.Address, ethers.utils.parseUnits(data.IPX.toString()), deploymentOptions);
-            await transaction.wait();
 
             if (existingEntry) {
+                const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
+                const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
+
+                const contract = new ethers.Contract(gameTokenAddress, gameTokenABI, wallet);
+
+                const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
+
+                const transaction = await contract.mintByClaimAddress(data.Address, ethers.utils.parseUnits(data.IPX.toString()), deploymentOptions);
+                await transaction.wait();
+
                 const SendIPX = {
                     IPX: existingEntry.data.IPX - IPXData.IPX,
                     Address: data.Address,
