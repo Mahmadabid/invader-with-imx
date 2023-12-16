@@ -48,6 +48,9 @@ const Header = () => {
           <Link href="/inventory">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Inventory</h1>
           </Link>
+          <Link href="/leaderboard">
+            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Leaderboard</h1>
+          </Link>
         </div>
       </div>
     </header>

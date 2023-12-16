@@ -76,7 +76,7 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
     const dataToSend: IPXEntry = {
         userId: Sub || '',
         data: {
-            IPX: (ClaimPoints * 80) / 100,
+            IPX: ClaimPoints,
             Address: Address
         },
     }
@@ -110,7 +110,7 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
     return (
         <>
             <h1 className='text-3xl font-bold'>Claim</h1>
-            <p className='text-white my-2 flex flex-row justify-center'>You have {loading || Address === '' ? <Load className='w-4 h-4 fill-white mx-1 mt-1' /> : Points} unclaimed IPX. Convert them to IPX</p>
+            <p className='text-white my-2 flex flex-row justify-center'>You have {loading ? <Load className='w-4 h-4 fill-white mx-1 mt-1' /> : Points} unclaimed IPX. Convert them to IPX</p>
             {Points < 200 ?
                 <p className='text-red-500 font-medium'>You need atleast 200 points to Claim</p>
                 : null}

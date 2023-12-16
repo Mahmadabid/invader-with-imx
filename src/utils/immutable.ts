@@ -1,3 +1,4 @@
+import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { config, blockchainData, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
@@ -26,7 +27,6 @@ async function getNftByAddress(accountAddress: string) {
     const response = await client.listNFTsByAccountAddress({
       chainName: "imtbl-zkevm-testnet",
       accountAddress,
-      contractAddress: "0x8b5924d9740d2158e1a482c30fc49004d5947efb"
     });
 
     return response.result;
@@ -99,6 +99,25 @@ async function getProfileInfo() {
   }
 }
 
+async function getLeaderBoard() {
+  try {
+    const signer = await signerFetch();
+
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    const burnLeaderboard = await tokenContract.getBurnedAmounts();
+    
+    const swapContract = new ethers.Contract(swapAddress, swapABI, signer);
+    const BuyBalance = await swapContract.getAllBuyers();
+    
+    return {
+      burnLeaderboard,
+      BuyBalance
+    };
+  } catch (error) {
+    console.error("Error getting wallet info:", error);
+  }
+}
+
 async function getWalletInfo() {
 
   try {
@@ -129,4 +148,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getWalletInfo, getNftByAddress, signerFetch, client };
+export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client };

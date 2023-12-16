@@ -47,7 +47,9 @@ export default async function handler(
 
                 const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
 
-                const transaction = await contract.mintByClaimAddress(data.Address, ethers.utils.parseUnits(data.IPX.toString()), deploymentOptions);
+                const IpxEther = (data.IPX * 80) / 100;
+
+                const transaction = await contract.mintByClaimAddress(data.Address, ethers.utils.parseUnits(IpxEther.toString()), deploymentOptions);
                 await transaction.wait();
 
                 const SendIPX = {

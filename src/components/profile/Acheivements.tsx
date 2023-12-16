@@ -101,9 +101,9 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, w
                     {PointsBadgeCount < 3 && (
                         <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">
                             {TotalPoints < 50 ?
-                                `Burn ${50 - TotalPoints} $IPX for level 1` : TotalPoints < 150 ?
-                                    `Burn ${150 - TotalPoints} $IPX for level 2` : TotalPoints < 300 ?
-                                        `Burn ${300 - TotalPoints} $IPX for level 3` : null}
+                                `Get ${50 - TotalPoints} points for level 1` : TotalPoints < 150 ?
+                                    `Get ${150 - TotalPoints} points for level 2` : TotalPoints < 300 ?
+                                        `Get ${300 - TotalPoints} points for level 3` : null}
                         </div>
                     )}
                     <div className="flex flex-wrap text-center items-center mt-10 justify-center">
@@ -139,9 +139,9 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, w
                     {HolderBadgeCount < 3 && (
                         <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">
                             {parseInt(walletIPX) < 50 ?
-                                `Burn ${50 - parseInt(walletIPX)} $IPX for level 1` : parseInt(walletIPX) < 150 ?
-                                    `Burn ${150 - parseInt(walletIPX)} $IPX for level 2` : parseInt(walletIPX) < 300 ?
-                                        `Burn ${300 - parseInt(walletIPX)} $IPX for level 3` : null}
+                                `Hold ${50 - parseInt(walletIPX)} $IPX for level 1` : parseInt(walletIPX) < 150 ?
+                                    `Hold ${150 - parseInt(walletIPX)} $IPX for level 2` : parseInt(walletIPX) < 300 ?
+                                        `Hold ${300 - parseInt(walletIPX)} $IPX for level 3` : null}
                         </div>
                     )}
 
