@@ -1,7 +1,8 @@
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
+import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
-import { ethers } from "ethers";
+import { Signer, ethers } from "ethers";
 
 const passportConfig = {
   baseConfig: new config.ImmutableConfiguration({
@@ -24,10 +25,10 @@ const client = new blockchainData.BlockchainData(configs);
 
 async function getNftByAddress(accountAddress: string) {
   try {
-    const response = await client.listNFTsByAccountAddress({
-      chainName: "imtbl-zkevm-testnet",
-      accountAddress,
-    });
+    const chainName = 'imtbl-zkevm-testnet';
+    // const contractAddress = '[contractAddress]';
+    // const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress });
+    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress });
 
     return response.result;
   } catch (error) {
@@ -82,7 +83,7 @@ async function getProfileInfo() {
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
     const burnBalance = await tokenContract.getBurnedAmount(walletAddress);
-    
+
     return {
       walletAddress,
       balanceInEther,
@@ -99,16 +100,61 @@ async function getProfileInfo() {
   }
 }
 
+const contractInstance = (CONTRACT_ADDRESS: string) => {
+
+  return new ERC721Client(CONTRACT_ADDRESS);
+};
+
+const transfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void) => {
+
+  const signer = await signerFetch();
+
+  const sender = await signer.getAddress();
+
+  const contract = contractInstance(CONTRACT_ADDRESS);
+
+  const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
+
+  const populatedTransaction = await contract[
+    'populateSafeTransferFrom(address,address,uint256)'
+  ](sender, RECIPIENT, TOKEN_ID, deploymentOptions);
+
+  const transaction = await signer.sendTransaction(populatedTransaction);
+
+  setTxn(transaction)
+
+  return transaction
+};
+
+
+const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void) => {
+
+  const signer = await signerFetch();
+
+  const contract = contractInstance(CONTRACT_ADDRESS);
+
+  const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
+
+  const populatedTransaction = await contract.populateBurn(TOKEN_ID, deploymentOptions);
+
+  const transaction = await signer.sendTransaction(populatedTransaction);
+
+  setTxn(transaction)
+
+  return transaction
+};
+
+
 async function getLeaderBoard() {
   try {
     const signer = await signerFetch();
 
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     const burnLeaderboard = await tokenContract.getBurnedAmounts();
-    
+
     const swapContract = new ethers.Contract(swapAddress, swapABI, signer);
     const BuyBalance = await swapContract.getAllBuyers();
-    
+
     return {
       burnLeaderboard,
       BuyBalance
@@ -148,4 +194,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client };
+export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

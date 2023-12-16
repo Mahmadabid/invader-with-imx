@@ -20,7 +20,7 @@ const Inventory = () => {
   useEffect(() => {
     const fetchNFTs = async () => {
       if (address) {
-        const NftbyAddress: any = await getNftByAddress(address);
+        const NftbyAddress: NFTProps[] | undefined = await getNftByAddress(address);
         setNFTstate(NftbyAddress);
         setLoading(false);
       }
