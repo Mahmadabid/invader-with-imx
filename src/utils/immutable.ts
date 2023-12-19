@@ -23,19 +23,6 @@ const configs = {
 
 const client = new blockchainData.BlockchainData(configs);
 
-async function getNftByAddress(accountAddress: string) {
-  try {
-    const chainName = 'imtbl-zkevm-testnet';
-    // const contractAddress = '[contractAddress]';
-    // const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress });
-    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress });
-
-    return response.result;
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 const passportInstance = new passport.Passport(passportConfig);
 
 const passportProvider = passportInstance.connectEvm();
@@ -44,6 +31,38 @@ const getAddress = async () => {
   const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
   const walletAddress = accounts[0];
   return walletAddress;
+}
+
+async function getNftByAddress(accountAddress: string) {
+  try {
+    const chainName = 'imtbl-zkevm-testnet';
+    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress });
+
+    return response.result;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function getNftByCollection(contractAddress: string) {
+  
+  const accountAddress = await getAddress();
+
+  try {
+
+    const chainName = 'imtbl-zkevm-testnet';
+
+    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress });
+    const responseResult = response.result;
+
+    return {
+      responseResult,
+      accountAddress
+    };
+
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const fetchAuth = async () => {
@@ -194,4 +213,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getAddress, fetchAuth, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getAddress, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

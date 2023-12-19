@@ -1,0 +1,17 @@
+{
+  "id": "24",
+  "image": "https://bafkreiemy3ttpbt3unwtzsqhsceu5hma22jvxu7lk6il7faotyw4xvmhb4.ipfs.nftstorage.link/",
+  "token_id": "24",
+  "name": "Level 1 Ship",
+  "description": "This NFT represents your ship at level 1. Also, it's your profile ship.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "Basic"
+    },
+    {
+      "trait_type": "Ammo",
+      "value": "1"
+    }
+  ]
+}
