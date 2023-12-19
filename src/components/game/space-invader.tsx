@@ -3,21 +3,15 @@ import { useInterval } from './useInterval';
 import {
   START_POSITION,
   GAME_SPEED,
+  START_ENEMIES_POSITION,
 } from './constants';
 
-interface ElementPosition {
+export interface ElementPosition {
   x: number;
   y: number;
   width: number;
   height: number;
 }
-
-const START_ENEMIES_POSITION: ElementPosition[] = [
-  { x: 100, y: 100, width: 50, height: 50 },
-  { x: 150, y: 100, width: 50, height: 50 },
-  { x: 250, y: 100, width: 50, height: 50 },
-  { x: 200, y: 100, width: 50, height: 50 },
-];
 
 export const SpaceInvader: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -34,12 +28,30 @@ export const SpaceInvader: React.FC = () => {
   const BULLET_HEIGHT = 20;
 
   const [canFire, setCanFire] = useState(true);
+  const [pressedKeys, setPressedKeys] = useState<Record<string, boolean>>({});
 
-  const pressed = ({ keyCode }: React.KeyboardEvent) => {
-    if (keyCode === 39) setPlayerPosition({ ...playerPostion, y: playerPostion.y + 30 });
-    if (keyCode === 37) setPlayerPosition({ ...playerPostion, y: playerPostion.y - 30 });
-    if (keyCode === 32 && canFire) {
-      setBulletPosition([...bulletsPosition, { ...playerPostion, width: BULLET_WIDTH, height: BULLET_HEIGHT }]);
+  const movePlayer = () => {
+    setPlayerPosition((prevPosition) => {
+      let newY = prevPosition.y;
+
+      if (pressedKeys['ArrowRight']) {
+        newY = Math.min(prevPosition.y + 5, 680 - prevPosition.width);
+      }
+
+      if (pressedKeys['ArrowLeft']) {
+        newY = Math.max(prevPosition.y - 5, 0);
+      }
+
+      return { ...prevPosition, y: newY };
+    });
+  };
+
+  const pressed = ({ code }: React.KeyboardEvent) => {
+    if (code === 'Space' && canFire) {
+      setBulletPosition((bullets) => [
+        ...bullets,
+        { ...playerPostion, width: BULLET_WIDTH, height: BULLET_HEIGHT },
+      ]);
       setCanFire(false);
 
       setTimeout(() => {
@@ -49,13 +61,23 @@ export const SpaceInvader: React.FC = () => {
   };
 
   const moveEnemies = () => {
-    setEnemies(
-      enemies.filter((enemy) => enemy.x < 680).map((enemy) => {
+    setEnemies((currentEnemies) =>
+      currentEnemies.map((enemy) => {
+        let updatedEnemy: ElementPosition;
+
         if (enemy.y < 60) {
-          return { x: enemy.x + 60, y: 580, width: 50, height: 50 };
+          updatedEnemy = { x: enemy.x + 60, y: 580, width: 50, height: 50 };
         } else {
-          return { x: enemy.x, y: enemy.y - 5, width: 50, height: 50 };
+          updatedEnemy = { x: enemy.x, y: enemy.y - 5, width: 50, height: 50 };
         }
+
+        if (updatedEnemy.x < 0) {
+          updatedEnemy.x = 0;
+        } else if (updatedEnemy.x + updatedEnemy.width > 800) {
+          updatedEnemy.x = 800 - updatedEnemy.width;
+        }
+
+        return updatedEnemy;
       })
     );
   };
@@ -96,46 +118,67 @@ export const SpaceInvader: React.FC = () => {
   };
 
   const gameLoop = () => {
+    movePlayer();
     moveEnemies();
     moveBullets();
   };
 
   useInterval(() => gameLoop(), GAME_SPEED);
-  useEffect(() => ref.current?.focus(), []);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    setPressedKeys((prevKeys) => ({ ...prevKeys, [e.code]: true }));
+  };
+
+  const handleKeyUp = (e: KeyboardEvent) => {
+    setPressedKeys((prevKeys) => ({ ...prevKeys, [e.code]: false }));
+  };
+
+  useEffect(() => {
+    ref.current?.focus();
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   return (
-    <div
-      className="container"
-      onKeyDown={(e) => pressed(e)}
-      role="button"
-      tabIndex={0}
-      ref={ref}
-      autoFocus
-    >
-      <img
-        className="spaceship"
-        src="/player.png"
-        style={{ top: playerPostion.x, left: playerPostion.y, width: 50 }}
-        alt="Player"
-      />
-      {enemies.map((enemy, index) => (
+    <div>
+      <div
+        className="w-[680px] h-[560px] bg-game"
+        onKeyDown={(e) => pressed(e)}
+        role="button"
+        tabIndex={0}
+        ref={ref}
+        autoFocus
+      >
         <img
-          key={'enemy' + index}
-          className="spaceship"
-          src="/enemy.png"
-          style={{ top: enemy.x, left: enemy.y, width: 50 }}
-          alt={`Enemy ${index}`}
+          className="absolute"
+          src="/player.png"
+          style={{ top: playerPostion.x, left: playerPostion.y, width: 50 }}
+          alt="Player"
         />
-      ))}
-      {bulletsPosition.map((bullet, index) => (
-        <img
-          key={'bullet' + index}
-          className="spaceship"
-          src="/bullet.png"
-          style={{ top: bullet.x, left: bullet.y, width: bullet.width, height: bullet.height }}
-          alt={`Bullet ${index}`}
-        />
-      ))}
+        {enemies.map((enemy, index) => (
+          <img
+            key={'enemy' + index}
+            className="absolute"
+            src="/enemy.png"
+            style={{ top: enemy.x, left: enemy.y, width: 50 }}
+            alt={`Enemy ${index}`}
+          />
+        ))}
+        {bulletsPosition.map((bullet, index) => (
+          <img
+            key={'bullet' + index}
+            className="absolute"
+            src="/bullet.png"
+            style={{ top: bullet.x, left: bullet.y, width: bullet.width, height: bullet.height }}
+            alt={`Bullet ${index}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
