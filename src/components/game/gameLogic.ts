@@ -5,6 +5,7 @@ export interface GAMELOGIC {
   TotalPoints: number;
   IPXUnclaimed: number;
   Level: number;
+  Health: number;
 }
 
 export const useGameLogic = () => {
@@ -13,6 +14,7 @@ export const useGameLogic = () => {
     TotalPoints: 0,
     IPXUnclaimed: 0,
     Level: 2,
+    Health: 3
   };
 
   const [gameLogic, setGameLogic] = useState<GAMELOGIC>(GameLogic);
