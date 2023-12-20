@@ -1,3 +1,4 @@
+import { useGameLogic } from "@/components/game/gameLogic";
 import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
 import Load from "@/components/utils/Load";
@@ -5,12 +6,14 @@ import { getNftByCollection } from "@/utils/immutable";
 import { useEffect, useState } from "react";
 
 const Home = () => {
+
   const [NFTstate, setNFTstate] = useState<NFTProps[] | undefined>([]);
   const [loading, setLoading] = useState(true);
   const [shipLoading, setShipLoading] = useState(false);
   const [minted, setMinted] = useState(false);
   const [Address, setAddress] = useState('');
   const contractAddress = '0x154339b6b882b9076ee90a25a142f116135c3e28';
+  const { gameLogic, setGameLogic } = useGameLogic()
 
   useEffect(() => {
     const fetchNFTs = async () => {
