@@ -8,6 +8,7 @@ import {
 } from './constants';
 import { useMovePlayer } from './movePlayer';
 import { useGameLogic } from './gameLogic';
+import { useGameConstants } from './gameConstants';
 
 export interface ElementPosition {
   x: number;
@@ -19,8 +20,10 @@ export interface ElementPosition {
 export const SpaceInvader: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic();
+  const { gameConst, setGameConst } = useGameConstants();
+
   const [playerBulletsPosition, setPlayerBulletPosition] = useState<ElementPosition[]>([]);
-  const [enemies, setEnemies] = useState<ElementPosition[]>(gameLogic.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+  const [enemies, setEnemies] = useState<ElementPosition[]>(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
   const [enemyBullets, setEnemyBullets] = useState<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>([]);
   const [enemyCanFire, setEnemyCanFire] = useState(true);
   const [playerPosition, setPlayerPosition] = useState<ElementPosition>({
@@ -30,34 +33,35 @@ export const SpaceInvader: React.FC = () => {
     height: 50,
   });
 
-
-  const [timer, setTimer] = useState(40);
   const timerInterval = 1000;
 
   useEffect(() => {
     const timerId = setInterval(() => {
       !gameLogic.gameover ?
-        setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : prevTimer)) : null
+        setGameLogic((prevLogic) => ({
+          ...prevLogic,
+          timer: (prevLogic.timer > 0? prevLogic.timer - 1: 0),
+        })): null;
     }, timerInterval);
 
     return () => clearInterval(timerId);
 
-  }, []);
+  }, [gameLogic.interval]);
 
   useEffect(() => {
-    if (timer <= 0) {
+    if (gameLogic.timer <= 0) {
       setGameLogic((prevGameLogic) => ({
         ...prevGameLogic,
         gameover: true,
       }));
     }
-  }, [timer]);
+  }, [gameLogic.timer]);
 
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
-  const ENEMY_BULLET_WIDTH = gameLogic.Level === 1 ? 10 : 12;
-  const ENEMY_BULLET_HEIGHT = gameLogic.Level === 1 ? 10 : 12;
-  const ENEMY_FIRE_INTERVAL = gameLogic.Level === 1 ? 950 : 800;
+  const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 10 : 12;
+  const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 10 : 12;
+  const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 : 800;
 
   const [canFire, setCanFire] = useState(true);
   const [pressedKeys, setPressedKeys] = useState<Record<string, boolean>>({});
@@ -65,10 +69,9 @@ export const SpaceInvader: React.FC = () => {
   const { movePlayer } = useMovePlayer(pressedKeys, setPlayerPosition);
 
   const pressed = ({ code }: React.KeyboardEvent) => {
-    console.log('Space key pressed!');
-    console.log('Fire Speed:', gameLogic.fireSpeed);
+
     if (code === 'Space' && canFire) {
-      const bulletsToFire = gameLogic.Level;
+      const bulletsToFire = gameConst.Level;
       const newBullets = Array.from({ length: bulletsToFire }, (_, index) => ({
         ...playerPosition,
         y: playerPosition.y + 25 * index,
@@ -86,7 +89,7 @@ export const SpaceInvader: React.FC = () => {
       setTimeout(() => {
         console.log('Timeout executed!');
         setCanFire(true);
-      }, gameLogic.fireSpeed);
+      }, (1000 - gameConst.fireSpeed));
     }
   };
 
@@ -146,7 +149,7 @@ export const SpaceInvader: React.FC = () => {
         if (enemy.y < 10) {
           updatedEnemy = { x: enemy.x + 40, y: 700, width: 50, height: 50 };
         } else {
-          updatedEnemy = { x: enemy.x, y: enemy.y - (gameLogic.Level === 1 ? 7 : 10), width: 50, height: 50 };
+          updatedEnemy = { x: enemy.x, y: enemy.y - (gameConst.Level === 1 ? 7 : 10), width: 50, height: 50 };
         }
 
         updatedEnemy.x = Math.max(0, Math.min(570 - updatedEnemy.width, updatedEnemy.x));
@@ -157,7 +160,7 @@ export const SpaceInvader: React.FC = () => {
           return null;
         }
 
-        if (Math.random() < (gameLogic.Level === 1 ? 0.025 : 0.0325) && enemyCanFire) {
+        if (Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : (0.0325 - gameConst.enemyFire)) && enemyCanFire) {
           setEnemyCanFire(false);
 
           setTimeout(() => {
@@ -187,7 +190,9 @@ export const SpaceInvader: React.FC = () => {
       if (allEnemiesDead) {
         setGameLogic((prevGameLogic) => ({
           ...prevGameLogic,
+          win: true,
           gameover: true,
+          IPXUnclaimed: (gameConst.Level === 1? 3: 5)
         }));
       }
 
@@ -267,11 +272,11 @@ export const SpaceInvader: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [gameConst.start, gameLogic.gameover]);
 
   const handleFirstStart = () => {
-    setGameLogic((prevGameLogic) => ({
-      ...prevGameLogic,
+    setGameConst((prevGameConst) => ({
+      ...prevGameConst,
       start: true
     }));
   }
@@ -281,40 +286,36 @@ export const SpaceInvader: React.FC = () => {
       ...prevGameLogic,
       gameover: false,
       TotalPoints: 0, 
-      Health: (prevGameLogic.Level === 1? 3: 4),
+      Health: gameConst.Health,
       IPXUnclaimed: 0,
+      timer: gameConst.timer,
+      win: false,
+      interval: (prevGameLogic.interval + 1)
     }));
 
-    setPlayerBulletPosition([]);
-    setEnemies(gameLogic.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+    setEnemies(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
     setEnemyBullets([]);
     setEnemyCanFire(true);
     setCanFire(true);
 
-    setPlayerPosition({
-      x: START_POSITION.x,
-      y: START_POSITION.y,
-      width: 50,
-      height: 50,
-    });
-    
-    setTimer(40);
+    respawnPlayer();
   }
 
   const headerHeight = 4.65;
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      {gameLogic.gameover && gameLogic.start ?
+      {gameLogic.gameover && gameConst.start ?
         <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
-          <h1 className='text-2xl font-bold my-4'>Game Over!</h1>
+          <h1 className='text-2xl font-bold my-4'>{gameLogic.win? 'You Won!': 'Game Over!'}</h1>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
-          <button onClick={handleStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
-        </div> : !gameLogic.gameover && !gameLogic.start ?
+          {gameLogic.win? <p className='font-medium mt-2 mb-4'>IPX won: {gameLogic.IPXUnclaimed}</p>: <p className='font-medium mt-2 mb-4'>IPX won: <span className='text-lime-500'>You need to win first!</span></p>}
+          <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
+        </div> : !gameLogic.gameover && !gameConst.start ?
          <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
            <h1 className='text-2xl font-bold my-4'>Ready!</h1>
            <p className='font-medium mt-2 mb-4'></p>
-           <button onClick={handleFirstStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
+           <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
          </div> :
         <div
           className="w-[680px] h-[560px] mt-2 relative bg-game border-none"
@@ -328,7 +329,7 @@ export const SpaceInvader: React.FC = () => {
             Score: {gameLogic.TotalPoints}
           </div>
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-white font-bold mt-4">
-            Time Left: {timer}s
+            Time Left: {gameLogic.timer}s
           </div>
           <div className="absolute top-0 right-0 mt-4">
             {[...Array(gameLogic.Health)].map((_, index) =>
@@ -346,7 +347,7 @@ export const SpaceInvader: React.FC = () => {
           </div>
           <img
             className="absolute"
-            src={gameLogic.Level === 1 ? '/player.png' : '/playerv2.png'}
+            src={gameConst.Level === 1 ? '/player.png' : '/playerv2.png'}
             style={{ top: playerPosition.x, left: playerPosition.y, width: 40, height: 40 }}
             alt="Player"
           />
@@ -378,6 +379,7 @@ export const SpaceInvader: React.FC = () => {
                 left: bullet.y,
                 width: bullet.width,
                 height: bullet.height,
+                transform: 'scaleY(-1)',
               }}
               alt={`Enemy Bullet ${index}`}
             />

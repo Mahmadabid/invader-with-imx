@@ -1,8 +1,8 @@
-import { useGameLogic } from "./gameLogic";
+import { useGameConstants } from "./gameConstants";
 import { ElementPosition } from "./space-invader";
 
 export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPosition: React.Dispatch<React.SetStateAction<ElementPosition>>) => {
-    const { gameLogic } = useGameLogic();
+    const { gameConst } = useGameConstants();
 
     const movePlayer = () => {
         setPlayerPosition((prevPosition) => {
@@ -17,7 +17,7 @@ export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPos
                 newY = Math.max(prevPosition.y - 5, 0);
             }
 
-            if (gameLogic.Level > 1) {
+            if (gameConst.Level > 1) {
                 if (pressedKeys['ArrowUp']) {
                     newX = Math.max(prevPosition.x - 5, 30);
                 }

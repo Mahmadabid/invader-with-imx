@@ -64,7 +64,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!loading && NFTstate?.length === 0) {
-      sendData();
+      // sendData();
     }
   }, [loading]);
 
