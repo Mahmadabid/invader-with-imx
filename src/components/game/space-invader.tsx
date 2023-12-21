@@ -51,7 +51,7 @@ export const SpaceInvader: React.FC = () => {
         gameover: true,
       }));
     }
-  }, [timer, setGameLogic]);
+  }, [timer]);
 
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
@@ -238,7 +238,6 @@ export const SpaceInvader: React.FC = () => {
   };
 
   const gameLoop = () => {
-
     if (!gameLogic.gameover) {
       movePlayer();
       moveEnemiesAndFireBullets();
@@ -268,83 +267,112 @@ export const SpaceInvader: React.FC = () => {
     };
   }, []);
 
+  const handleStart = () => {
+    setGameLogic((prevGameLogic) => ({
+      ...prevGameLogic,
+      gameover: false,
+      start: true,
+      TotalPoints: 0
+    }));
+
+    setPlayerBulletPosition([]);
+    setEnemies(gameLogic.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+    setEnemyBullets([]);
+    setEnemyCanFire(true);
+
+    setPlayerPosition({
+      x: START_POSITION.x,
+      y: START_POSITION.y,
+      width: 50,
+      height: 50,
+    });
+    
+    setTimer(40);
+    setPressedKeys({});
+  }
+
   const headerHeight = 4.65;
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      {gameLogic.gameover ?
-      <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
-        <h1 className='text-2xl font-bold my-4'>Game Over!</h1>
-        <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
-        <button className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
-      </div>:
-      <div
-        className="w-[680px] h-[560px] mt-2 relative bg-game border-none"
-        onKeyDown={(e) => pressed(e)}
-        role="button"
-        tabIndex={0}
-        ref={ref}
-        autoFocus
-      >
-        <div className="absolute top-0 left-0 text-white font-bold p-4">
-          Score: {gameLogic.TotalPoints}
-        </div>
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-white font-bold mt-4">
-          Time Left: {timer}s
-        </div>
-        <div className="absolute top-0 right-0 mt-4">
-          {[...Array(gameLogic.Health)].map((_, index) =>
-            <svg
-              key={index}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="red"
-              className="w-6 h-6 inline-block z-50"
-            >
-              <path fillRule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 0 1 9.75 22.5a.75.75 0 0 1-.75-.75v-4.131A15.838 15.838 0 0 1 6.382 15H2.25a.75.75 0 0 1-.75-.75 6.75 6.75 0 0 1 7.815-6.666ZM15 6.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" clipRule="evenodd" />
-              <path d="M5.26 17.242a.75.75 0 1 0-.897-1.203 5.243 5.243 0 0 0-2.05 5.022.75.75 0 0 0 .625.627 5.243 5.243 0 0 0 5.022-2.051.75.75 0 1 0-1.202-.897 3.744 3.744 0 0 1-3.008 1.51c0-1.23.592-2.323 1.51-3.008Z" />
-            </svg>
-          )}
-        </div>
-        <img
-          className="absolute"
-          src={gameLogic.Level === 1 ? '/player.png' : '/playerv2.png'}
-          style={{ top: playerPosition.x, left: playerPosition.y, width: 40, height: 40 }}
-          alt="Player"
-        />
-        {enemies.map((enemy, index) => (
+      {gameLogic.gameover ? !gameLogic.start ?
+        <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
+          <h1 className='text-2xl font-bold my-4'>Ready!</h1>
+          <p className='font-medium mt-2 mb-4'></p>
+          <button onClick={handleStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
+        </div> :
+        <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
+          <h1 className='text-2xl font-bold my-4'>Game Over!</h1>
+          <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
+          <button onClick={handleStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
+        </div> :
+        <div
+          className="w-[680px] h-[560px] mt-2 relative bg-game border-none"
+          onKeyDown={(e) => pressed(e)}
+          role="button"
+          tabIndex={0}
+          ref={ref}
+          autoFocus
+        >
+          <div className="absolute top-0 left-0 text-white font-bold p-4">
+            Score: {gameLogic.TotalPoints}
+          </div>
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-white font-bold mt-4">
+            Time Left: {timer}s
+          </div>
+          <div className="absolute top-0 right-0 mt-4">
+            {[...Array(gameLogic.Health)].map((_, index) =>
+              <svg
+                key={index}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="red"
+                className="w-6 h-6 inline-block z-50"
+              >
+                <path fillRule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 0 1 9.75 22.5a.75.75 0 0 1-.75-.75v-4.131A15.838 15.838 0 0 1 6.382 15H2.25a.75.75 0 0 1-.75-.75 6.75 6.75 0 0 1 7.815-6.666ZM15 6.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" clipRule="evenodd" />
+                <path d="M5.26 17.242a.75.75 0 1 0-.897-1.203 5.243 5.243 0 0 0-2.05 5.022.75.75 0 0 0 .625.627 5.243 5.243 0 0 0 5.022-2.051.75.75 0 1 0-1.202-.897 3.744 3.744 0 0 1-3.008 1.51c0-1.23.592-2.323 1.51-3.008Z" />
+              </svg>
+            )}
+          </div>
           <img
-            key={'enemy' + index}
             className="absolute"
-            src="/enemy.png"
-            style={{ top: enemy.x, left: enemy.y, width: 30, height: 30 }}
-            alt={`Enemy ${index}`}
+            src={gameLogic.Level === 1 ? '/player.png' : '/playerv2.png'}
+            style={{ top: playerPosition.x, left: playerPosition.y, width: 40, height: 40 }}
+            alt="Player"
           />
-        ))}
-        {playerBulletsPosition.map((bullet, index) => (
-          <img
-            key={`bullet${index}`}
-            className="absolute"
-            src="/bullet.png"
-            style={{ top: bullet.x, left: bullet.y, width: bullet.width, height: bullet.height }}
-            alt={`Bullet ${index}`}
-          />
-        ))}
-        {enemyBullets.map((bullet, index) => (
-          <img
-            key={'enemyBullet' + index}
-            className="absolute"
-            src="/Bullet.png"
-            style={{
-              top: bullet.x,
-              left: bullet.y,
-              width: bullet.width,
-              height: bullet.height,
-            }}
-            alt={`Enemy Bullet ${index}`}
-          />
-        ))}
-      </div>}
+          {enemies.map((enemy, index) => (
+            <img
+              key={'enemy' + index}
+              className="absolute"
+              src="/enemy.png"
+              style={{ top: enemy.x, left: enemy.y, width: 30, height: 30 }}
+              alt={`Enemy ${index}`}
+            />
+          ))}
+          {playerBulletsPosition.map((bullet, index) => (
+            <img
+              key={`bullet${index}`}
+              className="absolute"
+              src="/bullet.png"
+              style={{ top: bullet.x, left: bullet.y, width: bullet.width, height: bullet.height }}
+              alt={`Bullet ${index}`}
+            />
+          ))}
+          {enemyBullets.map((bullet, index) => (
+            <img
+              key={'enemyBullet' + index}
+              className="absolute"
+              src="/Bullet.png"
+              style={{
+                top: bullet.x,
+                left: bullet.y,
+                width: bullet.width,
+                height: bullet.height,
+              }}
+              alt={`Enemy Bullet ${index}`}
+            />
+          ))}
+        </div>}
     </div>
   );
 };

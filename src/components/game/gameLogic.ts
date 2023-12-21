@@ -7,7 +7,7 @@ export interface GAMELOGIC {
   Level: number;
   Health: number;
   fireSpeed: number;
-  startAgain: boolean;
+  start: boolean;
 }
 
 export const useGameLogic = () => {
@@ -18,7 +18,7 @@ export const useGameLogic = () => {
     Level: 2,
     Health: 3,
     fireSpeed: 1000,
-    startAgain: false,
+    start: false,
   };
 
   const [gameLogic, setGameLogic] = useState<GAMELOGIC>(GameLogic);

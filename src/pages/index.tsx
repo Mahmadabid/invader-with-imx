@@ -1,4 +1,3 @@
-import { useGameLogic } from "@/components/game/gameLogic";
 import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
 import Load from "@/components/utils/Load";
@@ -13,7 +12,6 @@ const Home = () => {
   const [minted, setMinted] = useState(false);
   const [Address, setAddress] = useState('');
   const contractAddress = '0x154339b6b882b9076ee90a25a142f116135c3e28';
-  const { gameLogic, setGameLogic } = useGameLogic()
 
   useEffect(() => {
     const fetchNFTs = async () => {
@@ -70,16 +68,6 @@ const Home = () => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (gameLogic.startAgain) {
-
-      setGameLogic((prevGameLogic) => ({
-        ...prevGameLogic,
-        startAgain: false,
-      }));
-    }
-  }, [gameLogic.startAgain, setGameLogic]);
-
   return (
     <div>
       {loading || shipLoading ? (
@@ -89,7 +77,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <SpaceInvader key={gameLogic.startAgain ? 'reset-key' : 'normal-key'} />
+          <SpaceInvader />
         </div>
       )}
     </div>
