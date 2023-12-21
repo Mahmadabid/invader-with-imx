@@ -20,7 +20,7 @@ export const SpaceInvader: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic();
   const [playerBulletsPosition, setPlayerBulletPosition] = useState<ElementPosition[]>([]);
-  const [enemies, setEnemies] = useState<ElementPosition[]>(gameLogic.Level === 1? START_ENEMIES_POSITION: START_ENEMIES_POSITION_2);
+  const [enemies, setEnemies] = useState<ElementPosition[]>(gameLogic.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
   const [enemyBullets, setEnemyBullets] = useState<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>([]);
   const [enemyCanFire, setEnemyCanFire] = useState(true);
   const [playerPosition, setPlayerPosition] = useState<ElementPosition>({
@@ -29,12 +29,35 @@ export const SpaceInvader: React.FC = () => {
     width: 50,
     height: 50,
   });
-console.log(gameLogic.gameover)
+
+
+  const [timer, setTimer] = useState(40);
+  const timerInterval = 1000;
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      !gameLogic.gameover ?
+        setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : prevTimer)) : null
+    }, timerInterval);
+
+    return () => clearInterval(timerId);
+
+  }, []);
+
+  useEffect(() => {
+    if (timer <= 0) {
+      setGameLogic((prevGameLogic) => ({
+        ...prevGameLogic,
+        gameover: true,
+      }));
+    }
+  }, [timer, setGameLogic]);
+
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
-  const ENEMY_BULLET_WIDTH = gameLogic.Level === 1? 10: 12;
-  const ENEMY_BULLET_HEIGHT = gameLogic.Level === 1? 10: 12;
-  const ENEMY_FIRE_INTERVAL = gameLogic.Level === 1? 950: 800;
+  const ENEMY_BULLET_WIDTH = gameLogic.Level === 1 ? 10 : 12;
+  const ENEMY_BULLET_HEIGHT = gameLogic.Level === 1 ? 10 : 12;
+  const ENEMY_FIRE_INTERVAL = gameLogic.Level === 1 ? 950 : 800;
 
   const [canFire, setCanFire] = useState(true);
   const [pressedKeys, setPressedKeys] = useState<Record<string, boolean>>({});
@@ -50,20 +73,20 @@ console.log(gameLogic.gameover)
         width: BULLET_WIDTH,
         height: BULLET_HEIGHT,
       }));
-  
+
       setPlayerBulletPosition((bullets) => [
         ...bullets,
         ...newBullets,
       ]);
-  
+
       setCanFire(false);
-  
+
       setTimeout(() => {
         setCanFire(true);
       }, gameLogic.fireSpeed);
     }
   };
-  
+
 
   useEffect(() => {
     if (gameLogic.Health <= 0) {
@@ -132,7 +155,7 @@ console.log(gameLogic.gameover)
           return null;
         }
 
-        if (Math.random() < (gameLogic.Level === 1? 0.025: 0.0325) && enemyCanFire) {
+        if (Math.random() < (gameLogic.Level === 1 ? 0.025 : 0.0325) && enemyCanFire) {
           setEnemyCanFire(false);
 
           setTimeout(() => {
@@ -215,10 +238,13 @@ console.log(gameLogic.gameover)
   };
 
   const gameLoop = () => {
-    movePlayer();
-    moveEnemiesAndFireBullets();
-    movePlayerBullets();
-    moveEnemyBullets();
+
+    if (!gameLogic.gameover) {
+      movePlayer();
+      moveEnemiesAndFireBullets();
+      movePlayerBullets();
+      moveEnemyBullets();
+    }
   };
 
   useInterval(() => gameLoop(), GAME_SPEED);
@@ -246,6 +272,12 @@ console.log(gameLogic.gameover)
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
+      {gameLogic.gameover ?
+      <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
+        <h1 className='text-2xl font-bold my-4'>Game Over!</h1>
+        <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
+        <button className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
+      </div>:
       <div
         className="w-[680px] h-[560px] mt-2 relative bg-game border-none"
         onKeyDown={(e) => pressed(e)}
@@ -256,6 +288,9 @@ console.log(gameLogic.gameover)
       >
         <div className="absolute top-0 left-0 text-white font-bold p-4">
           Score: {gameLogic.TotalPoints}
+        </div>
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 text-white font-bold mt-4">
+          Time Left: {timer}s
         </div>
         <div className="absolute top-0 right-0 mt-4">
           {[...Array(gameLogic.Health)].map((_, index) =>
@@ -273,7 +308,7 @@ console.log(gameLogic.gameover)
         </div>
         <img
           className="absolute"
-          src={gameLogic.Level === 1? '/player.png': '/playerv2.png'}
+          src={gameLogic.Level === 1 ? '/player.png' : '/playerv2.png'}
           style={{ top: playerPosition.x, left: playerPosition.y, width: 40, height: 40 }}
           alt="Player"
         />
@@ -309,7 +344,7 @@ console.log(gameLogic.gameover)
             alt={`Enemy Bullet ${index}`}
           />
         ))}
-      </div>
+      </div>}
     </div>
   );
 };

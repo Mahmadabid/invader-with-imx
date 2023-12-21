@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from "ethers";
+import { ERC721Client } from "@imtbl/contracts";
 
 type Entry = {
     address: string
@@ -8,7 +9,7 @@ type Entry = {
 type ApiResponse = {
     error?: string;
     message?: string;
-    entry?: Entry;
+    entry?: any;
     entries?: Entry[];
 };
 
@@ -49,17 +50,40 @@ export default async function handler(
             const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
             const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 
-            const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
+            const contract = new ERC721Client(CONTRACT_ADDRESS);
 
-            const adjustedGasPrice = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
+            // const adjustedGasPrice = {
+            //     maxPriorityFeePerGas: 100e9, // 100 Gwei
+            //     maxFeePerGas: 150e9,
+            //     gasLimit: 200000,
+            // };
 
             const TOKEN_ID = await getNextTokenId(contract);
 
-            const tx = await contract.mint(address, TOKEN_ID, adjustedGasPrice);
+            // const tx = await contract.mint(address, 10, adjustedGasPrice);
 
-            const receipt = await tx.wait();
+            const requests = [
+                {
+                  to: address,
+                  tokenIds: [15],
+                },
+                ];
+            
+              const gasOverrides = {
+                maxPriorityFeePerGas: 100e9, // 100 Gwei
+                maxFeePerGas: 150e9,
+                gasLimit: 200000,
+                };
+            
+            //   const tx = await contract.populateMintBatch(requests, gasOverrides);
 
-            return res.status(200).json({ message: "Minted successfully.", entry: receipt });
+            // const receipt = await tx.wait();
+            const populatedTransaction = await contract.populateMintBatch(requests, gasOverrides);
+
+            const result = await wallet.sendTransaction(populatedTransaction);
+            console.log("Transaction sent, result:", result);
+
+            return res.status(200).json({ message: "Minted successfully.", entry: result });
         } catch (error) {
             console.error('Error:', error);
             return res.status(500).json({ error: "Error Minting." });

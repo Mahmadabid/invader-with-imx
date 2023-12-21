@@ -49,9 +49,9 @@ const Home = () => {
         },
         body: JSON.stringify(dataToSend)
       });
-
+      console.log(response)
       if (response.ok) {
-        console.log('Minted successfully');
+        console.log('Minted successfully', response);
         setMinted(true);
       } else {
         console.error('Failed to Mint. Status:', response.status);
@@ -66,23 +66,32 @@ const Home = () => {
 
   useEffect(() => {
     if (!loading && NFTstate?.length === 0) {
-      // sendData();
+      sendData();
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (gameLogic.startAgain) {
+
+      setGameLogic((prevGameLogic) => ({
+        ...prevGameLogic,
+        startAgain: false,
+      }));
+    }
+  }, [gameLogic.startAgain, setGameLogic]);
+
   return (
     <div>
-      {/* {loading || shipLoading ? (
+      {loading || shipLoading ? (
         <div className="flex flex-col justify-center items-center my-20">
           <h1 className="text-xl font-medium text-slate-700">{shipLoading ? 'Minting your ship' : 'Fetching your ship'}</h1>
           <Load className="w-8 h-8 my-3" />
         </div>
       ) : (
         <div>
-
+          <SpaceInvader key={gameLogic.startAgain ? 'reset-key' : 'normal-key'} />
         </div>
-      )} */}
-      <div><SpaceInvader /></div>
+      )}
     </div>
   );
 };
