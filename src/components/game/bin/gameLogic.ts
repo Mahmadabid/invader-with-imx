@@ -14,7 +14,7 @@ export const useGameLogic = () => {
     gameover: false,
     TotalPoints: 0,
     IPXUnclaimed: 0,
-    Level: 2,
+    Level: 1,
     Health: 3,
     fireSpeed: 1000,
   };
