@@ -65,6 +65,8 @@ export const SpaceInvader: React.FC = () => {
   const { movePlayer } = useMovePlayer(pressedKeys, setPlayerPosition);
 
   const pressed = ({ code }: React.KeyboardEvent) => {
+    console.log('Space key pressed!');
+    console.log('Fire Speed:', gameLogic.fireSpeed);
     if (code === 'Space' && canFire) {
       const bulletsToFire = gameLogic.Level;
       const newBullets = Array.from({ length: bulletsToFire }, (_, index) => ({
@@ -82,11 +84,11 @@ export const SpaceInvader: React.FC = () => {
       setCanFire(false);
 
       setTimeout(() => {
+        console.log('Timeout executed!');
         setCanFire(true);
       }, gameLogic.fireSpeed);
     }
   };
-
 
   useEffect(() => {
     if (gameLogic.Health <= 0) {
@@ -267,18 +269,27 @@ export const SpaceInvader: React.FC = () => {
     };
   }, []);
 
+  const handleFirstStart = () => {
+    setGameLogic((prevGameLogic) => ({
+      ...prevGameLogic,
+      start: true
+    }));
+  }
+
   const handleStart = () => {
     setGameLogic((prevGameLogic) => ({
       ...prevGameLogic,
       gameover: false,
-      start: true,
-      TotalPoints: 0
+      TotalPoints: 0, 
+      Health: (prevGameLogic.Level === 1? 3: 4),
+      IPXUnclaimed: 0,
     }));
 
     setPlayerBulletPosition([]);
     setEnemies(gameLogic.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
     setEnemyBullets([]);
     setEnemyCanFire(true);
+    setCanFire(true);
 
     setPlayerPosition({
       x: START_POSITION.x,
@@ -288,24 +299,23 @@ export const SpaceInvader: React.FC = () => {
     });
     
     setTimer(40);
-    setPressedKeys({});
   }
 
   const headerHeight = 4.65;
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      {gameLogic.gameover ? !gameLogic.start ?
-        <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
-          <h1 className='text-2xl font-bold my-4'>Ready!</h1>
-          <p className='font-medium mt-2 mb-4'></p>
-          <button onClick={handleStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
-        </div> :
+      {gameLogic.gameover && gameLogic.start ?
         <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
           <h1 className='text-2xl font-bold my-4'>Game Over!</h1>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
           <button onClick={handleStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
-        </div> :
+        </div> : !gameLogic.gameover && !gameLogic.start ?
+         <div className="w-[680px] h-[560px] mt-2 text-white text-center bg-black">
+           <h1 className='text-2xl font-bold my-4'>Ready!</h1>
+           <p className='font-medium mt-2 mb-4'></p>
+           <button onClick={handleFirstStart} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
+         </div> :
         <div
           className="w-[680px] h-[560px] mt-2 relative bg-game border-none"
           onKeyDown={(e) => pressed(e)}
