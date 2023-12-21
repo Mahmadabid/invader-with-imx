@@ -12,11 +12,7 @@ const generateNFTFile = (id, tokenId, name, description, level, ammo) => {
       {
         trait_type: 'Level',
         value: level,
-      },
-      {
-        trait_type: 'Ammo',
-        value: ammo,
-      },
+      }
     ],
   };
 
@@ -37,7 +33,7 @@ const generateNFTFiles = (numFiles) => {
       i.toString(),
       `Level 1 Ship`,
       `This NFT represents your ship at level 1. Also, it's your profile ship.`,
-      'Basic',
+      '1',
       '1'
     );
   }

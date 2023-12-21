@@ -1,8 +1,4 @@
 import { ethers } from "hardhat";
-import {
-  MyERC721MintByID,
-  MyERC721MintByID__factory,
-} from "../typechain-types";
 
 async function deploy() {
 
@@ -14,22 +10,26 @@ async function deploy() {
     throw new Error("Please set your OPERATOR_ALLOWLIST in a .env file");
   }
 
-  const factory: MyERC721MintByID__factory = await ethers.getContractFactory(
-    "MyERC721MintByID"
+  const deploymentOptions = {
+    maxPriorityFeePerGas: 100e9,
+    maxFeePerGas: 150e9,
+    gasLimit: 10000000,
+    }
+    
+  const factory = await ethers.deployContract(
+    "ImmutableERC721MintByID",[deployer.address,
+      "Pixels Invader Ships",
+      "PXS",
+      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQHFTWSQfb34cUG58Cqcsw7L56cTPikvUVz3XXxSdwXdT/?_gl=1*3e42d3*_ga*Nzg4ODE3OTk3LjE2OTYyNzkyMTA.*_ga_5RMPXG14TE*MTcwMzE4Mzg3Ny4xMi4xLjE3MDMxODY1NzAuMjUuMC4w/",
+      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQ63zTYSj16rcGmMbat2gd38xsNpo2FPJ12ZM6YGwQV58?_gl=1*1sh190p*_ga*Nzg4ODE3OTk3LjE2OTYyNzkyMTA.*_ga_5RMPXG14TE*MTcwMzE4Mzg3Ny4xMi4xLjE3MDMxODU1MDIuMzUuMC4w/",
+      operatorAllowlist,
+      deployer.address,
+      ethers.parseUnits("2000")] , deploymentOptions
   );
-  const contract: MyERC721MintByID = await factory.connect(deployer).deploy(
-    deployer.address,
-    "Pixels Ship",
-    "PXS",
-    "https://example-base-uri.com/", // baseURI
-    "https://example-contract-uri.com/", // contractURI
-    operatorAllowlist,
-    deployer.address,
-    ethers.toBigInt("2000")
-  );
-  await contract.deployed();
 
-  console.log(`MyERC721MintByID contract deployed to ${contract.address}`);
+  await factory.waitForDeployment();
+
+  console.log(`ImmutableERC721MintByID contract deployed to ${factory.getAddress()}`);
 }
 
 deploy().catch((error) => {

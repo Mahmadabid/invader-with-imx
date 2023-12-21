@@ -7,10 +7,6 @@
   "attributes": [
     {
       "trait_type": "Level",
-      "value": "Basic"
-    },
-    {
-      "trait_type": "Ammo",
       "value": "1"
     }
   ]

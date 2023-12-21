@@ -170,6 +170,15 @@ const IPXPage = () => {
                 </Link>
             </div>
 
+            <div className="my-4">
+                <Link
+                    href="swap"
+                    className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition duration-300"
+                >
+                    Burn IPX
+                </Link>
+            </div>
+
             <p className="text-lg my-2">
                 Contract Address: <span className="font-mono">{gameTokenAddress}</span>
             </p>
