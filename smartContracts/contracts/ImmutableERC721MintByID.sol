@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache 2.0
 pragma solidity 0.8.20;
 
-import "../ERC721/abstract/ImmutableERC721Base.sol";
+import "./ERC721/abstract/ImmutableERC721Base.sol";
 
 contract ImmutableERC721MintByID is ImmutableERC721Base {
     uint256 private _totalMint;

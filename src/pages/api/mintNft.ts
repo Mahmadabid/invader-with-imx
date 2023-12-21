@@ -51,7 +51,11 @@ export default async function handler(
 
             const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-            const adjustedGasPrice = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
+            const adjustedGasPrice = {
+                maxPriorityFeePerGas: 100e9,
+                maxFeePerGas: 150e9,
+                gasLimit: 200000,
+                };;
 
             const TOKEN_ID = await getNextTokenId(contract);
 
