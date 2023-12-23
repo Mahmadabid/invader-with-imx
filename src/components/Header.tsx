@@ -33,22 +33,22 @@ const Header = () => {
           </svg>
         </button>
         <div className={`absolute right-0 mr-4 mt-2 z-50 w-48 bg-white shadow-md rounded-md ${menuOpen ? 'block' : 'hidden'}`} onClick={closeMenu}>
-          <Link onClick={closeMenu} href="/">
-            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Home</h1>
+          <Link href="/">
+            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Game</h1>
           </Link>
-          <Link onClick={closeMenu} href="/profile">
+          <Link href="/profile">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Profile</h1>
           </Link>
-          <Link onClick={closeMenu} href="/ipx">
+          <Link href="/ipx">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">$IPX</h1>
           </Link>
-          <Link onClick={closeMenu} href="/swap">
+          <Link href="/swap">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Swap</h1>
           </Link>
-          <Link onClick={closeMenu} href="/inventory">
+          <Link href="/inventory">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Inventory</h1>
           </Link>
-          <Link onClick={closeMenu} href="/leaderboard">
+          <Link href="/leaderboard">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Leaderboard</h1>
           </Link>
         </div>
