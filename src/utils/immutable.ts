@@ -2,7 +2,7 @@ import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
-import { Signer, ethers } from "ethers";
+import { ethers } from "ethers";
 
 const passportConfig = {
   baseConfig: new config.ImmutableConfiguration({

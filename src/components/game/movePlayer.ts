@@ -1,8 +1,7 @@
-import { useGameConstants } from "./gameConstants";
+import { GameConstantsProps, useGameConstants } from "./gameConstants";
 import { ElementPosition } from "./space-invader";
 
-export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPosition: React.Dispatch<React.SetStateAction<ElementPosition>>) => {
-    const { gameConst } = useGameConstants();
+export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPosition: React.Dispatch<React.SetStateAction<ElementPosition>>, gameConst: GameConstantsProps) => {
 
     const movePlayer = () => {
         setPlayerPosition((prevPosition) => {
@@ -10,7 +9,7 @@ export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPos
             let newY = prevPosition.y;
 
             if (pressedKeys['ArrowRight']) {
-                newY = Math.min(prevPosition.y + 5, 690 - prevPosition.height);
+                newY = Math.min(prevPosition.y + 5, 612 - prevPosition.height);
             }
 
             if (pressedKeys['ArrowLeft']) {
@@ -23,7 +22,7 @@ export const useMovePlayer = (pressedKeys: Record<string, boolean>, setPlayerPos
                 }
 
                 if (pressedKeys['ArrowDown']) {
-                    newX = Math.min(prevPosition.x + 5, 560 - prevPosition.width);
+                    newX = Math.min(prevPosition.x + 5, 490 - prevPosition.width);
                 }
             }
 

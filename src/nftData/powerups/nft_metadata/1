@@ -1,9 +1,9 @@
 {
-  "id": "3",
+  "id": "1",
   "image": "https://bafkreiemy3ttpbt3unwtzsqhsceu5hma22jvxu7lk6il7faotyw4xvmhb4.ipfs.nftstorage.link/",
-  "token_id": "3",
-  "name": "Level 1 Ship",
-  "description": "This NFT represents your ship at level 1. Also, it's your profile ship.",
+  "token_id": "1",
+  "name": "Slow Enemy",
+  "description": "This NFT will slow down the shooting of enemies.",
   "attributes": [
     {
       "trait_type": "Level",

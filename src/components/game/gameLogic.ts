@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGameConstants } from './gameConstants';
+import { GameConstantsProps, useGameConstants } from './gameConstants';
 
 export interface GAMELOGIC {
   gameover: boolean;
@@ -11,16 +11,14 @@ export interface GAMELOGIC {
   interval: number;
 }
 
-export const useGameLogic = () => {
-
-  const { gameConst } = useGameConstants();
+export const useGameLogic = (gameConst: GameConstantsProps) => {
 
   const GameLogic: GAMELOGIC = {
     gameover: false,
     TotalPoints: 0,
     IPXUnclaimed: 0,
     Health: gameConst.Health,
-    timer: gameConst.timer,
+    timer: gameConst.Level === 1? gameConst.timer + 8: gameConst.timer,
     win: false,
     interval: 0,
   };

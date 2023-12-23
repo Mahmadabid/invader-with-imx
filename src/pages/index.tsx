@@ -1,3 +1,5 @@
+import { shipAddress } from "@/components/Contracts/ShipContract";
+import { useGameConstants } from "@/components/game/gameConstants";
 import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
 import Load from "@/components/utils/Load";
@@ -11,12 +13,12 @@ const Home = () => {
   const [shipLoading, setShipLoading] = useState(false);
   const [minted, setMinted] = useState(false);
   const [Address, setAddress] = useState('');
-  const contractAddress = '0x154339b6b882b9076ee90a25a142f116135c3e28';
+  const { gameConst, setGameConst } = useGameConstants();
 
   useEffect(() => {
     const fetchNFTs = async () => {
       try {
-        const NftwithAddress = await getNftByCollection(contractAddress);
+        const NftwithAddress = await getNftByCollection(shipAddress);
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
 
         setAddress(NftwithAddress?.accountAddress);
@@ -35,7 +37,20 @@ const Home = () => {
     address: Address
   };
 
-  console.log(NFTstate);
+  const getNumber = (nftState: NFTProps[] | undefined) => {
+    const match = nftState?.length && nftState[1].name?.match(/Level (\d+)/);
+    const levelNumber = match ? parseInt(match[1]) : 1;
+    return levelNumber;
+  }
+  
+  const Number = getNumber(NFTstate);
+
+  useEffect(() => {
+    setGameConst((prevGameConst) => ({
+      ...prevGameConst,
+      Level: Number
+    }));
+  }, [Number, SpaceInvader])
 
   const sendData = async () => {
     try {
@@ -77,7 +92,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <SpaceInvader />
+          <SpaceInvader gameConst={gameConst} setGameConst={setGameConst} />
         </div>
       )}
     </div>

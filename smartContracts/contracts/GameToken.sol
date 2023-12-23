@@ -11,7 +11,7 @@ contract GameToken is ERC20, ERC20Burnable, Ownable {
     mapping(address => uint256) private burnedAmounts;
     address[] private allBurnedAddresses;
 
-    constructor() ERC20("Invader Pixel Token", "IPX") Ownable(msg.sender) {
+    constructor() ERC20("Invader Pixel Token", "IPX") Ownable() {
         _mint(msg.sender, 0 * 10 ** 18);
     }
 

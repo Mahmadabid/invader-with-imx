@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@imtbl/contracts": "^2.0.4",
-    "@imtbl/sdk": "^0.35.6",
+    "@imtbl/sdk": "^0.35.8",
     "@types/jsonwebtoken": "^9.0.5",
     "chart.js": "^4.4.1",
     "ethers": "^5.7.0",

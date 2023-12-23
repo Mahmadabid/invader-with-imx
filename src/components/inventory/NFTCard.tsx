@@ -21,7 +21,6 @@ export interface NFTProps {
     external_link: string | null;
     animation_url: string | null;
     youtube_url: string | null;
-    mint_activity_id: string | null;
   }
   
 

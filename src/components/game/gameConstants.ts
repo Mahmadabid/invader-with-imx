@@ -11,7 +11,7 @@ export interface GameConstantsProps {
 
 export const useGameConstants = () => {
   const GameConst: GameConstantsProps = {
-    Level: 2,
+    Level: 1,
     Health: 3,
     fireSpeed: 0,
     start: false,

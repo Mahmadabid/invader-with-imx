@@ -1,9 +1,9 @@
 import { getDefaultProvider, Wallet } from 'ethers'; // ethers v5
 import { Provider, TransactionResponse } from '@ethersproject/providers'; // ethers v5
 import { ERC721Client } from '@imtbl/contracts';
-import { shipAddress } from '@/components/Contracts/ShipContract';
+import { powerupsAddress } from '@/components/Contracts/PowerupsContract';
 
-const CONTRACT_ADDRESS = shipAddress;
+const CONTRACT_ADDRESS = powerupsAddress;
 const PRIVATE_KEY = `${process.env.PRIVATE_KEY}`
 const provider = getDefaultProvider('https://rpc.testnet.immutable.com');
 

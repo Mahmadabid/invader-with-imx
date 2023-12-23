@@ -4,7 +4,7 @@ const path = require('path');
 const generateNFTFile = (id, tokenId, name, description, level, ammo) => {
   const nftData = {
     id,
-    image: `https://bafkreiemy3ttpbt3unwtzsqhsceu5hma22jvxu7lk6il7faotyw4xvmhb4.ipfs.nftstorage.link/`,
+    image: `https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdPYE429FKwFYjqUeYN3jG1ncgwuhb3744VdPBLweEm51/`,
     token_id: tokenId,
     name,
     description,
