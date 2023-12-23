@@ -404,12 +404,13 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
               <img
                 key={'enemyBullet' + index}
                 className="absolute"
-                src="/Bullet.png"
+                src="/bullet.png"
                 style={{
                   top: bullet.x,
                   left: bullet.y,
                   width: bullet.width,
                   height: bullet.height,
+                  transform: 'scaleY(-1)',
                 }}
                 alt={`Enemy Bullet ${index}`}
               />
