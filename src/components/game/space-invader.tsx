@@ -410,7 +410,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
                   left: bullet.y,
                   width: bullet.width,
                   height: bullet.height,
-                  transform: 'scaleY(-1)',
                 }}
                 alt={`Enemy Bullet ${index}`}
               />
