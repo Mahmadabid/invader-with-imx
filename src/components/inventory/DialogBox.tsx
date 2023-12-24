@@ -2,6 +2,7 @@ import { burn, transfer } from '@/utils/immutable';
 import React, { ChangeEvent, useState } from 'react';
 import Load from '../utils/Load';
 import Link from 'next/link';
+import { shipAddress } from '../Contracts/ShipContract';
 
 type DialogProps = {
     handleClose: () => void;
@@ -15,6 +16,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
     const [inputValue, setInputValue] = useState('');
     const [Txn, setTxn] = useState<any>();
     const [loading, setLoading] = useState(false);
+    const [upgrade, setUpgrade] = useState(false);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
@@ -51,9 +53,17 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
                     <div className="fixed inset-0 bg-black opacity-75"></div>
                     <div className="relative bg-white p-8 max-w-md mx-auto rounded shadow-lg">
                         <h1 className='text-xl font-medium my-2 mb-7'>You can perform following actions.</h1>
-                        <button onClick={() => setOption(1)} className='px-2 py-2 font-medium text-white bg-green-500 hover:bg-emerald-500 rounded mx-2'>Transfer</button>
+                        {contractAddress === shipAddress.toLowerCase() ? <button onClick={() => {
+                            setUpgrade(true)
+                            setOption(0)
+                            }} className='px-2 py-2 font-medium text-white bg-black hover:bg-gray-800 rounded mx-2'>Upgrade</button> : null}
+                        <button onClick={() => {
+                            setOption(1)
+                            setUpgrade(false);
+                            }} className='px-2 py-2 font-medium text-white bg-green-500 hover:bg-emerald-500 rounded mx-2'>Transfer</button>
                         <button onClick={() => {
                             setLoading(true);
+                            setUpgrade(false);
                             burn(tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn)
                         }} className='px-2 py-2 font-medium text-white bg-orange-500 hover:bg-amber-500 rounded mx-2'>Burn</button>
                         {option === 1 ?
@@ -67,6 +77,11 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
                             </div>
                             : null
                         }
+                        {upgrade ?
+                            <div className='text-center'>
+                                <p className='text-xl font-bold text-slate-600 mt-4'>Coming Soon</p>
+                            </div>
+                            : null}
                         <div className="mt-4 flex justify-end">
                             <button
                                 className="px-4 py-1 text-white font-medium text-lg bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:shadow-outline-red"

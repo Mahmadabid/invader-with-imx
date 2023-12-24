@@ -13,7 +13,7 @@ const passportConfig = {
   }),
   scope: "transact openid offline_access email",
   audience: "platform_api",
-  clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID_X || '',
   redirectUri: process.env.NEXT_PUBLIC_URL + 'auth/callback/',
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
 };
