@@ -16,7 +16,7 @@ export const useGameLogic = (gameConst: GameConstantsProps) => {
   const GameLogic: GAMELOGIC = {
     gameover: false,
     TotalPoints: 0,
-    IPXUnclaimed: 0,
+    IPXUnclaimed: gameConst.Level === 1? 3: 5,
     Health: gameConst.Health,
     timer: gameConst.Level === 1? gameConst.timer + 8: gameConst.timer,
     win: false,

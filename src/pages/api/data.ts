@@ -35,7 +35,10 @@ export default async function handler(
             const existingPointsEntry = await Invader.findOne({ userId });
 
             if (existingPointsEntry) {
-                Object.assign(existingPointsEntry.data, data);
+
+                existingPointsEntry.data.IPX += data.IPX;
+                existingPointsEntry.data.TotalPoints += data.TotalPoints;
+
                 await existingPointsEntry.save();
 
                 return res.status(200).json({ message: "Invader entry updated", entry: existingPointsEntry });

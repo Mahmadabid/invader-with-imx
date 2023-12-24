@@ -7,6 +7,8 @@ export interface GameConstantsProps {
   start: boolean;
   timer: number;
   enemyFire: number;
+  Address: string;
+  userId: string;
 }
 
 export const useGameConstants = () => {
@@ -17,6 +19,8 @@ export const useGameConstants = () => {
     start: false,
     timer: 30,
     enemyFire: 0,
+    Address: '',
+    userId: '',
   };
 
   const [gameConst, setGameConst] = useState<GameConstantsProps>(GameConst);

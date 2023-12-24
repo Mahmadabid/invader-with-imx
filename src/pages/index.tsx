@@ -1,28 +1,29 @@
-import { shipAddress } from "@/components/Contracts/ShipContract";
 import { useGameConstants } from "@/components/game/gameConstants";
 import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
 import Load from "@/components/utils/Load";
-import { getNftByCollection } from "@/utils/immutable";
+import { getNftByCollection, passportInstance } from "@/utils/immutable";
 import { useEffect, useState } from "react";
 
 const Home = () => {
 
   const [NFTstate, setNFTstate] = useState<NFTProps[] | undefined>([]);
+  const [NFTPowerupsstate, setNFTPowerupsstate] = useState<NFTProps[] | undefined>([]);
   const [loading, setLoading] = useState(true);
   const [shipLoading, setShipLoading] = useState(false);
-  const [minted, setMinted] = useState(false);
   const [Address, setAddress] = useState('');
   const { gameConst, setGameConst } = useGameConstants();
 
   useEffect(() => {
     const fetchNFTs = async () => {
       try {
-        const NftwithAddress = await getNftByCollection(shipAddress);
+        const NftwithAddress = await getNftByCollection();
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
+        const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.responsed;
 
         setAddress(NftwithAddress?.accountAddress);
         setNFTstate(NftByAddress);
+        setNFTPowerupsstate(NftPowerupsByAddress)
       } catch (error) {
         console.error('Error fetching NFTs:', error);
       } finally {
@@ -38,12 +39,28 @@ const Home = () => {
   };
 
   const getNumber = (nftState: NFTProps[] | undefined) => {
-    const match = nftState?.length && nftState[1].name?.match(/Level (\d+)/);
+    const match = nftState?.length && nftState[0].name?.match(/Level (\d+)/);
     const levelNumber = match ? parseInt(match[1]) : 1;
     return levelNumber;
   }
-  
+
   const Number = getNumber(NFTstate);
+
+  const getUserID = async () => {
+    try {
+      const userProfile = await passportInstance.getUserInfo();
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        userId: userProfile?.sub || ''
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserID();
+  }, []);
 
   useEffect(() => {
     setGameConst((prevGameConst) => ({
@@ -51,6 +68,33 @@ const Home = () => {
       Level: Number
     }));
   }, [Number, SpaceInvader])
+
+  useEffect(() => {
+    setGameConst((prevGameConst) => ({
+      ...prevGameConst,
+      Address: Address
+    }));
+  }, [Address])
+
+  useEffect(() => {
+    const healthNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Extra Health');
+
+    if (healthNFTPowerups && healthNFTPowerups.length > 0) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        health: 4,
+      }));
+    }
+
+    const fireNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Faster Firing');
+
+    if (fireNFTPowerups && fireNFTPowerups.length > 0) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        fireSpeed: 100,
+      }));
+    }
+  }, [NFTPowerupsstate]);
 
   const sendData = async () => {
     try {
@@ -65,7 +109,6 @@ const Home = () => {
       console.log(response)
       if (response.ok) {
         console.log('Minted successfully', response);
-        setMinted(true);
       } else {
         console.error('Failed to Mint. Status:', response.status);
         throw new Error('Failed to Mint');

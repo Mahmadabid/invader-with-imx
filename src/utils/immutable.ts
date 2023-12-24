@@ -1,3 +1,6 @@
+import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract';
+import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
+import { shipAddress } from '@/components/Contracts/ShipContract';
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
@@ -7,17 +10,27 @@ import { ethers } from "ethers";
 const passportConfig = {
   baseConfig: new config.ImmutableConfiguration({
     environment: config.Environment.SANDBOX,
+    publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
   }),
   scope: "transact openid offline_access email",
   audience: "platform_api",
-  clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID_X || '',
   redirectUri: process.env.NEXT_PUBLIC_URL + 'auth/callback/',
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
 };
 
+// const configs = {
+//   baseConfig: new config.ImmutableConfiguration({
+//     environment: config.Environment.SANDBOX,
+//     publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
+//     apiKey: process.env.NEXT_PUBLIC_API_KEY,
+//   }),
+// };
+
 const configs = {
   baseConfig: new config.ImmutableConfiguration({
     environment: config.Environment.SANDBOX,
+    publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
   }),
 };
 
@@ -36,15 +49,26 @@ const getAddress = async () => {
 async function getNftByAddress(accountAddress: string) {
   try {
     const chainName = 'imtbl-zkevm-testnet';
-    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress });
 
-    return response.result;
+    const shipContractAddress = shipAddress;
+
+    const shipResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: shipContractAddress });
+    
+    const healthContractAddress = healthpowerupsAddress;
+
+    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
+    
+    const fireContractAddress = firepowerupsAddress;
+
+    const responsed = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
+
+    return [...shipResponse.result, ...response.result, ...responsed.result];
   } catch (error) {
     console.log(error)
   }
 }
 
-async function getNftByCollection(contractAddress: string) {
+async function getNftByCollection() {
   
   const accountAddress = await getAddress();
 
@@ -52,11 +76,25 @@ async function getNftByCollection(contractAddress: string) {
 
     const chainName = 'imtbl-zkevm-testnet';
 
-    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress });
+    const shipContractAddress = shipAddress;
+
+    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: shipContractAddress });
+    
     const responseResult = response.result;
+    
+    const healthContractAddress = healthpowerupsAddress;
+
+    const healthresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
+    
+    const fireContractAddress = firepowerupsAddress;
+
+    const fireresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
+
+    const responsed = [...healthresponse.result, ...fireresponse.result]
 
     return {
       responseResult,
+      responsed,
       accountAddress
     };
 
@@ -145,7 +183,6 @@ const transfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: s
   return transaction
 };
 
-
 const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void) => {
 
   const signer = await signerFetch();
@@ -162,7 +199,6 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
 
   return transaction
 };
-
 
 async function getLeaderBoard() {
   try {

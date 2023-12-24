@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const generateNFTFile = (id, tokenId, name, description, level, ammo) => {
+const generateNFTFile = (id, tokenId, name, description, level) => {
   const nftData = {
     id,
     image: `https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdPYE429FKwFYjqUeYN3jG1ncgwuhb3744VdPBLweEm51/`,
@@ -16,7 +16,7 @@ const generateNFTFile = (id, tokenId, name, description, level, ammo) => {
     ],
   };
 
-  const folderPath = path.join(__dirname, 'nft_metadata');
+  const folderPath = path.join(__dirname, 'ship_nft_metadata');
   const fileName = path.join(folderPath, `${id}`);
 
   if (!fs.existsSync(folderPath)) {
@@ -39,4 +39,4 @@ const generateNFTFiles = (numFiles) => {
   }
 };
 
-generateNFTFiles(30);
+generateNFTFiles(50);

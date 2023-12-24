@@ -3,9 +3,11 @@
 pragma solidity 0.8.20;
 
 import "./ERC721/abstract/ImmutableERC721Base.sol";
+import "./GameToken.sol";
 
 contract PowerupsMint is ImmutableERC721Base {
     uint256 private _totalMint;
+    GameToken public gameToken;
 
     ///     =====   Constructor  =====
 
@@ -29,10 +31,11 @@ contract PowerupsMint is ImmutableERC721Base {
         string memory contractURI_,
         address operatorAllowlist_,
         address royaltyReceiver_,
-        uint96 feeNumerator_
+        uint96 feeNumerator_,
+        address tokenAddress
     )
         ImmutableERC721Base(owner_, name_, symbol_, baseURI_, contractURI_, operatorAllowlist_, royaltyReceiver_, feeNumerator_)
-    {}
+    {gameToken = GameToken(tokenAddress);}
 
     /** @notice Allows minter to mint `tokenID` to `to`
      *  @param to the address to mint the token to
@@ -48,10 +51,11 @@ contract PowerupsMint is ImmutableERC721Base {
      *  @param to the address to mint the token to
      *  @param tokenID the ID of the token to mint
      */
-    function mint(address to, uint256 tokenID) external onlyRole(MINTER_ROLE) {
+    function mint(address to, uint256 tokenID, uint256 tokenAmountToSell) external {
         _totalMint++;
         _totalSupply++;
         _mint(to, tokenID);
+        gameToken.burnFrom(msg.sender, tokenAmountToSell);
     }
 
     /**

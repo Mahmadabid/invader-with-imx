@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from "ethers";
 import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
-import { config, blockchainData } from '@imtbl/sdk';
 
 type Entry = {
     address: string
@@ -59,45 +58,6 @@ export default async function handler(
             const tx = await contract.mint(address, TOKEN_ID, adjustedGasPrice);
 
             const receipt = await tx.wait();
-
-            const client = new blockchainData.BlockchainData({
-                baseConfig: {
-                    environment: config.Environment.SANDBOX,
-                },
-            });
-
-            const refreshNFTMetadata = async (
-                client: blockchainData.BlockchainData,
-                chainName: string,
-                contractAddress: string,
-            ) => {
-                try {
-                    await client.refreshNFTMetadata({
-                        chainName,
-                        contractAddress,
-                        refreshNFTMetadataByTokenIDRequest: {
-                            nft_metadata: [
-                                {
-                                    name: "Level 1 Ship",
-                                    animation_url: null,
-                                    image: "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdPYE429FKwFYjqUeYN3jG1ncgwuhb3744VdPBLweEm51/",
-                                    external_url: null,
-                                    youtube_url: null,
-                                    description: "This NFT represents your ship at level 1. Also, it's your profile ship.",
-                                    attributes: [
-                                        { trait_type: "Level", value: "1" },
-                                    ],
-                                    token_id: TOKEN_ID.toString(),
-                                },
-                            ],
-                        },
-                    });
-                } catch (error) {
-                    console.error('Error refreshing NFT metadata:', error);
-                }
-            };
-
-            await refreshNFTMetadata(client, 'imtbl-zkevm-testnet', shipAddress);
 
             return res.status(200).json({ message: "Minted successfully.", entry: receipt });
         } catch (error) {

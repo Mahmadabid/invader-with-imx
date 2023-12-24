@@ -22,7 +22,7 @@ interface SpaceInvadersProps {
   setGameConst: React.Dispatch<React.SetStateAction<GameConstantsProps>>;
 }
 
-export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameConst}) => {
+export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameConst }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic(gameConst);
 
@@ -41,29 +41,59 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
 
   useEffect(() => {
     if (gameConst.start && !gameLogic.gameover) {
-    const timerId = setInterval(() => {
-      if (!gameLogic.gameover) {
-        setGameLogic((prevLogic) => ({
-          ...prevLogic,
-          timer: (prevLogic.timer > 0 ? prevLogic.timer - 1 : 0),
-        }))
-      }
-    }, timerInterval);
+      const timerId = setInterval(() => {
+        if (!gameLogic.gameover) {
+          setGameLogic((prevLogic) => ({
+            ...prevLogic,
+            timer: (prevLogic.timer > 0 ? prevLogic.timer - 1 : 0),
+          }))
+        }
+      }, timerInterval);
 
-    return () => clearInterval(timerId);
-  }
+      return () => clearInterval(timerId);
+    }
   }, [gameLogic.interval, gameConst.start, gameLogic.gameover]);
 
   useEffect(() => {
     if (gameConst.start && !gameLogic.gameover) {
-    if (gameLogic.timer <= 0) {
-      setGameLogic((prevGameLogic) => ({
-        ...prevGameLogic,
-        gameover: true,
-      }));
+      if (gameLogic.timer <= 0) {
+        setGameLogic((prevGameLogic) => ({
+          ...prevGameLogic,
+          gameover: true,
+        }));
+      }
     }
-  }
   }, [gameLogic.timer]);
+
+  const dataToSend = {
+    userId: gameConst.userId,
+    data: {
+      IPX: gameLogic.win ? gameConst.Level === 1 ? 3 : 5 : 0,
+      TotalPoints: gameLogic.TotalPoints,
+      Address: gameConst.Address,
+    },
+  }
+
+  const sendData = async () => {
+    try {
+      const response = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend)
+      });
+      if (!response.ok) throw new Error('Failed to save data');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (gameConst.start && gameLogic.gameover) {
+      sendData();
+    }
+  }, [gameConst.start, gameLogic.gameover])
 
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
@@ -99,7 +129,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
       }, (1000 - gameConst.fireSpeed));
     }
   };
-  
+
   useEffect(() => {
     if (gameLogic.Health <= 0 && gameConst.start && !gameLogic.gameover) {
       setGameLogic((prevGameLogic) => ({
@@ -295,7 +325,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1? gameConst.timer + 8: gameConst.timer,
+      timer: gameConst.Level === 1 ? gameConst.timer + 8 : gameConst.timer,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
@@ -309,7 +339,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
     setGameConst((prevGameConst) => ({
       ...prevGameConst,
       start: true
-    }));    
+    }));
   }
 
   const handleStart = () => {
@@ -319,7 +349,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1? gameConst.timer + 8: gameConst.timer,
+      timer: gameConst.Level === 1 ? gameConst.timer + 8 : gameConst.timer,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
@@ -341,10 +371,26 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({gameConst, setGameCo
           <h1 className='text-2xl font-bold my-4'>{gameLogic.win ? 'You Won!' : 'Game Over!'}</h1>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
           {gameLogic.win ? <p className='font-medium mt-2 mb-4'>IPX won: {gameLogic.IPXUnclaimed}</p> : <p className='font-medium mt-2 mb-4'>IPX won: <span className='text-lime-500'>You need to win first!</span></p>}
+          <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
+            <p>You have:</p>
+            <div className='flex flex-row items-center justify-center'>
+              {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
+                : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
+                  : <p className='text-slate-400 font-medium ml-2'>Buy some</p>}
+            </div>
+          </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
         </div> : !gameLogic.gameover && !gameConst.start ?
           <div className="w-[612px] h-[504px] mt-2 text-white text-center bg-black">
             <h1 className='text-2xl font-bold my-4'>Ready!</h1>
+            <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
+              <p>You have:</p>
+              <div className='flex flex-row items-center justify-center'>
+                {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
+                  : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
+                    : <p className='text-slate-400 font-medium ml-2'>Buy some</p>}
+              </div>
+            </div>
             <p className='font-medium mt-2 mb-4'></p>
             <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
           </div> :
