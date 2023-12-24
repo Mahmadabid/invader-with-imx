@@ -38,6 +38,15 @@ const passportInstance = new passport.Passport(passportConfig);
 
 const passportProvider = passportInstance.connectEvm();
 
+async function signerFetch() {
+
+  const provider = new ethers.providers.Web3Provider(passportProvider);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+
+  return signer;
+}
+
 const getAddress = async () => {
   const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
   const walletAddress = accounts[0];
@@ -51,11 +60,11 @@ async function getNftByAddress(accountAddress: string) {
     const shipContractAddress = shipAddress;
 
     const shipResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: shipContractAddress });
-    
+
     const healthContractAddress = healthpowerupsAddress;
 
     const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
-    
+
     const fireContractAddress = firepowerupsAddress;
 
     const responsed = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
@@ -67,7 +76,7 @@ async function getNftByAddress(accountAddress: string) {
 }
 
 async function getNftByCollection() {
-  
+
   const accountAddress = await getAddress();
 
   try {
@@ -77,13 +86,13 @@ async function getNftByCollection() {
     const shipContractAddress = shipAddress;
 
     const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: shipContractAddress });
-    
+
     const responseResult = response.result;
-    
+
     const healthContractAddress = healthpowerupsAddress;
 
     const healthresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
-    
+
     const fireContractAddress = firepowerupsAddress;
 
     const fireresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
@@ -113,14 +122,6 @@ const fetchAuth = async () => {
     window.location.reload();
   }
 };
-
-async function signerFetch() {
-  const provider = new ethers.providers.Web3Provider(passportProvider);
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-
-  return signer;
-}
 
 async function getProfileInfo() {
   try {
