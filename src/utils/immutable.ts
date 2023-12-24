@@ -10,11 +10,10 @@ import { ethers } from "ethers";
 const passportConfig = {
   baseConfig: new config.ImmutableConfiguration({
     environment: config.Environment.SANDBOX,
-    publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
   }),
   scope: "transact openid offline_access email",
   audience: "platform_api",
-  clientId: process.env.NEXT_PUBLIC_CLIENT_ID_X || '',
+  clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
   redirectUri: process.env.NEXT_PUBLIC_URL + 'auth/callback/',
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
 };
@@ -30,7 +29,6 @@ const passportConfig = {
 const configs = {
   baseConfig: new config.ImmutableConfiguration({
     environment: config.Environment.SANDBOX,
-    publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
   }),
 };
 
