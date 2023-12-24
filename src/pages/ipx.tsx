@@ -155,7 +155,7 @@ const IPXPage = () => {
             <section className="mx-2 text-lg my-4 max-w-2xl text-center">
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">Token Burning</h2>
                 <p>
-                    IPX tokens are subject to periodic burning, ensuring a continuous reduction in the token supply.
+                    IPX tokens are burned in market and swap pages, ensuring a continuous reduction in the token supply.
                     This deflationary mechanism is designed to enhance the scarcity and value of IPX over time.
                     Everytime you buy something in market it gets burned.
                 </p>
