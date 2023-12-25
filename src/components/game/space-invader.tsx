@@ -20,9 +20,10 @@ export interface ElementPosition {
 interface SpaceInvadersProps {
   gameConst: GameConstantsProps;
   setGameConst: React.Dispatch<React.SetStateAction<GameConstantsProps>>;
+  levels: string;
 }
 
-export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameConst }) => {
+export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameConst, levels }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic(gameConst);
 
@@ -369,6 +370,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       {gameLogic.gameover && gameConst.start ?
         <div className="w-[612px] h-[504px] mt-2 text-white text-center bg-black">
           <h1 className='text-2xl font-bold my-4'>{gameLogic.win ? 'You Won!' : 'Game Over!'}</h1>
+          <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
           {gameLogic.win ? <p className='font-medium mt-2 mb-4'>IPX won: {gameLogic.IPXUnclaimed}</p> : <p className='font-medium mt-2 mb-4'>IPX won: <span className='text-lime-500'>You need to win first!</span></p>}
           <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
@@ -383,6 +385,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
         </div> : !gameLogic.gameover && !gameConst.start ?
           <div className="w-[612px] h-[504px] mt-2 text-white text-center bg-black">
             <h1 className='text-2xl font-bold my-4'>Ready!</h1>
+            <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
             <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
               <p>You have:</p>
               <div className='flex flex-row items-center justify-center'>

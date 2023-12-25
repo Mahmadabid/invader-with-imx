@@ -13,7 +13,7 @@ async function deploy() {
   const deploymentOptions = {
     maxPriorityFeePerGas: 100e9,
     maxFeePerGas: 150e9,
-    gasLimit: 8000000,
+    gasLimit: 10000000,
     }
     
   const factory = await ethers.deployContract(

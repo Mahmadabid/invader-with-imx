@@ -4,6 +4,8 @@ import DialogBox from "./DialogBox";
 
 interface NFTCardProps {
     nftData: NFTProps;
+    balance: number;
+    points: number;
 }
 
 export interface NFTProps {
@@ -24,7 +26,7 @@ export interface NFTProps {
   }
   
 
-const NFTCard: React.FC<NFTCardProps> = ({ nftData }) => {
+const NFTCard: React.FC<NFTCardProps> = ({ nftData, balance, points }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -43,7 +45,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nftData }) => {
             <button onClick={handleClickOpen} className="hover:bg-blue-500 text-white px-4 py-2 mt-2 bg-blue-600 rounded">Action</button>
             <br/>
             <Link href={`https://explorer.testnet.immutable.com/token/${nftData.contract_address}/instance/${nftData.token_id}`} target="_blank"><button className="hover:bg-green-500 text-white px-4 py-2 mt-2 bg-green-600 rounded">Explorer</button></Link>
-            {open? <DialogBox handleClose={handleClose} tokenId={nftData.token_id} contractAddress={nftData.contract_address} />: null}
+            {open? <DialogBox handleClose={handleClose} tokenId={nftData.token_id} balance={balance} points={points} contractAddress={nftData.contract_address} />: null}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract';
 import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
-import { shipAddress } from '@/components/Contracts/ShipContract';
+import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
@@ -81,6 +81,8 @@ async function getNftByCollection() {
 
   try {
 
+    const signer = await signerFetch();
+
     const chainName = 'imtbl-zkevm-testnet';
 
     const shipContractAddress = shipAddress;
@@ -88,6 +90,14 @@ async function getNftByCollection() {
     const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: shipContractAddress });
 
     const responseResult = response.result;
+
+    const contract = new ethers.Contract(shipAddress, shipABI, signer);
+
+    let LevelbyTokenID = ''
+
+    if (responseResult.length !== 0) {
+      LevelbyTokenID = await contract.getTokenLevel(responseResult[0].token_id);
+    }
 
     const healthContractAddress = healthpowerupsAddress;
 
@@ -101,6 +111,7 @@ async function getNftByCollection() {
 
     return {
       responseResult,
+      LevelbyTokenID,
       responsed,
       accountAddress
     };
@@ -122,6 +133,27 @@ const fetchAuth = async () => {
     window.location.reload();
   }
 };
+
+async function getInventoryData() {
+  const signer = await signerFetch();
+
+  const walletAddress = await signer.getAddress();
+
+  const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+  const tokenBalance = await tokenContract.balanceOf(walletAddress);
+
+  const balance = ethers.utils.formatEther(tokenBalance);
+
+  const userId = await passportInstance.getUserInfo();
+  const user = userId?.sub;
+
+  const url = `/api/data?userId=${user}`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return { data, balance }
+}
 
 async function getProfileInfo() {
   try {
@@ -199,6 +231,7 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
   return transaction
 };
 
+
 async function getLeaderBoard() {
   try {
     const signer = await signerFetch();
@@ -248,4 +281,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getAddress, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, getAddress, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

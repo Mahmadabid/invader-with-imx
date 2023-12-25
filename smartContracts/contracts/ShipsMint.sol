@@ -7,6 +7,10 @@ import "./ERC721/abstract/ImmutableERC721Base.sol";
 contract ShipsMint is ImmutableERC721Base {
     uint256 private _totalMint;
 
+    mapping(uint256 => string) private _tokenLevels;
+
+    event TokenLevelUpdated(uint256 indexed tokenId, string newLevel);
+
     ///     =====   Constructor  =====
 
     /**
@@ -42,6 +46,8 @@ contract ShipsMint is ImmutableERC721Base {
         _totalMint++;
         _totalSupply++;
         _safeMint(to, tokenID, "");
+
+        _setTokenLevel(tokenID, "1");
     }
 
     /** @notice Allows minter to mint `tokenID` to `to`
@@ -52,6 +58,8 @@ contract ShipsMint is ImmutableERC721Base {
         _totalMint++;
         _totalSupply++;
         _mint(to, tokenID);
+
+        _setTokenLevel(tokenID, "1");
     }
 
     /**
@@ -70,6 +78,19 @@ contract ShipsMint is ImmutableERC721Base {
         for (uint256 i = 0; i < mintRequests.length; i++) {
             _safeBatchMint(mintRequests[i]);
         }
+    }
+
+    function getTokenLevel(uint256 tokenID) external view returns (string memory) {
+        return _tokenLevels[tokenID];
+    }
+
+    function setTokenLevel(uint256 tokenID, string memory newLevel) external onlyRole(MINTER_ROLE) {
+        _setTokenLevel(tokenID, newLevel);
+    }
+
+    function _setTokenLevel(uint256 tokenID, string memory newLevel) internal {
+        _tokenLevels[tokenID] = newLevel;
+        emit TokenLevelUpdated(tokenID, newLevel);
     }
 
     /**

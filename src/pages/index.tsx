@@ -12,6 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [shipLoading, setShipLoading] = useState(false);
   const [Address, setAddress] = useState('');
+  const [Levels, setLevels] = useState('1');
   const { gameConst, setGameConst } = useGameConstants();
 
   useEffect(() => {
@@ -20,10 +21,13 @@ const Home = () => {
         const NftwithAddress = await getNftByCollection();
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
         const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.responsed;
+        const LevelbyID = NftwithAddress?.LevelbyTokenID;
 
         setAddress(NftwithAddress?.accountAddress);
         setNFTstate(NftByAddress);
-        setNFTPowerupsstate(NftPowerupsByAddress)
+        setNFTPowerupsstate(NftPowerupsByAddress);
+        setLevels(LevelbyID || '1');
+
       } catch (error) {
         console.error('Error fetching NFTs:', error);
       } finally {
@@ -37,14 +41,7 @@ const Home = () => {
   const dataToSend = {
     address: Address
   };
-
-  const getNumber = (nftState: NFTProps[] | undefined) => {
-    const match = nftState?.length && nftState[0].name?.match(/Level (\d+)/);
-    const levelNumber = match ? parseInt(match[1]) : 1;
-    return levelNumber;
-  }
-
-  const Number = getNumber(NFTstate);
+  
 
   const getUserID = async () => {
     try {
@@ -65,9 +62,9 @@ const Home = () => {
   useEffect(() => {
     setGameConst((prevGameConst) => ({
       ...prevGameConst,
-      Level: Number
+      Level: parseInt(Levels)
     }));
-  }, [Number, SpaceInvader])
+  }, [Levels, SpaceInvader])
 
   useEffect(() => {
     setGameConst((prevGameConst) => ({
@@ -135,7 +132,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <SpaceInvader gameConst={gameConst} setGameConst={setGameConst} />
+          <SpaceInvader gameConst={gameConst} levels={Levels} setGameConst={setGameConst} />
         </div>
       )}
     </div>

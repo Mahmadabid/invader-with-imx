@@ -1,4 +1,4 @@
-export const shipAddress = '0xBB24cC64016Dd87150B73d607f9083c8eccCFB82';
+export const shipAddress = '0xba36aF611310145fcb0528dbCD1c1B456603d58B';
 
 export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdCdHq5utVATDi3ggMHaNJ4geVKRLsKY6eqnNix6ZA2VH/';
 
@@ -356,6 +356,25 @@ export const shipABI = [
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "newLevel",
+        "type": "string"
+      }
+    ],
+    "name": "TokenLevelUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -674,6 +693,25 @@ export const shipABI = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTokenLevel",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -1268,6 +1306,24 @@ export const shipABI = [
       }
     ],
     "name": "setOperatorAllowlistRegistry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "newLevel",
+        "type": "string"
+      }
+    ],
+    "name": "setTokenLevel",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
