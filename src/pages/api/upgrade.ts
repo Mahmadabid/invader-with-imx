@@ -22,32 +22,33 @@ export default async function handler(
     if (req.method === 'POST') {
         const { id, level } = req.body;
 
-        if (!id || level) {
+        if (!id || !level) {
             return res.status(400).json({ error: "Required fields are missing." });
         }
 
         try {
-            
-        const ID = id.toString();
 
-        const Level = level.toString();
+            const ID = id.toString();
 
-        console.log(typeof ID, ID, typeof Level, Level)
+            const Level = level.toString();
+
             const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
             const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
-            
+
 
             const contract = new ethers.Contract(shipAddress, shipABI, wallet);
 
             const adjustedGasPrice = {
                 maxPriorityFeePerGas: 100e9,
                 maxFeePerGas: 150e9,
-                gasLimit: 400000,
+                gasLimit: 200000,
             };
 
             const tx = await contract.setTokenLevel(ID, Level, adjustedGasPrice);
 
             const receipt = await tx.wait();
+
+            console.log(receipt)
 
             return res.status(200).json({ message: "Upgraded successfully.", entry: receipt });
         } catch (error) {

@@ -42,12 +42,6 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
                     body: JSON.stringify(dataToSend)
                 });
 
-                if (response.ok) {
-                    console.log('Upgraded successfully', response);
-                } else {
-                    console.error('Failed to Upgrade. Status:', response.status);
-                    throw new Error('Failed to Upgrade');
-                }
             }
         } catch (error) {
             console.error('Error:', error);
