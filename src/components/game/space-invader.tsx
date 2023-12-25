@@ -255,7 +255,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           width: bullet.width,
           height: bullet.height,
           collided: enemies.some((enemy) =>
-            collide(bullet, enemy)
+            collide(enemy, bullet)
           ),
         }))
         .filter((bullet) => {
@@ -268,8 +268,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                       ...prevGameLogic,
                       TotalPoints: prevGameLogic.TotalPoints + 1,
                     }));
+                    return false
                   }
-                  return !collide(bullet, enemy);
+                  return true;
                 }
               )
             );
