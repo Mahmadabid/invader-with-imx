@@ -6,8 +6,9 @@ import "./ERC721/abstract/ImmutableERC721Base.sol";
 
 contract ShipsMint is ImmutableERC721Base {
     uint256 private _totalMint;
-
     mapping(uint256 => string) private _tokenLevels;
+    
+    uint256[] private _tokenIds;
 
     event TokenLevelUpdated(uint256 indexed tokenId, string newLevel);
 
@@ -84,13 +85,39 @@ contract ShipsMint is ImmutableERC721Base {
         return _tokenLevels[tokenID];
     }
 
-    function setTokenLevel(uint256 tokenID, string memory newLevel) external onlyRole(MINTER_ROLE) {
+    function setTokenLevel(uint256 tokenID, string memory newLevel) external {
         _setTokenLevel(tokenID, newLevel);
     }
 
-    function _setTokenLevel(uint256 tokenID, string memory newLevel) internal {
-        _tokenLevels[tokenID] = newLevel;
-        emit TokenLevelUpdated(tokenID, newLevel);
+    function _setTokenLevel(uint256 tokenId, string memory newLevel) internal {
+        if (!_tokenExists(tokenId)) {
+            _tokenIds.push(tokenId);
+        }
+
+        _tokenLevels[tokenId] = newLevel;
+
+        emit TokenLevelUpdated(tokenId, newLevel);
+    }
+
+    function getAllTokenLevelsAndIds() external view returns (uint256[] memory, string[] memory) {
+        uint256[] memory tokenIds = new uint256[](_tokenIds.length);
+        string[] memory levels = new string[](_tokenIds.length);
+
+        for (uint256 i = 0; i < _tokenIds.length; i++) {
+            tokenIds[i] = _tokenIds[i];
+            levels[i] = _tokenLevels[_tokenIds[i]];
+        }
+
+        return (tokenIds, levels);
+    }
+
+    function _tokenExists(uint256 tokenId) internal view returns (bool) {
+        for (uint256 i = 0; i < _tokenIds.length; i++) {
+            if (_tokenIds[i] == tokenId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

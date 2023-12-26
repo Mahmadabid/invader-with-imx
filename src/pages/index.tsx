@@ -41,7 +41,7 @@ const Home = () => {
   const dataToSend = {
     address: Address
   };
-  
+
 
   const getUserID = async () => {
     try {
@@ -125,17 +125,16 @@ const Home = () => {
 
   return (
     <div>
-      {/* {loading || shipLoading ? (
+      {loading || shipLoading ? (
         <div className="flex flex-col justify-center items-center my-20">
           <h1 className="text-xl font-medium text-slate-700">{shipLoading ? 'Minting your ship' : 'Fetching your ship'}</h1>
           <Load className="w-8 h-8 my-3" />
         </div>
       ) : (
-        
-      )} */}
-      <div>
+        <div>
           <SpaceInvader gameConst={gameConst} levels={Levels} setGameConst={setGameConst} />
         </div>
+      )}
     </div>
   );
 };

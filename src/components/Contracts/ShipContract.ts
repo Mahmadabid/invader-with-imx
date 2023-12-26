@@ -1,4 +1,4 @@
-export const shipAddress = '0xba36aF611310145fcb0528dbCD1c1B456603d58B';
+export const shipAddress = '0x60B927e66316Adea07781D220D51C6A6137CDE76';
 
 export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdCdHq5utVATDi3ggMHaNJ4geVKRLsKY6eqnNix6ZA2VH/';
 
@@ -612,6 +612,24 @@ export const shipABI = [
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllTokenLevelsAndIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "",
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",
