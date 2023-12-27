@@ -1,5 +1,7 @@
 # Pixels Invader
 
+[Game](https://pixels-invader.vercel.app/)
+
 ## Technologies used
 - Immutable zkevm
 - mongodb
@@ -32,7 +34,7 @@ Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](ht
 For ship contract NFT are upgraded so NFTs metadata is refreshed using [postMintRefresh.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/postMintRefresh.ts). This upgrades the NFT for next Levels. It fetches the IDs and their Levels form ship smart contract and updates the metadata of upgraded NFTs.
 
 ## Smart Contracts
-[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts)
+[Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/smartContracts)
 
 ### IPX Smart Contract 
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/GameToken.sol)
