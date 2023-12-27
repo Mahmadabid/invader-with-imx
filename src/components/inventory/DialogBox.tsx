@@ -85,7 +85,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
                             <div className='flex justify-center'><Load className='w-8 h-8 fill-black mt-3' /></div>
                         </div> : shipUpgrade ?
                             <div className="relative bg-white flex flex-col justify-center text-center p-8 max-w-md mx-auto rounded shadow-lg">
-                                <h1 className='text-2xl font-bold text-slate-600'>Your NFT has been upgraded.</h1>
+                                <h1 className='text-2xl font-bold text-slate-600'>Your Level has been upgraded. <br/> Your NFT will also be updated after sometime.</h1>
                             </div> :
                             <div className="relative bg-white p-8 max-w-md mx-auto rounded shadow-lg">
                                 <h1 className='text-xl font-medium my-2 mb-7'>You can perform following actions.</h1>
