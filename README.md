@@ -60,7 +60,7 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Health NFT by burning IPX.
 
 ## Game
-[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/components/game)
+[Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
 
 The game is a space Invaders style game. There is a feature of level. That determines the difficulty and the ship capability. Next Level gives you an upgraded ship. The level and Powerups NFTs are fetched by ```getNftByCollection()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
 
