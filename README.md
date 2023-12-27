@@ -2,7 +2,7 @@
 
 [Game](https://pixels-invader.vercel.app/)
 
-![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/3a069501-99d3-43de-b721-1c8e023beec1)
+![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/b17aac04-257c-43ce-8035-45e1abdeee5b)
 
 
 ## Technologies used
