@@ -42,14 +42,14 @@ const Header = () => {
           <Link href="/market">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Market</h1>
           </Link>
+          <Link href="/swap">
+            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Swap</h1>
+          </Link>
           <Link href="/profile">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Profile</h1>
           </Link>
           <Link href="/ipx">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">$IPX</h1>
-          </Link>
-          <Link href="/swap">
-            <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Swap</h1>
           </Link>
           <Link href="/leaderboard">
             <h1 className="block hover:bg-blue-500 font-medium hover:rounded-md hover:text-white px-4 py-2 text-gray-800">Leaderboard</h1>
