@@ -2,8 +2,7 @@
 
 [Game](https://pixels-invader.vercel.app/)
 
-![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/b17aac04-257c-43ce-8035-45e1abdeee5b)
-
+![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/d9047d27-d658-44f2-98e1-7aba84ad1aca)
 
 ## Technologies used
 - Immutable zkevm
