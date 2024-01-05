@@ -94,6 +94,12 @@ You get 1 score for shooting 1 alien. Aliens will move from right to left. Shoot
 - Aliens Firing is faster
 - On winning 5 IPX is awarded.
 
+### Powerups
+There are three powerups in this game. Extra Health, Extra Time and Faster Firing. These can be bought in market. 
+- Extra Health gives 1 extra health.
+- Extra Time gives 5 extra seconds.
+- Faster Firing speed up Players Firing by 100 milliseconds or 0.1 seconds
+
 ## Pages
 
 ### 1. Game
