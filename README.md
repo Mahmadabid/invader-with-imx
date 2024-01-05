@@ -28,9 +28,11 @@ Fire Powerups Contract [generateFiles.js](https://github.com/Mahmadabid/invader-
 
 Health Powerups Contract [generateFiles.js](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/generateFile.js). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
 
+Timer Powerups Contract [generateFiles.js](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/generateFile.js). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
+
 Ships Contract [generateFiles.js](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/generateFile.js). It fetches the total number of NFTs minted and the tokenID and their Level and generates their files by their level to upgrade Ships to Level 2 and add additional 50 files to accomodate new players.
 
-Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/metadataRefresh.ts), [Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/firing/metadataRefresh.ts), [Health](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/metadataRefresh.ts)
+Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/metadataRefresh.ts), [Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/firing/metadataRefresh.ts), [Health](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/metadataRefresh.ts), [Timer](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/metadataRefresh.ts)
 
 ### Post Mint Refresh
 For ship contract NFT are upgraded so NFTs metadata is refreshed using [postMintRefresh.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/postMintRefresh.ts). This upgrades the NFT for next Levels. It fetches the IDs and their Levels form ship smart contract and updates the metadata of upgraded NFTs.
@@ -62,6 +64,11 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
 
 This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Health NFT by burning IPX.
+
+### Timer Smart Contract
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
+
+This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Time NFT by burning IPX.
 
 ## Game
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
