@@ -1,5 +1,6 @@
 import { firepowerupsABI, firepowerupsAddress } from "@/components/Contracts/FirePowerupsContract";
 import { healthpowerupsABI, healthpowerupsAddress } from "@/components/Contracts/HealthPowerupsContract";
+import { timerpowerupsAddress, timerpowerupsABI } from "@/components/Contracts/TimerPowerupsContract";
 import { gameTokenAddress, gameTokenABI } from "@/components/Contracts/TokenContract";
 import Card from "@/components/market/Card";
 import Load from "@/components/utils/Load";
@@ -80,6 +81,53 @@ const Market = () => {
             setApprove(true);
 
             const approveTx = await gameToken.approve(healthpowerupsAddress, ethers.constants.MaxUint256);
+            await approveTx.wait();
+
+            setApprove(false);
+
+            const TokenID = getNextTokenId('health')
+
+            const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
+                gasLimit: gasLimit,
+            });
+            const receipt = await transaction.wait();
+
+            setHash(await receipt.transactionHash)
+
+            console.log('Sell successful!');
+        } catch (error: any) {
+            setTxnError(error.message)
+        }
+    };
+
+    const handleTimeBuy = async () => {
+        setTxn(true);
+
+        if (!signer) {
+            console.error('Signer not available');
+            return;
+        }
+
+        try {
+            const contract = new ethers.Contract(timerpowerupsAddress, timerpowerupsABI, signer);
+            const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+
+            const burnToken = ethers.utils.parseEther('10');
+            const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+
+            if (parseFloat(walletIPX) < 10) {
+                setTxnError('You dont have enough IPX');
+                return;
+              }
+        
+              if (parseFloat(walletBalance) < 0.013) {
+                setTxnError('You dont have enough tIMX');
+                return;
+              }
+
+            setApprove(true);
+
+            const approveTx = await gameToken.approve(timerpowerupsAddress, ethers.constants.MaxUint256);
             await approveTx.wait();
 
             setApprove(false);
@@ -199,6 +247,7 @@ const Market = () => {
                     <div className="flex flex-wrap justify-center">
                         <Card image="/health.png" name="Extra Heatlh" price="10" onButtonClick={handleHealthBuy} />
                         <Card image="/Bullets.png" name="Faster Firing" price="10" onButtonClick={handleFireBuy} />
+                        <Card image="/time.png" name="Extra Time +5 sec" price="10" onButtonClick={handleTimeBuy} />
                         <Card image="/gray.png" name="Coimg Soon" price="10" onButtonClick={() => { }} />
                     </div>
                 </div>

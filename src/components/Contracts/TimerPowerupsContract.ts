@@ -1,10 +1,10 @@
-export const shipAddress = '0x60B927e66316Adea07781D220D51C6A6137CDE76';
+export const timerpowerupsAddress = '0xdAC23B20246c24b215b60654d8eebc2d96f3ec42';
 
-export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZKwYM6UdkSgJBhScJVscqQrTVqoT67CaXvKrcV6EFZPe/';
+export const timerBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmS7xuucHMgTroQGCC8MqYXU2q9QDeNfe8xPuvSYf1a8fQ/';
 
-export const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZEEHh9WHFCBuW3EBY5L4jbpZsLodNRyuCPgJgEoPwXpN/';
+export const timerContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmPVUzE6E8SRwMe3otPe2KqjPm7CyokoGbgYA1sgoWPzrf/';
 
-export const shipABI = [
+export const timerpowerupsABI = [
   {
     "inputs": [
       {
@@ -46,6 +46,11 @@ export const shipABI = [
         "internalType": "uint96",
         "name": "feeNumerator_",
         "type": "uint96"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -356,25 +361,6 @@ export const shipABI = [
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "newLevel",
-        "type": "string"
-      }
-    ],
-    "name": "TokenLevelUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -606,12 +592,12 @@ export const shipABI = [
   },
   {
     "inputs": [],
-    "name": "getAdmins",
+    "name": "gameToken",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "contract GameToken",
         "name": "",
-        "type": "address[]"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -619,17 +605,12 @@ export const shipABI = [
   },
   {
     "inputs": [],
-    "name": "getAllTokenLevelsAndIds",
+    "name": "getAdmins",
     "outputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "address[]",
         "name": "",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -711,25 +692,6 @@ export const shipABI = [
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenID",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTokenLevel",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -837,6 +799,11 @@ export const shipABI = [
       {
         "internalType": "uint256",
         "name": "tokenID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenAmountToSell",
         "type": "uint256"
       }
     ],
@@ -1324,24 +1291,6 @@ export const shipABI = [
       }
     ],
     "name": "setOperatorAllowlistRegistry",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenID",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "newLevel",
-        "type": "string"
-      }
-    ],
-    "name": "setTokenLevel",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

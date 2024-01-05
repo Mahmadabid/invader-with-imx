@@ -2,6 +2,7 @@ import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract
 import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
 import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
+import { timerpowerupsAddress } from '@/components/Contracts/TimerPowerupsContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
@@ -107,12 +108,16 @@ async function getNftByCollection() {
 
     const fireresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
 
-    const responsed = [...healthresponse.result, ...fireresponse.result]
+    const timerContractAddress = timerpowerupsAddress;
+
+    const timerresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
+
+    const PowerupsResult = [...healthresponse.result, ...fireresponse.result, ...timerresponse.result]
 
     return {
       responseResult,
       LevelbyTokenID,
-      responsed,
+      PowerupsResult,
       accountAddress
     };
 

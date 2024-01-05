@@ -1,0 +1,13 @@
+{
+  "id": "48",
+  "image": "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmXswwCnRor47hTuza9YKvb8ppX32gFoppemybYWrLtB2i/",
+  "token_id": "48",
+  "name": "Extra Time",
+  "description": "This NFT gives you extra time.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    }
+  ]
+}

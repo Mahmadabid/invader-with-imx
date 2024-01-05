@@ -20,7 +20,7 @@ const Home = () => {
       try {
         const NftwithAddress = await getNftByCollection();
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
-        const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.responsed;
+        const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.PowerupsResult;
         const LevelbyID = NftwithAddress?.LevelbyTokenID;
 
         setAddress(NftwithAddress?.accountAddress);
@@ -91,7 +91,18 @@ const Home = () => {
         fireSpeed: 100,
       }));
     }
+
+    const timerNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Extra Time');
+
+    if (timerNFTPowerups && timerNFTPowerups.length > 0) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        timer: 35,
+      }));
+    }
+
   }, [NFTPowerupsstate]);
+  
 
   const sendData = async () => {
     try {

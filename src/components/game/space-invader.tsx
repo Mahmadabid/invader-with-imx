@@ -378,8 +378,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <p>You have:</p>
             <div className='flex flex-row items-center justify-center'>
               {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
-                : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
-                  : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+                  : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
+                  : gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-2' />                  : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
             </div>
           </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
@@ -392,6 +392,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               <div className='flex flex-row items-center justify-center'>
                 {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
                   : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
+                  : gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-2' />
                     : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
