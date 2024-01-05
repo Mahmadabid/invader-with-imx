@@ -22,11 +22,11 @@ Following Products of immutable zkevm were used
 - ERC721 contracts
 
 ## Metadata Refresh 
+Metadata Refresh is done to update ships and to add more NFTs to the contracts.
+
 Metadata Refresh is being done in two ways.
 
 ### Automatic Metadata Refresh
-Metadata Refresh is done to update ships and to add more NFTs to the contracts.
-
 When the ship is upgraded using [api](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/upgrade.ts) through inventory page. The NFT metadata is also updated using immutable ```refreshNFTMetadata()``` function.
 
 ### Manual Metadata Refresh 
