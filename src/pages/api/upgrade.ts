@@ -1,6 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from "ethers";
-import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
+import { config, blockchainData } from '@imtbl/sdk';
+import { shipAddress, shipABI } from "@/components/Contracts/ShipContract";
+
+const client = new blockchainData.BlockchainData({
+    baseConfig: {
+      environment: config.Environment.SANDBOX,
+      apiKey: 'api key',
+      publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
+    },
+  });
 
 type Entry = {
     id: string;
@@ -48,7 +57,38 @@ export default async function handler(
 
             const receipt = await tx.wait();
 
-            console.log(receipt)
+            const refreshNFTMetadata = async (
+                client: blockchainData.BlockchainData,
+                chainName: string,
+                contractAddress: string,
+                ID: string,
+            ) => {
+                await client.refreshNFTMetadata({
+                    chainName,
+                    contractAddress,
+                    refreshNFTMetadataByTokenIDRequest: {
+                        nft_metadata: [
+                            {
+                                name: "Level 2 Ship",
+                                animation_url: null,
+                                image: "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmWKtaHa5jQYfto46HSaCUjbKRGs7nMh5r4tzVYMFtK1vh/",
+                                external_url: null,
+                                youtube_url: null,
+                                description: "This NFT represents your ship at level 2. Also, it's your profile ship.",
+                                attributes: [
+                                    {
+                                        trait_type: "Level",
+                                        value: "2"
+                                    }
+                                ],
+                                token_id: ID,
+                            },
+                        ],
+                    },
+                });
+            };
+
+            await refreshNFTMetadata(client, "imtbl-zkevm-testnet", shipAddress, id)
 
             return res.status(200).json({ message: "Upgraded successfully.", entry: receipt });
         } catch (error) {
