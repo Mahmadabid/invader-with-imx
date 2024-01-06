@@ -20,6 +20,7 @@ Following Products of immutable zkevm were used
 - burn
 - transfer
 - ERC721 contracts
+- JWTs
 
 ## Metadata Refresh 
 Metadata Refresh is done to update ships and to add more NFTs to the contracts.
@@ -77,6 +78,9 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
 
 This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Time NFT by burning IPX.
+
+## JWTs
+JWTs are fetched using [Immutable JWT Guide](https://docs.immutable.com/docs/zkEVM/products/passport/identity/jwt). They are used to authenticate api to prevent unauthorized access. They are used through [key.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/components/key.ts) and with their verification is being done in [api](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/pages/api).
 
 ## Game
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
