@@ -9,6 +9,7 @@ import {
 import { useMovePlayer } from './movePlayer';
 import { useGameLogic } from './gameLogic';
 import { GameConstantsProps } from './gameConstants';
+import { useJWT } from '../key';
 
 export interface ElementPosition {
   x: number;
@@ -26,6 +27,8 @@ interface SpaceInvadersProps {
 export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameConst, levels }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic(gameConst);
+
+  const jwt = useJWT();
 
   const [playerBulletsPosition, setPlayerBulletPosition] = useState<ElementPosition[]>([]);
   const [enemies, setEnemies] = useState<ElementPosition[]>(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
@@ -81,6 +84,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt.accessToken}`
         },
         body: JSON.stringify(dataToSend)
       });

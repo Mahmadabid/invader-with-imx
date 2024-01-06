@@ -3,6 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import Link from 'next/link';
 import { shipAddress } from '../Contracts/ShipContract';
+import { useJWT } from '../key';
 
 type DialogProps = {
     handleClose: () => void;
@@ -21,6 +22,8 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
     const [shipLoading, setShipLoading] = useState(false);
     const [shipUpgrade, setShipUpgrade] = useState(false);
 
+    const jwt = useJWT();
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
     }
@@ -34,10 +37,11 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, tokenId, contractAddres
         try {
             setShipLoading(true);
             if (points >= 200 && balance >= 50) {
-                const response = await fetch('/api/upgrade', {
+                await fetch('/api/upgrade', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${jwt.accessToken}`
                     },
                     body: JSON.stringify(dataToSend)
                 });

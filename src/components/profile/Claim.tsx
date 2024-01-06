@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import { passportInstance } from '@/utils/immutable';
+import { useJWT } from '../key';
 
 interface ClaimProps {
     Sub: string | undefined;
@@ -17,19 +18,15 @@ type IPXEntry = {
     },
 };
 
-type JWTProps = {
-    accessToken: string;
-    idToken: string;
-};
-
 const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX }) => {
 
     const [Points, setPoints] = useState(0);
     const [Address, setAddress] = useState('');
     const [ClaimPoints, setClaimPoints] = useState(0);
     const [loading, setloading] = useState(false);
-    const [jwt, setJwt] = useState<JWTProps>({ accessToken: '', idToken: ''});
 
+    const jwt = useJWT();
+    
     const fetchData = async () => {
         setloading(true);
         const url = `/api/data?userId=${Sub}`;
@@ -59,20 +56,6 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
         }
     }, [Sub, ClaimTxn]);
 
-    async function JWT() {
-        const idToken = await passportInstance.getIdToken();
-        const accessToken = await passportInstance.getAccessToken();
-
-        setJwt({
-            accessToken: accessToken? accessToken: '',
-            idToken: idToken? idToken: ''
-        })        
-    }
-
-    useEffect(() => {
-        JWT();
-    }, [passportInstance])
-
     const dataToSend: IPXEntry = {
         userId: Sub || '',
         data: {
@@ -87,6 +70,7 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt.accessToken}`
                 },
                 body: JSON.stringify(dataToSend)
             });

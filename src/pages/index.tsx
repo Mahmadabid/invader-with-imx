@@ -1,6 +1,7 @@
 import { useGameConstants } from "@/components/game/gameConstants";
 import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
+import { useJWT } from "@/components/key";
 import Load from "@/components/utils/Load";
 import { getNftByCollection, passportInstance } from "@/utils/immutable";
 import { useEffect, useState } from "react";
@@ -14,6 +15,8 @@ const Home = () => {
   const [Address, setAddress] = useState('');
   const [Levels, setLevels] = useState('1');
   const { gameConst, setGameConst } = useGameConstants();
+
+  const jwt = useJWT();
 
   useEffect(() => {
     const fetchNFTs = async () => {
@@ -111,6 +114,7 @@ const Home = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt.accessToken}`
         },
         body: JSON.stringify(dataToSend)
       });

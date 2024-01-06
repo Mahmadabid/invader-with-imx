@@ -1,6 +1,49 @@
 import connectDb from "@/utils/db/mongodb";
 import Invader from "@/utils/db/model";
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
+import { getKeyId } from "@/components/key";
+
+const getPublicKey = async () => {
+    const client = jwksClient({ jwksUri: 'https://auth.immutable.com/.well-known/jwks.json' });
+
+    const key = await getKeyId();
+
+    return new Promise<string>((resolve, reject) => {
+        const keyId = key;
+
+        client.getSigningKey(keyId, (err, key) => {
+            if (err) {
+                reject(err);
+            } else {
+                const signingKey = key?.getPublicKey();
+                if (signingKey) {
+                    resolve(signingKey);
+                }
+            }
+        });
+    });
+};
+
+const verifyJwt = async (token: string) => {
+    try {
+        const publicKey: string = await getPublicKey();
+
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, publicKey, { algorithms: ['RS256'] }, (err, decoded) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(decoded);
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error fetching public key:', error);
+        throw new Error('Failed to verify JWT');
+    }
+};
 
 type InvaderEntry = {
     userId: string;
@@ -32,21 +75,28 @@ export default async function handler(
         }
 
         try {
-            const existingPointsEntry = await Invader.findOne({ userId });
+            if (req.headers.authorization) {
+                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
 
-            if (existingPointsEntry) {
+                if (!decodedToken)  return res.status(401).json({ error: 'Unauthorized' });
 
-                existingPointsEntry.data.IPX += data.IPX;
-                existingPointsEntry.data.TotalPoints += data.TotalPoints;
+                const existingPointsEntry = await Invader.findOne({ userId });
 
-                await existingPointsEntry.save();
+                if (existingPointsEntry) {
 
-                return res.status(200).json({ message: "Invader entry updated", entry: existingPointsEntry });
-            } else {
-                const newPointsEntry = await Invader.create({ userId, data });
+                    existingPointsEntry.data.IPX += data.IPX;
+                    existingPointsEntry.data.TotalPoints += data.TotalPoints;
 
-                return res.status(201).json({ message: "Invader entry created", entry: newPointsEntry });
+                    await existingPointsEntry.save();
+
+                    return res.status(200).json({ message: "Invader entry updated", entry: existingPointsEntry });
+                } else {
+                    const newPointsEntry = await Invader.create({ userId, data });
+
+                    return res.status(201).json({ message: "Invader entry created", entry: newPointsEntry });
+                }
             }
+            return res.status(401).json({ error: 'Unauthorized' });
         } catch (error) {
             console.log('error')
             return res.status(500).json({ error: "Error creating/updating points entry." });

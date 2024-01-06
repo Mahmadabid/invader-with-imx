@@ -16,7 +16,11 @@ const Inventory = () => {
       setInfoLoading(true);
       const result = await getInventoryData();
       setBalance(parseInt(result.balance));
-      setPoints(result.data.entries[0].data.TotalPoints);
+      try {
+        setPoints(result.data.entries[0].data.TotalPoints);        
+      } catch {
+        setPoints(0)
+      }
       setInfoLoading(false);
     }
 

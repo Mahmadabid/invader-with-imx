@@ -1,6 +1,49 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from "ethers";
 import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
+import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
+import { getKeyId } from '@/components/key';
+
+const getPublicKey = async () => {
+    const client = jwksClient({ jwksUri: 'https://auth.immutable.com/.well-known/jwks.json' });
+
+    const key = await getKeyId();
+
+    return new Promise<string>((resolve, reject) => {
+        const keyId = key;
+
+        client.getSigningKey(keyId, (err, key) => {
+            if (err) {
+                reject(err);
+            } else {
+                const signingKey = key?.getPublicKey();
+                if (signingKey) {
+                    resolve(signingKey);
+                }
+            }
+        });
+    });
+};
+
+const verifyJwt = async (token: string) => {
+    try {
+        const publicKey: string = await getPublicKey();
+
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, publicKey, { algorithms: ['RS256'] }, (err, decoded) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(decoded);
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error fetching public key:', error);
+        throw new Error('Failed to verify JWT');
+    }
+};
 
 type Entry = {
     address: string
@@ -35,6 +78,7 @@ export default async function handler(
 ) {
 
     if (req.method === 'POST') {
+
         const { address } = req.body;
 
         if (!address) {
@@ -42,24 +86,30 @@ export default async function handler(
         }
 
         try {
-            const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
-            const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
+            if (req.headers.authorization) {
+                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
 
-            const contract = new ethers.Contract(shipAddress, shipABI, wallet);
+                if (!decodedToken) return res.status(401).json({ error: 'Unauthorized' });
 
-            const adjustedGasPrice = {
-                maxPriorityFeePerGas: 100e9,
-                maxFeePerGas: 150e9,
-                gasLimit: 200000,
-            };
+                const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
+                const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 
-            const TOKEN_ID = await getNextTokenId();
+                const contract = new ethers.Contract(shipAddress, shipABI, wallet);
 
-            const tx = await contract.mint(address, TOKEN_ID, adjustedGasPrice);
+                const adjustedGasPrice = {
+                    maxPriorityFeePerGas: 100e9,
+                    maxFeePerGas: 150e9,
+                    gasLimit: 200000,
+                };
 
-            const receipt = await tx.wait();
+                const TOKEN_ID = await getNextTokenId();
 
-            return res.status(200).json({ message: "Minted successfully.", entry: receipt });
+                const tx = await contract.mint(address, TOKEN_ID, adjustedGasPrice);
+
+                const receipt = await tx.wait();
+
+                return res.status(200).json({ message: "Minted successfully.", entry: receipt });
+            }
         } catch (error) {
             console.error('Error:', error);
             return res.status(500).json({ error: "Error Minting." });
