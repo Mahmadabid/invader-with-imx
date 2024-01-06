@@ -38,7 +38,7 @@ const generateNFTFile = (id, tokenId, name, description, level) => {
 
 const generateNFTFiles = async () => {
 
-  const shipAddress = '0x60B927e66316Adea07781D220D51C6A6137CDE76';
+  const shipAddress = '0xf02A333C34C138CBd1126949d92497c598cb7764';
   const shipABI = [
     {
       "inputs": [

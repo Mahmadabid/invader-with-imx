@@ -2,6 +2,10 @@ import { ethers } from "hardhat";
 
 async function deploy() {
 
+  const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdCdHq5utVATDi3ggMHaNJ4geVKRLsKY6eqnNix6ZA2VH/';
+
+  const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZEEHh9WHFCBuW3EBY5L4jbpZsLodNRyuCPgJgEoPwXpN/';
+
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);
 
@@ -14,17 +18,17 @@ async function deploy() {
     maxPriorityFeePerGas: 100e9,
     maxFeePerGas: 150e9,
     gasLimit: 10000000,
-    }
-    
+  }
+
   const factory = await ethers.deployContract(
-    "ShipsMint",[deployer.address,
-      "Pixels Invader Ships",
-      "PXS",
-      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmUY7fXRWWSf56Lf5szrtsJmHrp89USVuG6GB6Z432NdFS/",
-      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZEEHh9WHFCBuW3EBY5L4jbpZsLodNRyuCPgJgEoPwXpN/",
-      operatorAllowlist,
-      deployer.address,
-      ethers.toBigInt("2000")] , deploymentOptions
+    "ShipsMint", [deployer.address,
+    "Pixels Invader Ships",
+    "PXS",
+    shipBaseURI,
+    shipContractURI,
+    operatorAllowlist,
+    deployer.address,
+    ethers.toBigInt("2000")], deploymentOptions
   );
 
   await factory.waitForDeployment();
