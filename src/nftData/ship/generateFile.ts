@@ -9,9 +9,12 @@ const generateNFTFile = (id: string, tokenId: string, name: string, description:
   let imageURL;
 
   if (level === '2') {
-    imageURL = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmWKtaHa5jQYfto46HSaCUjbKRGs7nMh5r4tzVYMFtK1vh/';
-  } else {
-    imageURL = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdPYE429FKwFYjqUeYN3jG1ncgwuhb3744VdPBLweEm51/';
+    imageURL = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZK7p8KTitDc1vxz23Xd83Ddo7jxrnebsjf8FKhc3AQh6/';
+  } else if (level === '3') {
+    imageURL = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTqceHT2tadsC89vFimny7Y5Di8DnQ2mdASodYzMsytCR/';
+  }
+  else {
+    imageURL = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmRn5a6ZGXbJMhLKFomKGFBLZ8zrMyMBvgrU39tzrsUGpu/';
   }
 
   const nftData = {

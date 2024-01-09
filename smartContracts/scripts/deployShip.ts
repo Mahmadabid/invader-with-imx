@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 
 async function deploy() {
 
-  const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdCdHq5utVATDi3ggMHaNJ4geVKRLsKY6eqnNix6ZA2VH/';
+  const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmPPRie9TDEkntuowHWR75jVZod35M7MoxHMPx7SWtLy4v/';
 
-  const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZEEHh9WHFCBuW3EBY5L4jbpZsLodNRyuCPgJgEoPwXpN/';
+  const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQK9yBb8EFPd1Rf4u9TANbpVPLtRtrJb6LAVHrp9JMgPY/';
 
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);

@@ -1,4 +1,4 @@
-export const healthpowerupsAddress = '0x08757CC7C503CAb64Ff4D912FdbA3f0EC07a26Af';
+export const healthpowerupsAddress = '0x4Ad0d87f196eb4E7026fF2661B45C45f8E1EE7B6';
 
 export const healthBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQnYGBsvaw25yWTteFV1Tsv83cQH8cpMD2Nw7oJQraUok/';
 
