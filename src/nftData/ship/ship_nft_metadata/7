@@ -1,0 +1,13 @@
+{
+  "id": "7",
+  "image": "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdPYE429FKwFYjqUeYN3jG1ncgwuhb3744VdPBLweEm51/",
+  "token_id": "7",
+  "name": "Level 1 Ship",
+  "description": "This NFT represents your ship at level 1. Also, it's your profile ship.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "7",
+  "image": "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmU62XezuEeVXQkq5DQXZX3od3E61hpkvJ7b9Pfp835ph6/",
+  "token_id": "7",
+  "name": "Extra Health",
+  "description": "This NFT will give you extra Health.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    }
+  ]
+}

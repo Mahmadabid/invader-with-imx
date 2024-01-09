@@ -1,0 +1,13 @@
+{
+  "id": "8",
+  "image": "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmdQ1ppm745225RPJ1y51d33PtWUDAiHr4mefLSDt2Q57r/",
+  "token_id": "8",
+  "name": "Faster Firing",
+  "description": "This NFT make your ship fire faster.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    }
+  ]
+}
