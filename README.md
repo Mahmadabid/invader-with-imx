@@ -37,7 +37,7 @@ Use this command
 ```
 ./node_modules/.bin/ts-node FolderName/generateFile.ts
 ```
-Replace FolderName with the name of folder. Like:
+Replace FolderName with the name of folder:
 ```
 ./node_modules/.bin/ts-node ship/generateFile.ts
 ./node_modules/.bin/ts-node timer/generateFile.ts
