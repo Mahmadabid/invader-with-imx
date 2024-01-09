@@ -132,7 +132,7 @@ You get 1 score for shooting 1 alien. Aliens will move from right to left. Shoot
 - Aliens are more in number. 
 - Time is 30sec. 
 - Ship can move in all directions. 
-- It shoots 2 bullets.
+- It shoots 3 bullets.
 - Aliens Firing is faster
 - On winning 5 IPX is awarded.
 
