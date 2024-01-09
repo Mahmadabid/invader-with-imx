@@ -51,7 +51,7 @@ Health Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invade
 
 Timer Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/generateFile.ts). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
 
-Ships Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/generateFile.ts). It fetches the total number of NFTs minted and the tokenID and their Level and generates their files by their level to upgrade Ships to Level 2 and add additional 50 files to accomodate new players.
+Ships Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/generateFile.ts). It fetches the total number of NFTs minted and the tokenID and their Level and generates their files by their level to upgrade Ships to Level 2 and 3 and add additional 50 files to accomodate new players.
 
 Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/metadataRefresh.ts), [Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/firing/metadataRefresh.ts), [Health](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/metadataRefresh.ts), [Timer](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/metadataRefresh.ts)
 
@@ -122,8 +122,16 @@ You get 1 score for shooting 1 alien. Aliens will move from right to left. Shoot
 
 **Level 2** 
 - Aliens are more in number. 
+- Time is 33sec. 
+- Ship can move in all directions. 
+- It shoots 2 bullets.
+- Aliens Firing is faster
+- On winning 4 IPX is awarded.
+
+**Level 3** 
+- Aliens are more in number. 
 - Time is 30sec. 
-- Ship can only move in all directions. 
+- Ship can move in all directions. 
 - It shoots 2 bullets.
 - Aliens Firing is faster
 - On winning 5 IPX is awarded.
