@@ -49,7 +49,7 @@ const client = new blockchainData.BlockchainData({
     baseConfig: {
         environment: config.Environment.SANDBOX,
         apiKey: process.env.API_KEY,
-        publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
+        publishableKey: process.env.NEXT_PUBLIC_PUBLISH_KEY,
     },
 });
 

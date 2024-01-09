@@ -4,6 +4,8 @@ export const timerBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ip
 
 export const timerContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmPVUzE6E8SRwMe3otPe2KqjPm7CyokoGbgYA1sgoWPzrf/';
 
+export const newTimerBaseURI = '';
+
 export const timerpowerupsABI = [
   {
     "inputs": [

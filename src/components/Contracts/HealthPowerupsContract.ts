@@ -4,6 +4,8 @@ export const healthBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/i
 
 export const healthContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmezuQbZSXH6zPAfeziuEobmLeASFQKbNfT2oSoSWE8Xyo/';
 
+export const newHealthBaseURI = '';
+
 export const healthpowerupsABI = [
   {
     "inputs": [

@@ -22,7 +22,7 @@ const passportConfig = {
 // const configs = {
 //   baseConfig: new config.ImmutableConfiguration({
 //     environment: config.Environment.SANDBOX,
-//     publishableKey: 'pk_imapik-test-WBki$1eh0T6ChGo$WVoo',
+//     publishableKey: process.env.NEXT_PUBLIC_PUBLISH_KEY,
 //     apiKey: process.env.NEXT_PUBLIC_API_KEY,
 //   }),
 // };

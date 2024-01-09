@@ -4,6 +4,8 @@ export const fireBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipf
 
 export const fireContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmfBzg6zmvJ4SsFHuZYhukT48ZLYVQapxPcUBgjvLmZvJM/';
 
+export const newFireBaseURI = '';
+
 export const firepowerupsABI = [
   {
     "inputs": [

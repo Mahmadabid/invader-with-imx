@@ -4,6 +4,7 @@ import {
   GAME_SPEED,
   START_ENEMIES_POSITION,
   START_ENEMIES_POSITION_2,
+  START_ENEMIES_POSITION_3,
   START_POSITION,
 } from './constants';
 import { useMovePlayer } from './movePlayer';
@@ -31,7 +32,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const jwt = useJWT();
 
   const [playerBulletsPosition, setPlayerBulletPosition] = useState<ElementPosition[]>([]);
-  const [enemies, setEnemies] = useState<ElementPosition[]>(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+  const [enemies, setEnemies] = useState<ElementPosition[]>(gameConst.Level === 1 ? START_ENEMIES_POSITION :gameConst.Level === 2 ? START_ENEMIES_POSITION_2: START_ENEMIES_POSITION_3);
   const [enemyBullets, setEnemyBullets] = useState<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>([]);
   const [enemyCanFire, setEnemyCanFire] = useState(true);
   const [playerPosition, setPlayerPosition] = useState<ElementPosition>({
@@ -72,7 +73,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const dataToSend = {
     userId: gameConst.userId,
     data: {
-      IPX: gameLogic.win ? gameConst.Level === 1 ? 3 : 5 : 0,
+      IPX: gameLogic.win ? gameConst.Level === 1 ? 3 : gameConst.Level === 2? 4: 5 : 0,
       TotalPoints: gameLogic.TotalPoints,
       Address: gameConst.Address,
     },
@@ -102,9 +103,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
-  const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 10 : 12;
-  const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 10 : 12;
-  const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 : 800;
+  const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 10 :gameConst.Level === 2? 12: 12;
+  const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 10 :gameConst.Level === 2? 12: 12;
+  const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 :gameConst.Level === 2? 850: 750;
 
   const [canFire, setCanFire] = useState(true);
   const [pressedKeys, setPressedKeys] = useState<Record<string, boolean>>({});
@@ -196,7 +197,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           if (enemy.y < 10) {
             updatedEnemy = { x: enemy.x + 35, y: 600, width: 27, height: 27 };
           } else {
-            updatedEnemy = { x: enemy.x, y: enemy.y - (gameConst.Level === 1 ? 7 : 10), width: 27, height: 27 };
+            updatedEnemy = { x: enemy.x, y: enemy.y - (gameConst.Level === 1 ? 7 : gameConst.Level === 2 ? 9: 11), width: 27, height: 27 };
           }
 
           updatedEnemy.x = Math.max(0, Math.min(504 - updatedEnemy.height, updatedEnemy.x));
@@ -207,7 +208,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             return null;
           }
 
-          if (Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : (0.0325 - gameConst.enemyFire)) && enemyCanFire) {
+          if (Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : gameConst.Level === 2 ? (0.03 - gameConst.enemyFire): (0.0325 - gameConst.enemyFire)) && enemyCanFire) {
             setEnemyCanFire(false);
 
             setTimeout(() => {
@@ -240,7 +241,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             ...prevGameLogic,
             win: true,
             gameover: true,
-            IPXUnclaimed: (gameConst.Level === 1 ? 3 : 5)
+            IPXUnclaimed: (gameConst.Level === 1 ? 3 :gameConst.Level === 2 ? 4: 5)
           }));
         }
 
@@ -331,12 +332,12 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1 ? gameConst.timer + 8 : gameConst.timer,
+      timer: gameConst.Level === 1 ? gameConst.timer + 8 :gameConst.Level === 2 ? gameConst.timer + 3: gameConst.timer,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
 
-    setEnemies(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+    setEnemies(gameConst.Level === 1 ? START_ENEMIES_POSITION :gameConst.Level === 2 ? START_ENEMIES_POSITION_2: START_ENEMIES_POSITION_3);
     setEnemyBullets([]);
     setEnemyCanFire(true);
     setCanFire(true);
@@ -355,12 +356,12 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1 ? gameConst.timer + 8 : gameConst.timer,
+      timer: gameConst.Level === 1 ? gameConst.timer + 8 :gameConst.Level === 2 ? gameConst.timer + 3: gameConst.timer,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
 
-    setEnemies(gameConst.Level === 1 ? START_ENEMIES_POSITION : START_ENEMIES_POSITION_2);
+    setEnemies(gameConst.Level === 1 ? START_ENEMIES_POSITION :gameConst.Level === 2 ? START_ENEMIES_POSITION_2: START_ENEMIES_POSITION_3);
     setEnemyBullets([]);
     setEnemyCanFire(true);
     setCanFire(true);
@@ -433,7 +434,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             </div>
             <img
               className="absolute"
-              src={gameConst.Level === 1 ? '/player.png' : '/playerv2.png'}
+              src={gameConst.Level === 1 ? '/player.png' : gameConst.Level === 2? '/playerv2.png': '/playerv3.png'}
               style={{ top: playerPosition.x, left: playerPosition.y, width: 36, height: 36 }}
               alt="Player"
             />
