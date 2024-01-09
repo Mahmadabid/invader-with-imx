@@ -105,7 +105,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const BULLET_HEIGHT = 13;
   const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 10 :gameConst.Level === 2? 12: 12;
   const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 10 :gameConst.Level === 2? 12: 12;
-  const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 :gameConst.Level === 2? 850: 750;
+  const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 :gameConst.Level === 2? 850: 700;
 
   const [canFire, setCanFire] = useState(true);
   const [pressedKeys, setPressedKeys] = useState<Record<string, boolean>>({});
@@ -118,7 +118,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       const bulletsToFire = gameConst.Level;
       const newBullets = Array.from({ length: bulletsToFire }, (_, index) => ({
         ...playerPosition,
-        y: playerPosition.y + 25 * index,
+        y: gameConst.Level === 1? playerPosition.y + 25 * (index + 0.85): gameConst.Level === 2? playerPosition.y + 25 * (index + 0.35): playerPosition.y + 25 * (index - 0.2),
         width: BULLET_WIDTH,
         height: BULLET_HEIGHT,
       }));
@@ -435,7 +435,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <img
               className="absolute"
               src={gameConst.Level === 1 ? '/player.png' : gameConst.Level === 2? '/playerv2.png': '/playerv3.png'}
-              style={{ top: playerPosition.x, left: playerPosition.y, width: 36, height: 36 }}
+              style={{ top: playerPosition.x, left: playerPosition.y, width: gameConst.Level === 3? 50 : 56, height: gameConst.Level === 3? 50: 56 }}
               alt="Player"
             />
             {enemies.map((enemy, index) => (

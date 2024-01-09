@@ -103,38 +103,42 @@ export default async function handler(
 
                 const receipt = await tx.wait();
 
+                const NftMetadata = (levels: string, tokenId: string) => { 
+                    return [
+                    {
+                        name: `Level ${levels} Ship`,
+                        animation_url: null,
+                        image: parseInt(levels) === 2? "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZK7p8KTitDc1vxz23Xd83Ddo7jxrnebsjf8FKhc3AQh6/": 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTqceHT2tadsC89vFimny7Y5Di8DnQ2mdASodYzMsytCR/',
+                        external_url: null,
+                        youtube_url: null,
+                        description: `This NFT represents your ship at level ${levels}. Also, it's your profile ship.`,
+                        attributes: [
+                            {
+                                trait_type: "Level",
+                                value: levels
+                            }
+                        ],
+                        token_id: tokenId,
+                    },
+                ] }
+
                 const refreshNFTMetadata = async (
                     client: blockchainData.BlockchainData,
                     chainName: string,
                     contractAddress: string,
                     ID: string,
+                    shipLevel: string,
                 ) => {
                     await client.refreshNFTMetadata({
                         chainName,
                         contractAddress,
                         refreshNFTMetadataByTokenIDRequest: {
-                            nft_metadata: [
-                                {
-                                    name: "Level 2 Ship",
-                                    animation_url: null,
-                                    image: "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmWKtaHa5jQYfto46HSaCUjbKRGs7nMh5r4tzVYMFtK1vh/",
-                                    external_url: null,
-                                    youtube_url: null,
-                                    description: "This NFT represents your ship at level 2. Also, it's your profile ship.",
-                                    attributes: [
-                                        {
-                                            trait_type: "Level",
-                                            value: "2"
-                                        }
-                                    ],
-                                    token_id: ID,
-                                },
-                            ],
+                            nft_metadata: NftMetadata(shipLevel, ID),
                         },
                     });
                 };
 
-                await refreshNFTMetadata(client, "imtbl-zkevm-testnet", shipAddress, id)
+                await refreshNFTMetadata(client, "imtbl-zkevm-testnet", shipAddress, id, Level)
 
                 return res.status(200).json({ message: "Upgraded successfully.", entry: receipt });
             }

@@ -1,6 +1,6 @@
 import { ElementPosition } from "./space-invader";
 
-export const START_POSITION = { x: 460, y: 310 };
+export const START_POSITION = { x: 455, y: 310 };
 
 export const START_ENEMIES_POSITION: ElementPosition[] = [
   { x: 47, y: 72, width: 27, height: 27 },

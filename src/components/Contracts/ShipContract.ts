@@ -4,7 +4,7 @@ export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipf
 
 export const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQK9yBb8EFPd1Rf4u9TANbpVPLtRtrJb6LAVHrp9JMgPY/';
 
-export const newShipBaseURI = '';
+export const newShipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmRdqefH3tZcEmGFwunkzKYcqTjqQLuXdkuC7eQrQaPpFe/';
 
 export const shipABI = [
   {
