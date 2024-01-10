@@ -22,7 +22,8 @@ Following Products of immutable zkevm were used
 - JWTs
 - burn
 - transfer
-<br>
+
+
 
 ## Metadata Refresh 
 Metadata Refresh is done to update ships and to add more NFTs to the contracts.
