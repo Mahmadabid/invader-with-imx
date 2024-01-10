@@ -312,12 +312,12 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
         y: debris.y !== 0 ? debris.y - 7 : debris.y,
         active: debris.y > 0,
       };
-  
+
       if (collide(playerPosition, updatedDebris)) {
         handlePlayerCollision();
         return null;
       }
-  
+
       return updatedDebris;
     }).filter((debris): debris is Debris => debris !== null && debris.active);
   };
@@ -418,7 +418,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   }
 
   const headerHeight = 4.65;
-
+  console.log(gameConst)
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
       {gameLogic.gameover && gameConst.start ?
@@ -430,9 +430,10 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
             <p>You have:</p>
             <div className='flex flex-row items-center justify-center'>
-              {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
-                : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
-                  : gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-2' /> : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+              {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
+              {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
+              {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+              {gameConst.Health === 4 && gameConst.fireSpeed === 100 && gameConst.timer === 35 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
             </div>
           </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
@@ -443,10 +444,10 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
               <p>You have:</p>
               <div className='flex flex-row items-center justify-center'>
-                {gameConst.Health === 4 ? <img src='/Bullets.png' alt='Bullets' width={30} height={30} className='mx-2' />
-                  : gameConst.fireSpeed === 100 ? <img src='/health.png' alt='Health' width={30} height={30} className='mx-2' />
-                    : gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-2' />
-                      : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+                {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.Health === 4 && gameConst.fireSpeed === 100 && gameConst.timer === 35 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
             <p className='font-medium mt-2 mb-4'></p>

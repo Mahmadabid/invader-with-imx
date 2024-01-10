@@ -1,4 +1,4 @@
-import { burn, getInventoryData, transfer } from '@/utils/immutable';
+import { burn, transfer } from '@/utils/immutable';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import Link from 'next/link';
@@ -117,12 +117,20 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                                 }} className='px-2 py-2 font-medium text-white bg-orange-500 hover:bg-amber-500 rounded mx-2'>Burn</button>
                                 {option === 1 ?
                                     <div className='mt-6'>
-                                        <p className='my-2 text-red-500 font-medium'>Please Enter a valid address. To ensure successful Transaction</p>
-                                        <input type='text' value={inputValue} onChange={handleChange} className='bg-gray-950 text-white p-2 rounded min-w-full' placeholder='Enter Address to transfer this NFT' />
-                                        <button onClick={() => {
-                                            setLoading(true);
-                                            transfer(inputValue, tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn)
-                                        }} className='bg-blue-500 hover:bg-teal-500 rounded text-white mt-3 p-2'>Transfer</button>
+                                        {contractAddress === shipAddress.toLowerCase() ? 
+                                        <div>
+                                            <p className='my-2 text-red-500 font-medium'>Ship cant be transfered.</p>
+                                        </div>
+                                         :
+                                            <div>
+                                                <p className='my-2 text-red-500 font-medium'>Please Enter a valid address. To ensure successful Transaction</p>
+                                                <input type='text' value={inputValue} onChange={handleChange} className='bg-gray-950 text-white p-2 rounded min-w-full' placeholder='Enter Address to transfer this NFT' />
+                                                <button onClick={() => {
+                                                    setLoading(true);
+                                                    transfer(inputValue, tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn)
+                                                }} className='bg-blue-500 hover:bg-teal-500 rounded text-white mt-3 p-2'>Transfer</button>
+                                            </div>
+                                        }
                                     </div>
                                     : option === 2 ?
                                         <div className='mt-6'>
@@ -138,7 +146,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
 
                                             {Level === 3 ?
                                                 <div>
-                                                    <p className='my-2 text-red-500 font-medium'>You need to hold 100 $IPX and have 350 points to upgrade to Level 3.</p>
+                                                    <p className='my-2 text-red-500 font-medium'>Your ship is at max level.</p>
                                                 </div> : null}
                                         </div>
                                         : null

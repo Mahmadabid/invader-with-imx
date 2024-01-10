@@ -45,7 +45,6 @@ const Home = () => {
     address: Address
   };
 
-
   const getUserID = async () => {
     try {
       const userProfile = await passportInstance.getUserInfo();
@@ -82,7 +81,7 @@ const Home = () => {
     if (healthNFTPowerups && healthNFTPowerups.length > 0) {
       setGameConst((prevGameConst) => ({
         ...prevGameConst,
-        health: 4,
+        Health: 4,
       }));
     }
 
@@ -118,7 +117,7 @@ const Home = () => {
         },
         body: JSON.stringify(dataToSend)
       });
-      console.log(response)
+
       if (response.ok) {
         console.log('Minted successfully', response);
       } else {

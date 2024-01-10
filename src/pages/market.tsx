@@ -205,9 +205,9 @@ const Market = () => {
                             <div>
                                 {Hash?.length === 0 ? (
                                     TxnError ? (
-                                        <div className="flex flex-col font-bold items-center justify-center">
+                                        <div className="flex flex-col font-bold text-center items-center justify-center">
                                             <p className="text-xl text-red-600">{TxnError}</p>
-                                            <p className="mt-4 text-blue-800 text-xl">Please Try Again</p>
+                                            <p className="mt-4 text-blue-800 text-xl">Please Try Again <br/> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
                                         </div>
                                     ) : !Approve ? (
                                         <div className="flex flex-col font-bold items-center mb-2">
@@ -229,9 +229,9 @@ const Market = () => {
                                         </div>
                                         <div className="flex flex-col text-center justify-center mt-2">
                                             <p className="text-green-700 text-xl font-bold my-2">Success</p>
-                                            <Link href="/">
+                                            <Link href="/inventory">
                                                 <button className="bg-yellow-500 hover:bg-yellow-400 text-white font-bold px-4 py-2 rounded mt-2">
-                                                    View in Main page
+                                                    View in Inventory page
                                                 </button>
                                             </Link>
                                         </div>

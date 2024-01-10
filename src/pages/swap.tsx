@@ -145,9 +145,9 @@ const Swap = () => {
               <div>
                 {Hash?.length === 0 ? (
                   TxnError ? (
-                    <div className="flex flex-col font-bold items-center justify-center">
+                    <div className="flex flex-col font-bold text-center items-center justify-center">
                       <p className="text-xl text-red-600">{TxnError}</p>
-                      <p className="mt-4 text-blue-800 text-xl">Please Try Again</p>
+                      <p className="mt-4 text-blue-800 text-xl">Please Try Again <br/> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
                     </div>
                   ) : !Approve ? (
                     <div className="flex flex-col font-bold items-center mb-2">

@@ -66,13 +66,17 @@ async function getNftByAddress(accountAddress: string) {
 
     const healthContractAddress = healthpowerupsAddress;
 
-    const response = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
+    const healthResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
 
     const fireContractAddress = firepowerupsAddress;
 
-    const responsed = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
+    const fireFesponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
 
-    return [...shipResponse.result, ...response.result, ...responsed.result];
+    const timerContractAddress = timerpowerupsAddress;
+
+    const timerResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
+
+    return [...shipResponse.result, ...healthResponse.result, ...fireFesponse.result, ...timerResponse.result];
   } catch (error) {
     console.log(error)
   }
