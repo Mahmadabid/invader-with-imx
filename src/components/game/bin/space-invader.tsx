@@ -58,7 +58,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     const randomX = 600;
     const randomY = Math.floor(Math.random() * (500 * 0.75 - debrisHeight) + 500 * 0.25);
 
-    return { x: randomY, y: randomX, width: debrisWidth, height: debrisHeight, active: true };
+    return { x: randomX, y: randomY, width: debrisWidth, height: debrisHeight, active: true };
   };
 
 
@@ -210,6 +210,17 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     });
   };
 
+  const handlePlayerCollision = () => {
+    if (gameConst.start && !gameLogic.gameover) {
+      setGameLogic((prevGameLogic) => ({
+        ...prevGameLogic,
+        Health: prevGameLogic.Health - 1,
+      }));
+
+      respawnPlayer();
+    };
+  };
+
   const moveEnemiesAndFireBullets = () => {
     if (gameConst.start && !gameLogic.gameover) {
       setEnemies((currentEnemies: ElementPosition[]) => {
@@ -306,31 +317,12 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   };
 
   const moveDebris = (debrisArray: Debris[]): Debris[] => {
-    return debrisArray.map((debris) => {
-      const updatedDebris = {
-        ...debris,
-        y: debris.y !== 0 ? debris.y - 7 : debris.y,
-        active: debris.y > 0,
-      };
-  
-      if (collide(playerPosition, updatedDebris)) {
-        handlePlayerCollision();
-        return null;
-      }
-  
-      return updatedDebris;
-    }).filter((debris): debris is Debris => debris !== null && debris.active);
-  };
-
-  const handlePlayerCollision = () => {
-    if (gameConst.start && !gameLogic.gameover) {
-      setGameLogic((prevGameLogic) => ({
-        ...prevGameLogic,
-        Health: prevGameLogic.Health - 1,
-      }));
-
-      respawnPlayer();
-    };
+    return debrisArray.map((debris) => ({
+      ...debris,
+      x: debris.x !== 0 ? debris.x - 7 : debris.x,
+      active: debris.x > 0,
+    }))
+      .filter((debris) => debris.active);
   };
 
   const gameLoop = () => {
@@ -339,7 +331,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       moveEnemiesAndFireBullets();
       movePlayerBullets();
       moveEnemyBullets();
-
+  
       if (gameConst.Level === 3) {
         if (Math.random() < 1) {
           setDebris((currentDebris) => moveDebris(currentDebris));
@@ -525,7 +517,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 key={`debris${index}`}
                 className="absolute"
                 src="/debris.png"
-                style={{ top: debris.x, left: debris.y, width: debris.width, height: debris.height }}
+                style={{ top: debris.y, left: debris.x, width: debris.width, height: debris.height }}
                 alt={`Debris ${index}`}
               />
             )) : null}

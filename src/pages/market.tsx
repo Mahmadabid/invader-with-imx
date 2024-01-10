@@ -65,10 +65,10 @@ const Market = () => {
             const contract = new ethers.Contract(healthpowerupsAddress, healthpowerupsABI, signer);
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
-            const burnToken = ethers.utils.parseEther('10');
+            const burnToken = ethers.utils.parseEther('30');
             const gasLimit = ethers.utils.parseUnits('10', 'gwei');
 
-            if (parseFloat(walletIPX) < 10) {
+            if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
               }
@@ -112,10 +112,10 @@ const Market = () => {
             const contract = new ethers.Contract(timerpowerupsAddress, timerpowerupsABI, signer);
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
-            const burnToken = ethers.utils.parseEther('10');
+            const burnToken = ethers.utils.parseEther('30');
             const gasLimit = ethers.utils.parseUnits('10', 'gwei');
 
-            if (parseFloat(walletIPX) < 10) {
+            if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
               }
@@ -159,10 +159,10 @@ const Market = () => {
             const contract = new ethers.Contract(firepowerupsAddress, firepowerupsABI, signer);
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
-            const burnToken = ethers.utils.parseEther('10');
+            const burnToken = ethers.utils.parseEther('30');
             const gasLimit = ethers.utils.parseUnits('10', 'gwei');
 
-            if (parseFloat(walletIPX) < 10) {
+            if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
               }
@@ -245,10 +245,10 @@ const Market = () => {
                 <div className="text-center">
                     <h1 className="text-6xl font-bold mt-5 mb-10">Market</h1>
                     <div className="flex flex-wrap justify-center">
-                        <Card image="/health.png" name="Extra Heatlh" price="10" onButtonClick={handleHealthBuy} />
-                        <Card image="/Bullets.png" name="Faster Firing" price="10" onButtonClick={handleFireBuy} />
-                        <Card image="/time.png" name="Extra Time +5 sec" price="10" onButtonClick={handleTimeBuy} />
-                        <Card image="/gray.png" name="Coimg Soon" price="10" onButtonClick={() => { }} />
+                        <Card image="/health.png" name="Extra Heatlh" price="30" onButtonClick={handleHealthBuy} />
+                        <Card image="/Bullets.png" name="Faster Firing" price="30" onButtonClick={handleFireBuy} />
+                        <Card image="/time.png" name="Extra Time +5 sec" price="30" onButtonClick={handleTimeBuy} />
+                        <Card image="/gray.png" name="Coimg Soon" price="0" onButtonClick={() => { }} />
                     </div>
                 </div>
             }

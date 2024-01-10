@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { blockchainData } from '@imtbl/sdk';
 import { shipAddress, shipABI } from "../../components/Contracts/ShipContract";
-import { client, PrivateKey } from "../utils";
+import { PrivateKey, client } from "../utils";
 
 const PostMintRefresh = async () => {
     const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
@@ -13,33 +13,37 @@ const PostMintRefresh = async () => {
 
     const IDLevels = await contract.getAllTokenLevelsAndIds();
 
+    const NftMetadata = (levels: string, tokenId: string) => { 
+        return [
+        {
+            name: `Level ${levels} Ship`,
+            animation_url: null,
+            image: parseInt(levels) === 2? "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZK7p8KTitDc1vxz23Xd83Ddo7jxrnebsjf8FKhc3AQh6/": 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTqceHT2tadsC89vFimny7Y5Di8DnQ2mdASodYzMsytCR/',
+            external_url: null,
+            youtube_url: null,
+            description: `This NFT represents your ship at level ${levels}. Also, it's your profile ship.`,
+            attributes: [
+                {
+                    trait_type: "Level",
+                    value: levels
+                }
+            ],
+            token_id: tokenId,
+        },
+    ] }
+
     const refreshNFTMetadata = async (
         client: blockchainData.BlockchainData,
         chainName: string,
         contractAddress: string,
         id: string,
+        shipLevel: string,
     ) => {
-        await client.refreshNFTMetadata({
+        return await client.refreshNFTMetadata({
             chainName,
             contractAddress,
             refreshNFTMetadataByTokenIDRequest: {
-                nft_metadata: [
-                    {
-                        name: "Level 2 Ship",
-                        animation_url: null,
-                        image: "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmWKtaHa5jQYfto46HSaCUjbKRGs7nMh5r4tzVYMFtK1vh/",
-                        external_url: null,
-                        youtube_url: null,
-                        description: "This NFT represents your ship at level 2. Also, it's your profile ship.",
-                        attributes: [
-                            {
-                                trait_type: "Level",
-                                value: "2"
-                            }
-                        ],
-                        token_id: id,
-                    },
-                ],
+                nft_metadata: NftMetadata(shipLevel, id),
             },
         });
     };
@@ -47,8 +51,8 @@ const PostMintRefresh = async () => {
     for (let i = 0; i < IDLevels[0].length; i++) {
         const level = IDLevels[1][i].toString();
 
-        if (parseInt(level) === 2) {
-            refreshNFTMetadata(client, "imtbl-zkevm-testnet", shipAddress, IDLevels[0][i].toString())
+        if (parseInt(level) === 2 || parseInt(level) === 3) {
+            await refreshNFTMetadata(client, "imtbl-zkevm-testnet", shipAddress, IDLevels[0][i].toString(), level)
         }
     }
 }
