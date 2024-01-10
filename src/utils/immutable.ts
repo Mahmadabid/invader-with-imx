@@ -8,16 +8,17 @@ import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
 
-const passportConfig = {
-  baseConfig: new config.ImmutableConfiguration({
+const passportInstance = new passport.Passport({
+  baseConfig: {
     environment: config.Environment.SANDBOX,
-  }),
-  scope: "transact openid offline_access email",
-  audience: "platform_api",
+    publishableKey: process.env.NEXT_PUBLIC_PUBLISH_KEY || '',
+  },
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
   redirectUri: process.env.NEXT_PUBLIC_URL + 'auth/callback/',
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
-};
+  audience: 'platform_api',
+  scope: 'openid offline_access email transact',
+});
 
 // const configs = {
 //   baseConfig: new config.ImmutableConfiguration({
@@ -34,8 +35,6 @@ const configs = {
 };
 
 const client = new blockchainData.BlockchainData(configs);
-
-const passportInstance = new passport.Passport(passportConfig);
 
 const passportProvider = passportInstance.connectEvm();
 
