@@ -2,7 +2,7 @@
 
 [Game](https://pixels-invader.vercel.app/)
 
-![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/d9047d27-d658-44f2-98e1-7aba84ad1aca)
+![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/ebc638a6-538a-4109-8ed6-adbcb39f2aff)
 
 ## Technologies used
 - Immutable zkevm
@@ -71,6 +71,12 @@ Use this command
 ```
 
 
+## Checkout
+Checkout is used to bridge Ether from Ethereum to Immutable Zkevm. Currently it bridges sepolia to immutable zkevm testnet. You can bridge IMX directly to immutable Passport wallet. It also enables the option to swap tokens supported by checkout.
+
+You can view the checkout features at [Bridge Page](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
+
+
 ## Smart Contracts
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/smartContracts)
 
@@ -103,12 +109,6 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
 
 This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Time NFT by burning IPX.
-
-
-## Checkout
-Checkout is used to bridge Ether from Ethereum to Immutable Zkevm. Currently it bridges sepolia to immutable zkevm testnet. It also enables the option to swap tokens supported by checkout.
-
-You can view the checkout features at [Bridge Page](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
 
 
 ## JWTs
@@ -199,7 +199,7 @@ The Burn also uses IPX Contract and burns the amount. It is used for Acheivement
 #### 6. Bridge
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
 
-This page uses immutable checkput functionality to bridge and swap tokens. The bridge is from sepolia and immutable zkevm testnet. The swap allows to swap tokens supported by immutable checkout.
+This page uses immutable checkput functionality to bridge and swap tokens. The bridge is from sepolia and immutable zkevm testnet. You can bridge directly to immutable passport wallet. The swap allows to swap tokens supported by immutable checkout.
 
 #### 7. Leaderboard
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/leaderboard.tsx)
