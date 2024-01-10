@@ -112,7 +112,8 @@ The game is a space Invaders style game. There is a feature of level. That deter
 You get 0.5 score for shooting 1 alien. Aliens will move from right to left. Shoot them before they kill you or before time runs out. You will only get IPX if you win. Losers will only get the score. You can add powerups from Market.
 
 ### Level
-Level also determines difficulty level.
+Level upgrades your ship. Level also determines difficulty level.
+
 **Level 1** 
 - Aliens are less in number. 
 - Time is 36sec. 
