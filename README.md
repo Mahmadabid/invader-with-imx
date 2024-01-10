@@ -176,14 +176,8 @@ It then grants option to **burn** and **transfer** and for ship to **upgrade**(W
 
 This page allows users to buy Powerups NFTs using $IPX. The market burns $IPX and mints NFTS. The NFT powerups will be provide boost to players to help them win.
 
-#### 4. Profile
-[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/profile.tsx)
-
-This Page fetches user information about IMX, IPX, IPX burned, Unclaimed IPX and Total Points earned in the game using ```getProfileInfo()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
-
-This Page also allows the user to claim unclaimed IPX using this [api](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/web3.ts) without user paying any gas fee.
-
-This page also gives acheivemnets badges to players who have burned specific amount of $IPX,are holding speciific amount of $IPX, have acquired specific amount of points by playing the game.
+#### 4. Shop
+[Code]()
 
 #### 5. Swap
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/swap.tsx)
@@ -201,7 +195,17 @@ The Burn also uses IPX Contract and burns the amount. It is used for Acheivement
 
 This page uses immutable checkput functionality to bridge and swap tokens. The bridge is from sepolia and immutable zkevm testnet. You can bridge directly to immutable passport wallet. The swap allows to swap tokens supported by immutable checkout.
 
-#### 7. Leaderboard
+#### 7. Profile
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/profile.tsx)
+
+This Page fetches user information about IMX, IPX, IPX burned, Unclaimed IPX and Total Points earned in the game using ```getProfileInfo()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
+
+This Page also allows the user to claim unclaimed IPX using this [api](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/web3.ts) without user paying any gas fee.
+
+This page also gives acheivemnets badges to players who have burned specific amount of $IPX,are holding speciific amount of $IPX, have acquired specific amount of points by playing the game.
+
+
+#### 8. Leaderboard
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/leaderboard.tsx)
 
 It takes three different data. 
@@ -209,12 +213,12 @@ It takes three different data.
 - It takes burn record from [smart contract](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/GameToken.sol) using ```getBurnedAmounts()``` function.
 - It takes Buy record from [smart contract](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/Swap.sol) using ```getAllBuyers()``` function.
 
-#### 8. IPX
+#### 9. IPX
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/ipx.tsx)
 
 This page displays the info about IPX token also it fetches total burned amount and Total Supply of Token using its [smart Contract](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/GameToken.sol) funtion ```getTotalSupply() and getBurnSupply()```
 
-#### 9. Root Page 
+#### 10. Root Page 
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/_app.tsx)
 
 This page fetches User Data and and handles login ensuring page remains the same after login.
