@@ -38,8 +38,11 @@ const client = new blockchainData.BlockchainData(configs);
 
 const passportProvider = passportInstance.connectEvm();
 
-async function signerFetch() {
+const browserProvider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
 
+const browserSigner = browserProvider.getSigner();
+
+async function signerFetch() {
   const provider = new ethers.providers.Web3Provider(passportProvider);
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
@@ -237,13 +240,12 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
 
 
 async function getLeaderBoard() {
-  try {
-    const signer = await signerFetch();
+  try {;
 
-    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, browserSigner);
     const burnLeaderboard = await tokenContract.getBurnedAmounts();
 
-    const swapContract = new ethers.Contract(swapAddress, swapABI, signer);
+    const swapContract = new ethers.Contract(swapAddress, swapABI, browserSigner);
     const BuyBalance = await swapContract.getAllBuyers();
 
     return {
@@ -285,4 +287,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getInventoryData, getAddress, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, getAddress, browserSigner, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

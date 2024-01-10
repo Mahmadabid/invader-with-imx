@@ -2,17 +2,17 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import Link from 'next/link';
-import { signerFetch } from '@/utils/immutable';
+import { browserSigner } from '@/utils/immutable';
 import { ethers } from 'ethers';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import Load from '@/components/utils/Load';
 
-async function getTotalSupply(signer: ethers.Signer): Promise<string>  {
+async function getTotalSupply(signer: ethers.Signer): Promise<string> {
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     return await tokenContract.totalSupply();
 }
 
-async function getBurnSupply(signer: ethers.Signer): Promise<string>  {
+async function getBurnSupply(signer: ethers.Signer): Promise<string> {
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     return await tokenContract.totalBurned();
 }
@@ -31,7 +31,7 @@ const IPXPage = () => {
         const fetchData = async () => {
             try {
                 setTotalLoading(true);
-                const signer = await signerFetch();
+                const signer = browserSigner;
                 const totalSupplyResult = await getTotalSupply(signer);
                 setTotalSupply(ethers.utils.formatEther(totalSupplyResult));
             } catch (error) {
@@ -48,7 +48,7 @@ const IPXPage = () => {
         const fetchData = async () => {
             try {
                 setBurnLoading(true);
-                const signer = await signerFetch();
+                const signer = browserSigner;
                 const burnSupplyResult = await getBurnSupply(signer);
                 setBurnSupply(ethers.utils.formatEther(burnSupplyResult));
             } catch (error) {

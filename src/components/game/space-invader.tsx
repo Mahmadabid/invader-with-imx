@@ -347,7 +347,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       }
     }
   };
-  
 
   useInterval(() => gameLoop(), GAME_SPEED);
 
