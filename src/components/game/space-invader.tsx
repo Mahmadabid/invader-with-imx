@@ -418,7 +418,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   }
 
   const headerHeight = 4.65;
-  console.log(gameConst)
+
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
       {gameLogic.gameover && gameConst.start ?
