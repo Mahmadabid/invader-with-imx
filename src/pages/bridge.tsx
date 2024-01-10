@@ -62,7 +62,7 @@ const Bridge = () => {
     return (
         <div className="bg-gray-950 text-white text-center pb-1" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
             <div className='pt-10 justify-center flex flex-col items-center'>
-                <h1 className='font-bold text-2xl py-10'>Bridge Ether for IMX from Ethereum to Immutable Zkevm</h1>
+                <h1 className='font-bold text-2xl py-10'>Bridge Ether from Ethereum to Immutable Zkevm</h1>
                 <button onClick={() => setBridgeOpen(true)} className="font-bold text-xl bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600 transition duration-300">Bridge</button>
                 <h1 className='font-medium text-lg text-red-600 py-5'>It may take an hour to bridge.</h1>
                 <div className='my-6' id="bridge" />
