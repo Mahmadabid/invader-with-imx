@@ -109,32 +109,35 @@ JWTs are fetched using [Immutable JWT Guide](https://docs.immutable.com/docs/zkE
 
 The game is a space Invaders style game. There is a feature of level. That determines the difficulty and the ship capability. Next Level gives you an upgraded ship. The level and Powerups NFTs are fetched by ```getNftByCollection()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
 
-You get 1 score for shooting 1 alien. Aliens will move from right to left. Shoot them before they kill you or before time runs out. You will only get IPX if you win. Losers will only get the score. You can add powerups from Market.
+You get 0.5 score for shooting 1 alien. Aliens will move from right to left. Shoot them before they kill you or before time runs out. You will only get IPX if you win. Losers will only get the score. You can add powerups from Market.
 
 ### Level
+Level upgrades your ship. Level also determines difficulty level.
+
 **Level 1** 
 - Aliens are less in number. 
-- Time is 38sec. 
+- Time is 36sec. 
 - Ship can only move left and right 
 - It shoots 1 bullet. 
 - Aliens firing will be slow.
-- On winning 3 IPX is awarded.
+- On winning 1 IPX is awarded.
 
 **Level 2** 
 - Aliens are more in number. 
-- Time is 33sec. 
+- Time is 24sec. 
 - Ship can move in all directions. 
 - It shoots 2 bullets.
 - Aliens Firing is faster
-- On winning 4 IPX is awarded.
+- On winning 2 IPX is awarded.
 
 **Level 3** 
 - Aliens are more in number. 
-- Time is 30sec. 
+- Time is 20sec. 
 - Ship can move in all directions. 
 - It shoots 3 bullets.
 - Aliens Firing is faster
-- On winning 5 IPX is awarded.
+- On winning 3 IPX is awarded.
+- Debris starts coming.
 
 ### Powerups
 There are three powerups in this game. Extra Health, Extra Time and Faster Firing. These can be bought in market. 
