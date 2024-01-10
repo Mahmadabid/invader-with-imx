@@ -22,7 +22,6 @@ Following Products of immutable zkevm were used
 - JWTs
 - burn
 - transfer
-
 <br>
 
 ## Metadata Refresh 
@@ -70,7 +69,6 @@ Use this command
 ```
 ./node_modules/.bin/ts-node ship/metadataRefresh.ts
 ```
-
 <br>
 
 ## Checkout
