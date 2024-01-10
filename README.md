@@ -24,7 +24,6 @@ Following Products of immutable zkevm were used
 - transfer
 
 
-
 ## Metadata Refresh 
 Metadata Refresh is done to update ships and to add more NFTs to the contracts.
 
@@ -70,7 +69,7 @@ Use this command
 ```
 ./node_modules/.bin/ts-node ship/metadataRefresh.ts
 ```
-<br>
+
 
 ## Checkout
 Checkout is used to bridge Ether from Ethereum to Immutable Zkevm. Currently it bridges sepolia to immutable zkevm testnet. You can bridge IMX directly to immutable Passport wallet. It also enables the option to swap tokens supported by checkout.
