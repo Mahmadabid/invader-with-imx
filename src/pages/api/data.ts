@@ -51,7 +51,8 @@ type InvaderEntry = {
         IPX: number;
         Address: string;
         TotalPoints: number;
-    }
+    };
+    userProvider: 'metamask' | 'passport';
 };
 
 type ApiResponse = {
@@ -68,17 +69,26 @@ export default async function handler(
     await connectDb();
 
     if (req.method === 'POST') {
-        const { userId, data } = req.body as InvaderEntry;
-        console.log(req.body)
-        if (!userId || !data) {
+        const { userId, data, userProvider } = req.body as InvaderEntry;
+
+        if (!userId || !data || !userProvider) {
             return res.status(400).json({ error: "Required fields are missing." });
         }
 
         try {
             if (req.headers.authorization) {
-                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
+                if (userProvider === 'passport') {
+                    const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
+                    if (!decodedToken) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
 
-                if (!decodedToken)  return res.status(401).json({ error: 'Unauthorized' });
+                if (userProvider === 'metamask') {
+                    if (process.env.JWT !== req.headers.authorization.split(' ')[1]) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
 
                 const existingPointsEntry = await Invader.findOne({ userId });
 

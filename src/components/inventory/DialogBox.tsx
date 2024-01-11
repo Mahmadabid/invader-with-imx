@@ -1,9 +1,10 @@
 import { burn, transfer } from '@/utils/immutable';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import Link from 'next/link';
 import { shipAddress } from '../Contracts/ShipContract';
 import { useJWT } from '../key';
+import { UserContext } from '@/utils/Context';
 
 type DialogProps = {
     handleClose: () => void;
@@ -23,6 +24,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
     const [Level, setLevel] = useState(1);
     const [shipLoading, setShipLoading] = useState(false);
     const [shipUpgrade, setShipUpgrade] = useState(false);
+    const [User, _] = useContext(UserContext);
 
     const jwt = useJWT();
 
@@ -44,6 +46,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
     const dataToSend = {
         id: tokenId,
         level: LevelUpgrade,
+        userProvider: User,
     };
 
     const sendData = async () => {
@@ -113,7 +116,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                                 <button onClick={() => {
                                     setLoading(true);
                                     setOption(0);
-                                    burn(tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn)
+                                    burn(tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn, User)
                                 }} className='px-2 py-2 font-medium text-white bg-orange-500 hover:bg-amber-500 rounded mx-2'>Burn</button>
                                 {option === 1 ?
                                     <div className='mt-6'>
@@ -127,7 +130,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                                                 <input type='text' value={inputValue} onChange={handleChange} className='bg-gray-950 text-white p-2 rounded min-w-full' placeholder='Enter Address to transfer this NFT' />
                                                 <button onClick={() => {
                                                     setLoading(true);
-                                                    transfer(inputValue, tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn)
+                                                    transfer(inputValue, tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn, User)
                                                 }} className='bg-blue-500 hover:bg-teal-500 rounded text-white mt-3 p-2'>Transfer</button>
                                             </div>
                                         }

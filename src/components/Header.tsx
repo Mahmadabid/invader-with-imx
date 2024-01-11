@@ -27,7 +27,7 @@ const Header = () => {
           style={{ zIndex: 1000 }}
         >
           <div className="text-white flex flex-row text-2xl font-bold">
-            Logging Out &nbsp;<Load className='w-9 h-9 fill-white'/>
+            Logging Out &nbsp;<Load className='w-9 h-9 fill-white' />
           </div>
           <p className="text-orange-600 text-lg font-bold">It will take few seconds</p>
         </div>
@@ -36,14 +36,17 @@ const Header = () => {
         onClick={async () => {
           try {
             setLoggingOut(true);
-            await passportInstance?.logout();
+            localStorage.clear();
+            if (User === 'passport') {
+              await passportInstance?.logout();
+            }
           } catch (error) {
             console.log(error)
           } finally {
             router.reload();
           }
         }}
-      >{loggingOut? <Load />: 'Logout'}</button>
+      >{loggingOut ? <Load /> : 'Logout'}</button>
         : <></>}
       <h1 className="mx-auto text-4xl xse:text-3xl font-bold">
         <Link href='/'>Pixels Invader</Link>

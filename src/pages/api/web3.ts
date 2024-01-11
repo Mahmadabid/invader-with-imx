@@ -53,6 +53,7 @@ type IPXEntry = {
         IPX: number;
         Address: string;
     };
+    userProvider: 'metamask' | 'passport';
 };
 
 type ApiResponse = {
@@ -69,9 +70,9 @@ export default async function handler(
     await connectDb();
 
     if (req.method === 'POST') {
-        const { userId, data } = req.body as IPXEntry;
+        const { userId, data, userProvider } = req.body as IPXEntry;
 
-        if (!userId || !data) {
+        if (!userId || !data || !userProvider) {
             return res.status(400).json({ error: "Required fields are missing." });
         }
 
@@ -81,13 +82,25 @@ export default async function handler(
 
         try {
             if (req.headers.authorization) {
-                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
 
-                if (!decodedToken) return res.status(401).json({ error: 'Unauthorized' });
+                if (userProvider === 'passport') {
+                    const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
+                    if (!decodedToken) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
+
+                if (userProvider === 'metamask') {
+                    if (process.env.JWT !== req.headers.authorization.split(' ')[1]) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
 
                 const existingEntry = await Invader.findOne({ userId });
 
                 if (existingEntry) {
+                    if (existingEntry.data.IPX < data.IPX) return res.status(401).json({ error: 'Invalid Amount' });
+
                     const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
                     const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 

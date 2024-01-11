@@ -2,8 +2,9 @@ import Acheivements from '@/components/profile/Acheivements';
 import Claim from '@/components/profile/Claim';
 import WalletInfo from '@/components/profile/WalletInfo';
 import Load from '@/components/utils/Load';
-import { getProfileInfo, passportInstance } from '@/utils/immutable';
-import React, { useState, useEffect } from 'react'
+import { UserContext } from '@/utils/Context';
+import { getMetamaskSub, getProfileInfo, passportInstance } from '@/utils/immutable';
+import React, { useState, useEffect, useContext } from 'react'
 
 export default function Profile() {
     const [user, setUser] = useState<{ Email: string | undefined; Sub: string | undefined } | undefined>(undefined);
@@ -14,16 +15,26 @@ export default function Profile() {
     const [PointsIPX, setPointsIPX] = useState<number | undefined>(undefined);
     const [claimTxn, setClaimTxn] = useState(false);
     const [claimLoad, setClaimLoad] = useState(false);
+    const [User, _] = useContext(UserContext);
 
     const fetchUser = async () => {
         try {
-            const userProfile = await passportInstance.getUserInfo();
+            if (User === 'passport') {
+                const userProfile = await passportInstance.getUserInfo();
 
-            setUser({
-                Email: userProfile?.email,
-                Sub: userProfile?.sub,
-            });
+                setUser({
+                    Email: userProfile?.email,
+                    Sub: userProfile?.sub,
+                });
+            }
+            if (User === 'metamask') {
+                const metamaskSub = await getMetamaskSub();
 
+                setUser({
+                        Email: 'User',
+                        Sub: metamaskSub,
+                    })
+            }
         } catch (error) {
             console.log(error);
         }
@@ -39,36 +50,35 @@ export default function Profile() {
         };
         setClaimLoad(true);
 
-        if (user) {
-            const fetchWalletInfo = async () => {
-                const info = await getProfileInfo();
-                setWalletAddress(info.walletAddress ? info.walletAddress : '');
-                setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
-                setWalletIPX(info.tokenBalance ? info.tokenBalance : '');
-                setBurnBalance(info.burnBalance ? info.burnBalance : '');
-                setClaimLoad(false);
-            };
+        const fetchWalletInfo = async () => {
+            const info = await getProfileInfo(User);
+            setWalletAddress(info.walletAddress ? info.walletAddress : '');
+            setWalletBalance(info.balanceInEther ? info.balanceInEther : '');
+            setWalletIPX(info.tokenBalance ? info.tokenBalance : '');
+            setBurnBalance(info.burnBalance ? info.burnBalance : '');
+            setClaimLoad(false);
+        };
 
-            fetchWalletInfo();
-        }
-        
+        fetchWalletInfo();
+
     }, [user, claimTxn]);
 
     const headerHeight = 4.6;
 
     return (
         <div className="bg-gray-950 text-white text-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-            <div className='font-bold text-2xl py-4'>
-                <h1>Hello {user?.Email ?? 'there'} 👋 </h1>
+            <div>
+                <h1 className='font-bold text-2xl pt-4'>Hello {user?.Email ?? 'there'} 👋 </h1>
+                <h1 className='font-medium text-xl pb-4 pt-2 text-lime-500'>{User === 'passport' ? 'Immutable Passport' : 'Metamask'}</h1>
             </div>
             {user && (
                 <>
-                    <div className="flex ml-5 my-2 flex-row justify-center">
+                    {User === 'passport' ? <div className="flex ml-5 my-2 flex-row justify-center">
                         <p className='font-bold p-1'>Email: &nbsp;</p>
                         <div className='px-1 text-center truncate break-words w-full xsm:w-96 mx-1 h-10 py-2 bg-black rounded opacity-70'>
                             {user.Email}
                         </div>
-                    </div>
+                    </div> : null}
                     <WalletInfo address={walletAddress} PointsIPX={PointsIPX} claimLoad={claimLoad} balance={walletBalance} IPXBalance={walletIPX} burnBalance={burnBalance} />
                 </>
             )}

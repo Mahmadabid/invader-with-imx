@@ -8,6 +8,8 @@ import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
 import { ethers } from "ethers";
 
+export type UserProps = 'metamask' | 'passport' | undefined;
+
 const passportInstance = new passport.Passport({
   baseConfig: {
     environment: config.Environment.SANDBOX,
@@ -36,18 +38,40 @@ const browserProvider = new ethers.providers.JsonRpcProvider('https://rpc.testne
 
 const browserSigner = browserProvider.getSigner();
 
-async function signerFetch() {
-  const provider = new ethers.providers.Web3Provider(passportProvider);
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
+async function signerFetch(User: UserProps) {
 
-  return signer;
+  if (User === 'metamask') {
+    const metamaskProvider = new ethers.providers.Web3Provider((window as any).ethereum);
+    await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+    const metamaskSigner = metamaskProvider.getSigner();
+
+    const signer = metamaskSigner;
+    return signer;
+
+  } else {
+
+    const passportProviders = new ethers.providers.Web3Provider(passportProvider);
+    await passportProviders.send("eth_requestAccounts", []);
+    const passportSigner = passportProviders.getSigner();
+
+    const signer = passportSigner;
+    return signer;
+  }
 }
 
-const getAddress = async () => {
+const getAddress = async (User: UserProps) => {
+  if (User === 'passport') {
   const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
   const walletAddress = accounts[0];
   return walletAddress;
+  }
+  if (User === 'metamask') {
+    const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+    if (accounts && accounts.length > 0) {
+      const walletAddress = accounts[0];
+      return walletAddress;
+    }
+  }
 }
 
 async function getNftByAddress(accountAddress: string) {
@@ -76,14 +100,11 @@ async function getNftByAddress(accountAddress: string) {
   }
 }
 
-async function getNftByCollection() {
+async function getNftByCollection(User: UserProps) {
 
-  const accountAddress = await getAddress();
+  const accountAddress = await getAddress(User);
 
   try {
-
-    const signer = await signerFetch();
-
     const chainName = 'imtbl-zkevm-testnet';
 
     const shipContractAddress = shipAddress;
@@ -92,7 +113,7 @@ async function getNftByCollection() {
 
     const responseResult = response.result;
 
-    const contract = new ethers.Contract(shipAddress, shipABI, signer);
+    const contract = new ethers.Contract(shipAddress, shipABI, browserSigner);
 
     let LevelbyTokenID = ''
 
@@ -139,8 +160,8 @@ const fetchAuth = async () => {
   }
 };
 
-async function getInventoryData() {
-  const signer = await signerFetch();
+async function getInventoryData(User: UserProps) {
+  const signer = await signerFetch(User);
 
   const walletAddress = await signer.getAddress();
 
@@ -149,8 +170,14 @@ async function getInventoryData() {
 
   const balance = ethers.utils.formatEther(tokenBalance);
 
-  const userId = await passportInstance.getUserInfo();
-  const user = userId?.sub;
+  let user = '';
+
+  if (User === 'passport') {
+    const userId = await passportInstance.getUserInfo();
+    user = userId?.sub || ''
+  } else if (User === 'metamask') {
+    user = await getMetamaskSub()
+  }
 
   const url = `/api/data?userId=${user}`;
 
@@ -160,47 +187,25 @@ async function getInventoryData() {
   return { data, balance }
 }
 
-async function getProfileInfo() {
-  try {
-    // for metamask
-    // const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-    // await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-    // const signer = provider.getSigner();
+const getProfileInfo = async (User: UserProps) => {
 
-    // const walletAddress = await signer.getAddress();
+  const signer = await signerFetch(User);
+  const walletAddress = await signer.getAddress();
 
-    // const balance = await signer?.provider.getBalance(walletAddress ? walletAddress : '');
-    // const balanceInEther = ethers.utils.formatEther(balance ? balance : '');
+  const balance = await signer.getBalance();
+  const balanceInEther = ethers.utils.formatEther(balance);
 
-    const signer = await signerFetch();
-    const walletAddress = await signer.getAddress();
+  const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+  const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
-    const balance = await passportProvider.request({
-      method: 'eth_getBalance',
-      params: [walletAddress, 'latest']
-    });
+  const burnBalance = await tokenContract.getBurnedAmount(walletAddress);
 
-    const balanceInEther = ethers.utils.formatEther(balance);
-
-    const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
-    const tokenBalance = await tokenContract.balanceOf(walletAddress);
-
-    const burnBalance = await tokenContract.getBurnedAmount(walletAddress);
-
-    return {
-      walletAddress,
-      balanceInEther,
-      tokenBalance: ethers.utils.formatEther(tokenBalance),
-      burnBalance: ethers.utils.formatEther(burnBalance)
-    };
-  } catch (error) {
-    console.error("Error getting wallet info:", error);
-    return {
-      walletAddress: null,
-      balanceInEther: null,
-      tokenBalance: null
-    };
-  }
+  return {
+    walletAddress,
+    balanceInEther,
+    tokenBalance: ethers.utils.formatEther(tokenBalance),
+    burnBalance: ethers.utils.formatEther(burnBalance)
+  };
 }
 
 const contractInstance = (CONTRACT_ADDRESS: string) => {
@@ -208,40 +213,40 @@ const contractInstance = (CONTRACT_ADDRESS: string) => {
   return new ERC721Client(CONTRACT_ADDRESS);
 };
 
-const transfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void) => {
+const transfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void, User: UserProps) => {
 
-  const signer = await signerFetch();
+  const signer = await signerFetch(User);
 
   const sender = await signer.getAddress();
 
   const contract = contractInstance(CONTRACT_ADDRESS);
 
-  const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
-
   const populatedTransaction = await contract[
     'populateSafeTransferFrom(address,address,uint256)'
-  ](sender, RECIPIENT, TOKEN_ID, deploymentOptions);
+  ](sender, RECIPIENT, TOKEN_ID);
 
   const transaction = await signer.sendTransaction(populatedTransaction);
 
-  setTxn(transaction)
+  await transaction.wait();
+
+  setTxn(transaction);
 
   return transaction
 };
 
-const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void) => {
+const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void, User: UserProps) => {
 
-  const signer = await signerFetch();
+  const signer = await signerFetch(User);
 
   const contract = contractInstance(CONTRACT_ADDRESS);
 
-  const deploymentOptions = { gasPrice: ethers.utils.parseUnits('10', 'gwei') };
-
-  const populatedTransaction = await contract.populateBurn(TOKEN_ID, deploymentOptions);
+  const populatedTransaction = await contract.populateBurn(TOKEN_ID);
 
   const transaction = await signer.sendTransaction(populatedTransaction);
+  
+  await transaction.wait();
 
-  setTxn(transaction)
+  setTxn(transaction);
 
   return transaction
 };
@@ -249,8 +254,6 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
 
 async function getLeaderBoard() {
   try {
-    ;
-
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, browserSigner);
     const burnLeaderboard = await tokenContract.getBurnedAmounts();
 
@@ -266,16 +269,20 @@ async function getLeaderBoard() {
   }
 }
 
-async function getWalletInfo() {
+const getMetamaskSub = () => {
+  const localStorageData = localStorage.getItem('ajs_anonymous_id');
+
+  const parsedData = JSON.parse(localStorageData || '');
+  return parsedData
+}
+
+async function getWalletInfo(User: UserProps) {
 
   try {
-    const signer = await signerFetch();
+    const signer = await signerFetch(User);
     const walletAddress = await signer.getAddress();
 
-    const balance = await passportProvider.request({
-      method: 'eth_getBalance',
-      params: [walletAddress, 'latest']
-    });
+    const balance = await signer.getBalance();
     const balanceInEther = ethers.utils.formatEther(balance);
 
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
@@ -296,4 +303,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getInventoryData, configs, getAddress, browserSigner, browserProvider, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, getMetamaskSub, configs, getAddress, browserSigner, browserProvider, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

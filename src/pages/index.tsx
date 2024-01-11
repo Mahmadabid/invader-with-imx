@@ -3,8 +3,9 @@ import { SpaceInvader } from "@/components/game/space-invader";
 import { NFTProps } from "@/components/inventory/NFTCard";
 import { useJWT } from "@/components/key";
 import Load from "@/components/utils/Load";
-import { getNftByCollection, passportInstance } from "@/utils/immutable";
-import { useEffect, useState } from "react";
+import { UserContext } from "@/utils/Context";
+import { getMetamaskSub, getNftByCollection, passportInstance } from "@/utils/immutable";
+import { useContext, useEffect, useState } from "react";
 
 const Home = () => {
 
@@ -15,13 +16,14 @@ const Home = () => {
   const [Address, setAddress] = useState('');
   const [Levels, setLevels] = useState('1');
   const { gameConst, setGameConst } = useGameConstants();
+  const [User, _] = useContext(UserContext);
 
   const jwt = useJWT();
 
   useEffect(() => {
     const fetchNFTs = async () => {
       try {
-        const NftwithAddress = await getNftByCollection();
+        const NftwithAddress = await getNftByCollection(User);
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
         const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.PowerupsResult;
         const LevelbyID = NftwithAddress?.LevelbyTokenID;
@@ -42,16 +44,26 @@ const Home = () => {
   }, []);
 
   const dataToSend = {
-    address: Address
+    address: Address,
+    userProvider: User
   };
 
   const getUserID = async () => {
     try {
-      const userProfile = await passportInstance.getUserInfo();
-      setGameConst((prevGameConst) => ({
-        ...prevGameConst,
-        userId: userProfile?.sub || ''
-      }));
+      if (User === 'passport') {
+        const userProfile = await passportInstance.getUserInfo();
+        setGameConst((prevGameConst) => ({
+          ...prevGameConst,
+          userId: userProfile?.sub || ''
+        }));
+      }
+      if (User === 'metamask') {
+        const userProfile = await getMetamaskSub();
+        setGameConst((prevGameConst) => ({
+          ...prevGameConst,
+          userId: userProfile || ''
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -104,7 +116,7 @@ const Home = () => {
     }
 
   }, [NFTPowerupsstate]);
-  
+
 
   const sendData = async () => {
     try {
@@ -146,7 +158,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <SpaceInvader gameConst={gameConst} levels={Levels} setGameConst={setGameConst} />
+          <SpaceInvader User={User} gameConst={gameConst} levels={Levels} setGameConst={setGameConst} />
         </div>
       )}
     </div>

@@ -4,10 +4,11 @@ import { timerpowerupsAddress, timerpowerupsABI } from "@/components/Contracts/T
 import { gameTokenAddress, gameTokenABI } from "@/components/Contracts/TokenContract";
 import Card from "@/components/market/Card";
 import Load from "@/components/utils/Load";
+import { UserContext } from "@/utils/Context";
 import { getWalletInfo } from "@/utils/immutable";
 import { ethers } from "ethers";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Market = () => {
 
@@ -20,10 +21,11 @@ const Market = () => {
     const [walletAddress, setWalletAddress] = useState('');
     const [loading, setLoading] = useState(true);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
+    const [User, _] = useContext(UserContext);
 
     const fetchWalletInfo = async () => {
         try {
-          const info = await getWalletInfo();
+          const info = await getWalletInfo(User);
           setWalletBalance(info.balanceInEther || '');
           setWalletIPX(info.tokenBalance || '');
           setSigner(info.signer);
@@ -66,7 +68,9 @@ const Market = () => {
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
             const burnToken = ethers.utils.parseEther('30');
-            const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+            const burnApprove = ethers.utils.parseEther('31');
+
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
@@ -80,7 +84,7 @@ const Market = () => {
 
             setApprove(true);
 
-            const approveTx = await gameToken.approve(healthpowerupsAddress, ethers.constants.MaxUint256);
+            const approveTx = await gameToken.approve(healthpowerupsAddress, burnApprove);
             await approveTx.wait();
 
             setApprove(false);
@@ -88,7 +92,7 @@ const Market = () => {
             const TokenID = getNextTokenId('health')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
-                gasLimit: gasLimit,
+                gasPrice: gasPrice,
             });
             
             const receipt = await transaction.wait();
@@ -114,7 +118,9 @@ const Market = () => {
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
             const burnToken = ethers.utils.parseEther('30');
-            const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+            const burnApprove = ethers.utils.parseEther('31');
+
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
@@ -128,7 +134,7 @@ const Market = () => {
 
             setApprove(true);
 
-            const approveTx = await gameToken.approve(timerpowerupsAddress, ethers.constants.MaxUint256);
+            const approveTx = await gameToken.approve(timerpowerupsAddress, burnApprove);
             await approveTx.wait();
 
             setApprove(false);
@@ -136,7 +142,7 @@ const Market = () => {
             const TokenID = getNextTokenId('health')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
-                gasLimit: gasLimit,
+                gasPrice: gasPrice,
             });
             const receipt = await transaction.wait();
 
@@ -161,7 +167,9 @@ const Market = () => {
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
             const burnToken = ethers.utils.parseEther('30');
-            const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+            const burnApprove = ethers.utils.parseEther('31');
+
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
@@ -175,7 +183,7 @@ const Market = () => {
 
             setApprove(true);
 
-            const approveTx = await gameToken.approve(firepowerupsAddress, ethers.constants.MaxUint256);
+            const approveTx = await gameToken.approve(firepowerupsAddress, burnApprove);
             await approveTx.wait();
 
             setApprove(false);
@@ -183,7 +191,7 @@ const Market = () => {
             const TokenID = getNextTokenId('fire')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
-                gasLimit: gasLimit,
+                gasPrice: gasPrice,
             });
             const receipt = await transaction.wait();
 

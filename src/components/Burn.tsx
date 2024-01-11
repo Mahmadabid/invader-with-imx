@@ -1,8 +1,9 @@
 import { signerFetch } from "@/utils/immutable";
 import { ethers } from "ethers";
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useContext, useState } from "react"
 import Load from "./utils/Load";
 import { gameTokenABI, gameTokenAddress } from "./Contracts/TokenContract";
+import { UserContext } from "@/utils/Context";
 
 interface BurnProps {
     setTxn: (value: React.SetStateAction<boolean>) => void;
@@ -16,13 +17,14 @@ interface BurnProps {
 const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance, walletIPX, loading }) => {
 
     const [burnAmount, setBurnAmount] = useState(0);
+    const [User, _] = useContext(UserContext);
 
     const handleBurnAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
         setBurnAmount(parseFloat(e.target.value));
     };
 
     async function sendBurnTransaction() {
-        const signer = await signerFetch();
+        const signer = await signerFetch(User);
 
         if (parseFloat(walletIPX) === 0.0) {
             setTxnError('Your dont have any IPX')
@@ -38,7 +40,7 @@ const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance
             const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
     
             const tokenAmount = ethers.utils.parseEther(burnAmount.toString());
-            const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
             if (parseFloat(walletIPX) < burnAmount) {
                 setTxnError('You dont have enough IPX');
@@ -51,7 +53,7 @@ const Burn: React.FC<BurnProps> = ({ setTxn, setHash, setTxnError, walletBalance
               }
     
             const BurnTx = await tokenContract.burn(tokenAmount, {
-                gasLimit: gasLimit,
+                gasPrice: gasPrice,
             });
 
             const receipt = await BurnTx.wait();

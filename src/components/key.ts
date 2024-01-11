@@ -30,7 +30,7 @@ export const useJWT = (): JWTProps => {
       const accessToken = await passportInstance.getAccessToken();
 
       setJwt({
-        accessToken: accessToken ? accessToken : '',
+        accessToken: accessToken ? accessToken : process.env.NEXT_PUBLIC_JWT || '',
         idToken: idToken ? idToken : '',
       });
     }

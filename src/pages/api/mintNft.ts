@@ -46,8 +46,14 @@ const verifyJwt = async (token: string) => {
 };
 
 type Entry = {
-    address: string
+    address: string;
+    userProvider: 'metamask' | 'passport'
 };
+
+type RequestBody = {
+    address: string;
+    userProvider: 'metamask' | 'passport'
+}
 
 type ApiResponse = {
     error?: string;
@@ -79,17 +85,27 @@ export default async function handler(
 
     if (req.method === 'POST') {
 
-        const { address } = req.body;
+        const { address, userProvider } = req.body as RequestBody;
 
-        if (!address) {
+        if (!address || !userProvider) {
             return res.status(400).json({ error: "Required fields are missing." });
         }
 
         try {
             if (req.headers.authorization) {
-                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
 
-                if (!decodedToken) return res.status(401).json({ error: 'Unauthorized' });
+                if (userProvider === 'passport') {
+                    const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
+                    if (!decodedToken) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
+
+                if (userProvider === 'metamask') {
+                    if (process.env.JWT !== req.headers.authorization.split(' ')[1]) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
 
                 const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
                 const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);

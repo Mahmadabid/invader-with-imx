@@ -56,6 +56,7 @@ const client = new blockchainData.BlockchainData({
 type Entry = {
     id: string;
     level: string;
+    userProvider: 'metamask' | 'passport';
 };
 
 type ApiResponse = {
@@ -71,17 +72,27 @@ export default async function handler(
 ) {
 
     if (req.method === 'POST') {
-        const { id, level } = req.body;
+        const { id, level, userProvider } = req.body;
 
-        if (!id || !level) {
+        if (!id || !level || !userProvider) {
             return res.status(400).json({ error: "Required fields are missing." });
         }
 
         try {
             if (req.headers.authorization) {
-                const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
 
-                if (!decodedToken) return res.status(401).json({ error: 'Unauthorized' });
+                if (userProvider === 'passport') {
+                    const decodedToken = await verifyJwt(req.headers.authorization.split(' ')[1]);
+                    if (!decodedToken) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
+
+                if (userProvider === 'metamask') {
+                    if (process.env.JWT !== req.headers.authorization.split(' ')[1]) {
+                        return res.status(401).json({ error: 'Unauthorized' });
+                    }
+                }
 
                 const ID = id.toString();
 

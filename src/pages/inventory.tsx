@@ -1,7 +1,8 @@
 import NFTCard, { NFTProps } from "@/components/inventory/NFTCard";
 import Load from "@/components/utils/Load";
+import { UserContext } from "@/utils/Context";
 import { getAddress, getInventoryData, getNftByAddress } from "@/utils/immutable";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Inventory = () => {
   const [address, setAddress] = useState("");
@@ -10,11 +11,12 @@ const Inventory = () => {
   const [balance, setBalance] = useState(0);
   const [Points, setPoints] = useState(0);
   const [InfoLoading, setInfoLoading] = useState(false);
+  const [User, _] = useContext(UserContext);
 
   useEffect(() => {
     const fetchData = async () => {
       setInfoLoading(true);
-      const result = await getInventoryData();
+      const result = await getInventoryData(User);
       setBalance(parseInt(result.balance));
       try {
         setPoints(result.data.entries[0].data.TotalPoints);        
@@ -29,7 +31,7 @@ const Inventory = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedAddress = await getAddress();
+      const fetchedAddress = await getAddress(User);
       setAddress(fetchedAddress);
     };
 

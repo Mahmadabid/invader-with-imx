@@ -5,7 +5,7 @@ const Card: React.FC<{ image: string; name: string; price: string; onButtonClick
     onButtonClick,
 }) => {
     return (
-        <div className="max-w-xs mx-auto bg-white mx-8 shadow-lg shadow-slate-600 rounded-lg overflow-hidden mb-8">
+        <div className="max-w-xs bg-white mx-8 shadow-lg shadow-slate-600 rounded-lg overflow-hidden mb-8">
             {image === '/gray.png' ?
                 <div className="bg-gray-900 text-white w-56 h-[389px] flex items-center justify-center">
                     <p className="text-xl font-bold">Coming Soon</p>

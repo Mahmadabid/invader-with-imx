@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect, useContext } from 'react';
 import { ethers } from "ethers";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,6 +7,7 @@ import Burn from '@/components/Burn';
 import { getWalletInfo } from "@/utils/immutable";
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { gameTokenABI, gameTokenAddress } from '@/components/Contracts/TokenContract';
+import { UserContext } from '@/utils/Context';
 
 const Swap = () => {
   const [buyAmount, setBuyAmount] = useState<number>(0);
@@ -22,10 +23,11 @@ const Swap = () => {
   const [walletAddress, setWalletAddress] = useState('');
   const [loading, setLoading] = useState(true);
   const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
+  const [User, _] = useContext(UserContext);
 
   const fetchWalletInfo = async () => {
     try {
-      const info = await getWalletInfo();
+      const info = await getWalletInfo(User);
       setWalletBalance(info.balanceInEther || '');
       setWalletIPX(info.tokenBalance || '');
       setSigner(info.signer);
@@ -52,23 +54,23 @@ const Swap = () => {
 
     try {
       const buyToken = ethers.utils.parseEther(buyAmount.toString())
-      const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+      const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
       if (parseFloat(walletBalance) < buyAmount + 0.013) {
         setTxnError('You dont have enough tIMX');
         return;
       }
 
-      const transaction = await signer.sendTransaction({
-        to: swapAddress,
-        value: buyToken,
-        gasLimit: gasLimit,
-      })
-      const receipt = await transaction.wait();
+        const transaction = await signer.sendTransaction({
+          to: swapAddress,
+          value: buyToken,
+          gasPrice: gasPrice,
+        })
 
-      setHash(receipt.transactionHash)
+        const receipt = await transaction.wait();
 
-      console.log('Buy successful!');
+        setHash(receipt.transactionHash);
+
     } catch (error: any) {
       setTxnError(error.message)
     }
@@ -88,7 +90,9 @@ const Swap = () => {
       const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
       const sellToken = ethers.utils.parseEther(sellAmount.toString())
-      const gasLimit = ethers.utils.parseUnits('10', 'gwei');
+      const sellApprove = ethers.utils.parseEther((sellAmount + 1).toString())
+
+      const gasPrice = ethers.utils.parseUnits('10', 'gwei');
 
       if (parseFloat(walletIPX) < sellAmount) {
         setTxnError('You dont have enough IPX');
@@ -104,21 +108,20 @@ const Swap = () => {
       const allowance = await gameToken.allowance(walletAddress, swapAddress);
 
       if (parseFloat(ethers.utils.formatEther(allowance)) < parseFloat(ethers.utils.formatEther((sellToken)))) {
-        const approveTx = await gameToken.approve(swapAddress, ethers.constants.MaxUint256);
+        const approveTx = await gameToken.approve(swapAddress, sellApprove);
         await approveTx.wait();
 
-        console.log('Approval successful!');
       }
       setApprove(false);
 
       const transaction = await contract.sellTokens(sellToken, {
-        gasLimit: gasLimit,
+        gasPrice: gasPrice,
       });
+
       const receipt = await transaction.wait();
 
       setHash(await receipt.transactionHash)
 
-      console.log('Sell successful!');
     } catch (error: any) {
       setTxnError(error.message)
     }
@@ -147,7 +150,7 @@ const Swap = () => {
                   TxnError ? (
                     <div className="flex flex-col font-bold text-center items-center justify-center">
                       <p className="text-xl text-red-600">{TxnError}</p>
-                      <p className="mt-4 text-blue-800 text-xl">Please Try Again <br/> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
+                      <p className="mt-4 text-blue-800 text-xl">Please Try Again <br /> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
                     </div>
                   ) : !Approve ? (
                     <div className="flex flex-col font-bold items-center mb-2">
@@ -219,7 +222,7 @@ const Swap = () => {
                       tIMX
                     </div>
                   </div>
-                  <p className='text-white ml-5 mt-3 truncate'>{walletBalance? walletBalance: <Load />}</p>
+                  <p className='text-white ml-5 mt-3 truncate'>{walletBalance ? walletBalance : <Load />}</p>
                 </div>
                 <div className="mb-2">
                   <input
@@ -261,7 +264,7 @@ const Swap = () => {
                       IPX
                     </div>
                   </div>
-                  <p className='text-white ml-5 mt-3 truncate'>{walletIPX? walletIPX: <Load />}</p>
+                  <p className='text-white ml-5 mt-3 truncate'>{walletIPX ? walletIPX : <Load />}</p>
                 </div>
                 <div className="mb-2">
                   <input

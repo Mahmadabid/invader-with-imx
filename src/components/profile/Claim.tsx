@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Load from '../utils/Load';
-import { passportInstance } from '@/utils/immutable';
 import { useJWT } from '../key';
+import { UserContext } from '@/utils/Context';
+import { UserProps } from '@/utils/immutable';
 
 interface ClaimProps {
     Sub: string | undefined;
@@ -16,6 +17,7 @@ type IPXEntry = {
         IPX: number;
         Address: string
     },
+    userProvider: UserProps
 };
 
 const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX }) => {
@@ -24,6 +26,7 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
     const [Address, setAddress] = useState('');
     const [ClaimPoints, setClaimPoints] = useState(0);
     const [loading, setloading] = useState(false);
+    const [User, _] = useContext(UserContext);
 
     const jwt = useJWT();
     
@@ -62,6 +65,7 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
             IPX: ClaimPoints,
             Address: Address
         },
+        userProvider: User,
     }
 
     const sendData = async () => {
