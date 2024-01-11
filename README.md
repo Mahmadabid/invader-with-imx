@@ -17,6 +17,7 @@ Following Products of immutable zkevm were used
 - Metadata Refresh
 - Checkout
 - @imtb/sdk
+- Widgets
 - ERC721Client
 - ERC721 contracts
 - JWTs
@@ -75,6 +76,10 @@ Use this command
 Checkout is used to bridge Ether from Ethereum to Immutable Zkevm. Currently it bridges sepolia to immutable zkevm testnet. You can bridge IMX directly to immutable Passport wallet. It also enables the option to swap tokens supported by checkout.
 
 You can view the checkout features at [Bridge Page](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
+
+
+## Widgets
+Widget are used to connect and bridge and swap tokens. It is used in [Bridge Page](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
 
 
 ## Smart Contracts
