@@ -90,6 +90,7 @@ const Market = () => {
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
                 gasLimit: gasLimit,
             });
+            
             const receipt = await transaction.wait();
 
             setHash(await receipt.transactionHash)

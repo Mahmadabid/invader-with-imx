@@ -18,20 +18,14 @@ const passportInstance = new passport.Passport({
   logoutRedirectUri: process.env.NEXT_PUBLIC_URL || '',
   audience: 'platform_api',
   scope: 'openid offline_access email transact',
+  logoutMode: 'silent',
 });
 
-// const configs = {
-//   baseConfig: new config.ImmutableConfiguration({
-//     environment: config.Environment.SANDBOX,
-//     publishableKey: process.env.NEXT_PUBLIC_PUBLISH_KEY,
-//     apiKey: process.env.NEXT_PUBLIC_API_KEY,
-//   }),
-// };
-
 const configs = {
-  baseConfig: new config.ImmutableConfiguration({
+  baseConfig: {
     environment: config.Environment.SANDBOX,
-  }),
+    publishableKey: process.env.NEXT_PUBLIC_PUBLISH_KEY,
+  },
 };
 
 const client = new blockchainData.BlockchainData(configs);
@@ -168,6 +162,16 @@ async function getInventoryData() {
 
 async function getProfileInfo() {
   try {
+    // for metamask
+    // const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+    // await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+    // const signer = provider.getSigner();
+
+    // const walletAddress = await signer.getAddress();
+
+    // const balance = await signer?.provider.getBalance(walletAddress ? walletAddress : '');
+    // const balanceInEther = ethers.utils.formatEther(balance ? balance : '');
+
     const signer = await signerFetch();
     const walletAddress = await signer.getAddress();
 
@@ -244,7 +248,8 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
 
 
 async function getLeaderBoard() {
-  try {;
+  try {
+    ;
 
     const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, browserSigner);
     const burnLeaderboard = await tokenContract.getBurnedAmounts();
@@ -291,4 +296,4 @@ async function getWalletInfo() {
   }
 }
 
-export { passportInstance, passportProvider, getInventoryData, getAddress, browserSigner, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, configs, getAddress, browserSigner, browserProvider, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

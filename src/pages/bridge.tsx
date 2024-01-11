@@ -25,6 +25,7 @@ const Bridge = () => {
             const widgets = await checkoutSDK.widgets({
                 config: { theme: checkout.WidgetTheme.DARK },
             });
+            
             if (bridgeOpen) {
                 const bridge = widgets.create(checkout.WidgetType.BRIDGE, { config: { theme: checkout.WidgetTheme.DARK } })
                 setBridge(bridge);

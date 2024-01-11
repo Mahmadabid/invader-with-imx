@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserContext.Provider value={[User, setUser]}>
       <Layout>
-        {!User && router.pathname !== '/auth/callback' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
+        {!User && router.pathname !== '/auth/callback' && router.pathname !== '/bridge' && router.pathname !== '/ipx' && router.pathname !== '/shop' && router.pathname !== '/leaderboard' ?
           <Login />
           :
           <Component {...pageProps} />}
