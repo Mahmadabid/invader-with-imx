@@ -132,7 +132,7 @@ Level upgrades your ship. Level also determines difficulty level.
 
 **Level 1** 
 - Aliens are less in number. 
-- Time is 36sec. 
+- Time is 32ec. 
 - Ship can only move left and right 
 - It shoots 1 bullet. 
 - Aliens firing will be slow.
