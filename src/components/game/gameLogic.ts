@@ -18,7 +18,7 @@ export const useGameLogic = (gameConst: GameConstantsProps) => {
     TotalPoints: 0,
     IPXUnclaimed: gameConst.Level === 1? 1: gameConst.Level === 2? 2: 3,
     Health: gameConst.Health,
-    timer: gameConst.Level === 1? gameConst.timer + 8: gameConst.Level === 2? gameConst.timer: gameConst.timer - 3,
+    timer: gameConst.Level === 1 ? gameConst.timer + 2 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
     win: false,
     interval: 0,
   };
