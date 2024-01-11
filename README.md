@@ -16,8 +16,8 @@ Following Products of immutable zkevm were used
 - Immutable Passport
 - Metadata Refresh
 - Checkout
-- @imtb/sdk
 - Widgets
+- @imtb/sdk
 - ERC721Client
 - ERC721 contracts
 - JWTs
@@ -79,7 +79,25 @@ You can view the checkout features at [Bridge Page](https://github.com/Mahmadabi
 
 
 ## Widgets
-Widget are used to connect and bridge and swap tokens. It is used in [Bridge Page](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
+Three widgets are being used. 
+* Connect
+* Swap
+* Bridge
+
+#### Connect
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/components/Login.tsx)
+
+The connect widget is used to connect immutable Passport and Metamask to the Pixels Invader. It serves as a login.
+
+#### Swap
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
+
+The swap widget allows you to swap IMX with other tokens supported by checkout.
+
+#### Bridge
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/bridge.tsx)
+
+The bridge widget allows you to bridge Ether between Ethereum and Immutable Zkevm.
 
 
 ## Smart Contracts
