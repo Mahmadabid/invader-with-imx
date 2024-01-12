@@ -54,8 +54,7 @@ function Login({userLoading}: LoadProps) {
       connect.unmount();
       setOpen(false);
     });
-  }, [connect])
-
+  }, [connect]);
 
   const headerHeight = 4.6;
 
