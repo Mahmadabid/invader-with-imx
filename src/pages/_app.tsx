@@ -40,6 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
           }
         }
       }
+      setUserLoading(false);
     } catch (error) {
       console.error('Error checking user login:', error);
     }
