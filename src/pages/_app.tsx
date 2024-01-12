@@ -19,19 +19,23 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   const checkUserLoggedIn = async () => {
+    const userStorageData = localStorage.getItem('user_provider_pixels_invader');
+
+    const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
+
     try {
-      const userProfile = await passportInstance.getUserInfo();
-      if (userProfile !== undefined) {
-        setUser('passport');
-        setUserLoading(false);
-        return;
-      }
+      if (userParsedData) {
+        if (userParsedData === 'passport') {
+          const userProfile = await passportInstance.getUserInfo();
+          if (userProfile !== undefined) {
+            setUser('passport');
+            setUserLoading(false);
+            return;
+          }
+        }
 
-      const localStorageData = localStorage.getItem('ajs_user_traits');
+        if (userParsedData === 'metamask') {
 
-      if (localStorageData) {
-        const parsedData: localStorageProps = JSON.parse(localStorageData);
-        if (parsedData.isMetaMask && !parsedData.isPassportWallet) {
           const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
           if (accounts.length > 0) {
             setUser('metamask');
@@ -54,7 +58,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <UserContext.Provider value={[User, setUser]}>
       <Layout>
-        {!User && router.pathname !== '/auth/callback' && router.pathname !== '/bridge' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
+        {!User && router.pathname !== '/auth/callback' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
           <Login userLoading={userLoading} />
           :
           <Component {...pageProps} />}

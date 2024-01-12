@@ -41,7 +41,13 @@ function Login({userLoading}: LoadProps) {
     if (!connect) return;
 
     connect.addListener(checkout.ConnectEventType.SUCCESS, (data: checkout.ConnectionSuccess) => {
-      setUser(data.walletProviderName)
+      const userStorageData = localStorage.getItem('user_provider_pixels_invader');
+      const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
+
+      const userData = userParsedData? userParsedData: data.walletProviderName;
+
+      localStorage.setItem('user_provider_pixels_invader', userData || '');
+      setUser(userData);
     });
 
     connect.addListener(checkout.ConnectEventType.CLOSE_WIDGET, () => {
