@@ -19,7 +19,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
 
     const [option, setOption] = useState(0);
     const [inputValue, setInputValue] = useState('');
-    const [Txn, setTxn] = useState<any>();
+    const [Txn, setTxn] = useState('');
     const [loading, setLoading] = useState(false);
     const [Level, setLevel] = useState(1);
     const [shipLoading, setShipLoading] = useState(false);
@@ -74,8 +74,8 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                 <div className='z-50'>
                     <div className="fixed inset-0 bg-black opacity-75"></div>
                     <div className="relative bg-white p-8 max-w-md mx-auto rounded shadow-lg">
-                        {Txn ? <><h1 className='text-lg font-medium text-gray-900 my-3 truncate'>{Txn.hash}</h1>
-                            <Link href={`https://explorer.testnet.immutable.com/tx/${Txn.hash}`} target="_blank"><button className="hover:bg-green-500 text-white px-4 py-2 mt-2 bg-green-600 rounded">Explorer</button></Link>
+                        {Txn ? <><h1 className='text-lg font-medium text-gray-900 my-3 truncate'>{Txn}</h1>
+                            <Link href={`https://explorer.testnet.immutable.com/tx/${Txn}`} target="_blank"><button className="hover:bg-green-500 text-white px-4 py-2 mt-2 bg-green-600 rounded">Explorer</button></Link>
                             <div className='text-center mt-2'><p className='text-slate-600 font-medium'>Reload Page to view changes</p></div>
                         </> : <div className='text-center'>
                             <h1 className='text-xl font-medium text-gray-950 my-3'>Waiting For Transaction</h1>

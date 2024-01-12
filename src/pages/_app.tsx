@@ -15,6 +15,7 @@ interface localStorageProps {
 export default function App({ Component, pageProps }: AppProps) {
 
   const [User, setUser] = useState<'passport' | 'metamask' | undefined>(undefined);
+  const [userLoading, setUserLoading] = useState(true);
   const router = useRouter();
 
   const checkUserLoggedIn = async () => {
@@ -22,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
       const userProfile = await passportInstance.getUserInfo();
       if (userProfile !== undefined) {
         setUser('passport');
+        setUserLoading(false);
         return;
       }
 
@@ -33,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
           const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
           if (accounts.length > 0) {
             setUser('metamask');
+            setUserLoading(false);
             return;
           }
         }
@@ -50,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <UserContext.Provider value={[User, setUser]}>
       <Layout>
         {!User && router.pathname !== '/auth/callback' && router.pathname !== '/bridge' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
-          <Login />
+          <Login userLoading={userLoading} />
           :
           <Component {...pageProps} />}
       </Layout>

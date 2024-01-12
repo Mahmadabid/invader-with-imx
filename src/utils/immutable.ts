@@ -6,7 +6,7 @@ import { timerpowerupsAddress } from '@/components/Contracts/TimerPowerupsContra
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
 import { config, blockchainData, passport } from '@imtbl/sdk';
-import { ethers } from "ethers";
+import { Signer, ethers } from "ethers";
 
 export type UserProps = 'metamask' | 'passport' | undefined;
 
@@ -147,19 +147,6 @@ async function getNftByCollection(User: UserProps) {
   }
 }
 
-const fetchAuth = async () => {
-  try {
-    const accounts = await passportProvider.request({
-      method: "eth_requestAccounts",
-    });
-    console.log("connected", accounts);
-  } catch (error) {
-    console.error(error, 'not found');
-  } finally {
-    window.location.reload();
-  }
-};
-
 async function getInventoryData(User: UserProps) {
   const signer = await signerFetch(User);
 
@@ -208,6 +195,38 @@ const getProfileInfo = async (User: UserProps) => {
   };
 }
 
+const ethersContractInstance = async (signer: Signer, CONTRACT_ADDRESS: string) => {
+
+  return new ethers.Contract(
+    CONTRACT_ADDRESS,
+    [
+      'function safeTransferFrom(address from, address to, uint256 tokenId)',
+    ],
+    signer,
+  );
+};
+
+const ethersTransfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void, User: UserProps) => {
+
+  const signer = await signerFetch(User);
+
+  const sender = await signer.getAddress();
+
+  const contract = await ethersContractInstance(signer, CONTRACT_ADDRESS);
+
+  const transaction = await contract.safeTransferFrom(sender, RECIPIENT, TOKEN_ID, {
+    maxPriorityFeePerGas: 10e9,
+    maxFeePerGas: 150e9,
+    gasLimit: 2000000,
+  });
+
+  await transaction.wait();
+
+  setTxn(transaction.hash);
+
+  return;
+}
+
 const contractInstance = (CONTRACT_ADDRESS: string) => {
 
   return new ERC721Client(CONTRACT_ADDRESS);
@@ -229,9 +248,9 @@ const transfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: s
 
   await transaction.wait();
 
-  setTxn(transaction);
+  setTxn(transaction.hash);
 
-  return transaction
+  return;
 };
 
 const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void, User: UserProps) => {
@@ -246,9 +265,9 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
   
   await transaction.wait();
 
-  setTxn(transaction);
+  setTxn(transaction.hash);
 
-  return transaction
+  return;
 };
 
 
@@ -269,11 +288,12 @@ async function getLeaderBoard() {
   }
 }
 
-const getMetamaskSub = () => {
-  const localStorageData = localStorage.getItem('ajs_anonymous_id');
-
-  const parsedData = JSON.parse(localStorageData || '');
-  return parsedData
+const getMetamaskSub = async () => {
+  const address = await getAddress('metamask');
+  if (!address) return '';
+  const sub = `metamask | ${address}`
+  
+  return sub;
 }
 
 async function getWalletInfo(User: UserProps) {
@@ -303,4 +323,4 @@ async function getWalletInfo(User: UserProps) {
   }
 }
 
-export { passportInstance, passportProvider, getInventoryData, getMetamaskSub, configs, getAddress, browserSigner, browserProvider, fetchAuth, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, getMetamaskSub, configs, getAddress, browserSigner, browserProvider, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
