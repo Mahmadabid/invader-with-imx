@@ -142,30 +142,36 @@ JWTs are fetched using [Immutable JWT Guide](https://docs.immutable.com/docs/zkE
 ## API
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/pages/api)
 
+
 #### Data API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/data.ts)
 
 It fetches data based on userID and also is used to modify data of each user after every game and when user claims unclaimed IPX.
+
 
 #### FetchAll API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/fetchall.ts)
 
 It fetches data of all users. It is used to make leaderboard.
 
+
 #### MintNft API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/mintNft.ts)
 
 It mints Ship for new player using immutable sdk mint function. It also sets their level to 1.
+
 
 #### Upgrade API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/upgrade.ts)
 
 It upgrades Ship to Level 2 and 3. It also uses metadata refresh from immutable and refreshes the data of NFT.
 
+
 #### Web3 API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/web3.ts)
 
 It mints IPX. It is used to claim unclaimed IPX.
+
 
 ## Game
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
