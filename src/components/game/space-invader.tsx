@@ -384,7 +384,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1 ? gameConst.timer + 2 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
+      timer: gameConst.Level === 1 ? gameConst.timer + 4 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
@@ -410,7 +410,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       TotalPoints: 0,
       Health: gameConst.Health,
       IPXUnclaimed: 0,
-      timer: gameConst.Level === 1 ? gameConst.timer + 2 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
+      timer: gameConst.Level === 1 ? gameConst.timer + 4 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
       win: false,
       interval: (prevGameLogic.interval + 1)
     }));
