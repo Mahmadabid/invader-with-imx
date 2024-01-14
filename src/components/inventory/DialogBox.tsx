@@ -1,4 +1,4 @@
-import { burn, transfer } from '@/utils/immutable';
+import { UserProvider, burn, transfer } from '@/utils/immutable';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import Link from 'next/link';
@@ -26,7 +26,9 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
     const [shipUpgrade, setShipUpgrade] = useState(false);
     const [User, _] = useContext(UserContext);
 
-    const jwt = useJWT();
+    const userProvider = UserProvider();
+
+    const jwt = useJWT(userProvider);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);

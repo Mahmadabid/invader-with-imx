@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { ethers } from "ethers";
+import { Signer, Wallet, ethers } from "ethers";
 import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 import { getKeyId } from '@/components/key';
+import { ERC721Client } from '@imtbl/contracts';
+import { Provider } from "@ethersproject/providers";
 
 const getPublicKey = async () => {
     const client = jwksClient({ jwksUri: 'https://auth.immutable.com/.well-known/jwks.json' });
@@ -62,12 +64,15 @@ type ApiResponse = {
     entries?: Entry[];
 };
 
-async function getNextTokenId() {
-    try {
-        const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
-        const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
+interface browserProvider extends Provider {
+    getSigner: () => Signer;
+}
 
-        const contract = new ethers.Contract(shipAddress, shipABI, wallet);
+async function getNextTokenId(provider: browserProvider) {
+    try {
+        const browserSigner = provider.getSigner();
+
+        const contract = new ethers.Contract(shipAddress, shipABI, browserSigner);
 
         const totalSupply = await contract.getTotalMint();
         return totalSupply.toNumber() + 1;
@@ -108,23 +113,31 @@ export default async function handler(
                 }
 
                 const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
-                const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 
-                const contract = new ethers.Contract(shipAddress, shipABI, wallet);
+                const contract = new ERC721Client(shipAddress);
 
-                const adjustedGasPrice = {
+                const wallet = new Wallet(`${process.env.PRIVATE_KEY}`, provider);
+
+                const TOKEN_ID = await getNextTokenId(provider);
+
+                const requests = [
+                    {
+                        to: address,
+                        tokenIds: [TOKEN_ID],
+                    },
+                ];
+
+                const gasOverrides = {
                     maxPriorityFeePerGas: 100e9,
                     maxFeePerGas: 150e9,
                     gasLimit: 200000,
                 };
 
-                const TOKEN_ID = await getNextTokenId();
+                const populatedTransaction = await contract.populateMintBatch(requests, gasOverrides);
 
-                const tx = await contract.mint(address, TOKEN_ID, adjustedGasPrice);
+                await wallet.sendTransaction(populatedTransaction);
 
-                const receipt = await tx.wait();
-
-                return res.status(200).json({ message: "Minted successfully.", entry: receipt });
+                return res.status(200).json({ message: "Minted successfully." });
             }
         } catch (error) {
             console.error('Error:', error);

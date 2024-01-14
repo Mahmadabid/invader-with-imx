@@ -2,7 +2,7 @@ import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Load from '../utils/Load';
 import { useJWT } from '../key';
 import { UserContext } from '@/utils/Context';
-import { UserProps } from '@/utils/immutable';
+import { UserProps, UserProvider } from '@/utils/immutable';
 
 interface ClaimProps {
     Sub: string | undefined;
@@ -28,7 +28,9 @@ const Claim: React.FC<ClaimProps> = ({ Sub, setClaimTxn, ClaimTxn, setPointsIPX 
     const [loading, setloading] = useState(false);
     const [User, _] = useContext(UserContext);
 
-    const jwt = useJWT();
+    const userProvider = UserProvider();
+
+    const jwt = useJWT(userProvider);
     
     const fetchData = async () => {
         setloading(true);

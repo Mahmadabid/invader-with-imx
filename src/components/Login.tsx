@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { checkout, config } from '@imtbl/sdk';
-import { passportInstance } from '@/utils/immutable';
+import { UserProvider, passportInstance } from '@/utils/immutable';
 import { UserContext } from "@/utils/Context";
 import Load from "./utils/Load";
 
@@ -41,8 +41,8 @@ function Login({userLoading}: LoadProps) {
     if (!connect) return;
 
     connect.addListener(checkout.ConnectEventType.SUCCESS, (data: checkout.ConnectionSuccess) => {
-      const userStorageData = localStorage.getItem('user_provider_pixels_invader');
-      const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
+
+      const userParsedData = UserProvider()
 
       const userData = userParsedData? userParsedData: data.walletProviderName;
 

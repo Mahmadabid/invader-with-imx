@@ -101,7 +101,6 @@ export default async function handler(
                 const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
                 const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 
-
                 const contract = new ethers.Contract(shipAddress, shipABI, wallet);
 
                 const adjustedGasPrice = {

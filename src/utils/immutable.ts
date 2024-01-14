@@ -38,6 +38,12 @@ const browserProvider = new ethers.providers.JsonRpcProvider('https://rpc.testne
 
 const browserSigner = browserProvider.getSigner();
 
+const UserProvider = () => {
+  const userStorageData = localStorage.getItem('user_provider_pixels_invader');
+  const userParsedData = userStorageData?.toString() as UserProps;
+  return userParsedData;
+}
+
 async function signerFetch(User: UserProps) {
 
   if (User === 'metamask') {
@@ -61,9 +67,9 @@ async function signerFetch(User: UserProps) {
 
 const getAddress = async (User: UserProps) => {
   if (User === 'passport') {
-  const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
-  const walletAddress = accounts[0];
-  return walletAddress;
+    const accounts = await passportProvider.request({ method: "eth_requestAccounts" });
+    const walletAddress = accounts[0];
+    return walletAddress;
   }
   if (User === 'metamask') {
     const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
@@ -262,7 +268,7 @@ const burn = async (TOKEN_ID: string | number, CONTRACT_ADDRESS: string, setTxn:
   const populatedTransaction = await contract.populateBurn(TOKEN_ID);
 
   const transaction = await signer.sendTransaction(populatedTransaction);
-  
+
   await transaction.wait();
 
   setTxn(transaction.hash);
@@ -292,7 +298,7 @@ const getMetamaskSub = async () => {
   const address = await getAddress('metamask');
   if (!address) return '';
   const sub = `metamask | ${address}`
-  
+
   return sub;
 }
 
@@ -323,4 +329,4 @@ async function getWalletInfo(User: UserProps) {
   }
 }
 
-export { passportInstance, passportProvider, getInventoryData, getMetamaskSub, configs, getAddress, browserSigner, browserProvider, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };
+export { passportInstance, passportProvider, getInventoryData, getMetamaskSub, UserProvider, configs, getAddress, browserSigner, browserProvider, getNftByCollection, getProfileInfo, getLeaderBoard, getWalletInfo, getNftByAddress, signerFetch, client, burn, transfer };

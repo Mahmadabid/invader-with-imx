@@ -4,7 +4,7 @@ import { NFTProps } from "@/components/inventory/NFTCard";
 import { useJWT } from "@/components/key";
 import Load from "@/components/utils/Load";
 import { UserContext } from "@/utils/Context";
-import { getMetamaskSub, getNftByCollection, passportInstance } from "@/utils/immutable";
+import { UserProvider, getMetamaskSub, getNftByCollection, passportInstance } from "@/utils/immutable";
 import { useContext, useEffect, useState } from "react";
 
 const Home = () => {
@@ -18,7 +18,9 @@ const Home = () => {
   const { gameConst, setGameConst } = useGameConstants();
   const [User, _] = useContext(UserContext);
 
-  const jwt = useJWT();
+  const userProvider = UserProvider();
+
+  const jwt = useJWT(userProvider);
 
   useEffect(() => {
     const fetchNFTs = async () => {

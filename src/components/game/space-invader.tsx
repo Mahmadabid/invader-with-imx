@@ -11,7 +11,7 @@ import { useMovePlayer } from './movePlayer';
 import { useGameLogic } from './gameLogic';
 import { GameConstantsProps } from './gameConstants';
 import { useJWT } from '../key';
-import { UserProps } from '@/utils/immutable';
+import { UserProps, UserProvider } from '@/utils/immutable';
 
 export interface ElementPosition {
   x: number;
@@ -39,7 +39,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const ref = useRef<HTMLDivElement>(null);
   const { gameLogic, setGameLogic } = useGameLogic(gameConst);
 
-  const jwt = useJWT();
+  const userProvider = UserProvider();
+
+  const jwt = useJWT(userProvider);
 
   const [playerBulletsPosition, setPlayerBulletPosition] = useState<ElementPosition[]>([]);
   const [enemies, setEnemies] = useState<ElementPosition[]>(gameConst.Level === 1 ? START_ENEMIES_POSITION : gameConst.Level === 2 ? START_ENEMIES_POSITION_2 : START_ENEMIES_POSITION_3);
@@ -108,7 +110,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const dataToSend = {
     userId: gameConst.userId,
     data: {
-      IPX: gameLogic.win ? gameConst.Level === 1 ? 3 : gameConst.Level === 2 ? 4 : 5 : 0,
+      IPX: gameLogic.win ? gameConst.Level === 1 ? 1 : gameConst.Level === 2 ? 2 : 3 : 0,
       TotalPoints: gameLogic.TotalPoints,
       Address: gameConst.Address,
     },
@@ -246,7 +248,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             ]);
           }
 
-          if (updatedEnemy.x >= 490) {
+          if (!updatedEnemy) {
             setGameLogic((prevGameLogic) => ({
               ...prevGameLogic,
               gameover: true,
@@ -286,6 +288,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           collided: enemies.some((enemy) => collide(enemy, bullet)),
         }))
         .filter((bullet) => {
+          if (bullet.x === 0) {
+            return false
+          }
           if (bullet.collided) {
             setEnemies((enemies) => enemies.filter((enemy) => !collide(bullet, enemy)));
             setGameLogic((prevGameLogic) => ({
@@ -294,7 +299,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             }));
             return false;
           }
-          return bullet.x > 0;
+          return true;
         })
     );
   };
