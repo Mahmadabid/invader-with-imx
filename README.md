@@ -23,6 +23,7 @@ Following Products of immutable zkevm were used
 - JWTs
 - burn
 - transfer
+- mint
 
 
 ## Metadata Refresh 
