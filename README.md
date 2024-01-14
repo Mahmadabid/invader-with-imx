@@ -136,8 +136,36 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 
 
 ## JWTs
-JWTs are fetched using [Immutable JWT Guide](https://docs.immutable.com/docs/zkEVM/products/passport/identity/jwt). They are used to authenticate api to prevent unauthorized access. They are used through [key.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/components/key.ts) and with their verification is being done in [api](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/pages/api).
+JWTs are fetched using [Immutable JWT Guide](https://docs.immutable.com/docs/zkEVM/products/passport/identity/jwt). They are used to authenticate api to prevent unauthorized access. They are used through [key.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/components/key.ts) and with their verification is being done in [api](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/pages/api). For immutable passport JWT are used. For metamask env is used for verification.
 
+
+## API
+[Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/pages/api)
+
+#### Data API
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/data.ts)
+
+It fetches data based on userID and also is used to modify data of each user after every game and when user claims unclaimed IPX.
+
+#### FetchAll API
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/fetchall.ts)
+
+It fetches data of all users. It is used to make leaderboard.
+
+#### MintNft API
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/mintNft.ts)
+
+It mints Ship for new player using immutable sdk mint function. It also sets their level to 1.
+
+#### Upgrade API
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/upgrade.ts)
+
+It upgrades Ship to Level 2 and 3. It also uses metadata refresh from immutable and refreshes the data of NFT.
+
+#### Web3 API
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/web3.ts)
+
+It mints IPX. It is used to claim unclaimed IPX.
 
 ## Game
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
