@@ -13,6 +13,7 @@ export const START_ENEMIES_POSITION: ElementPosition[] = [
   { x: 47, y: 457, width: 27, height: 27 },
   { x: 47, y: 512, width: 27, height: 27 },
   { x: 47, y: 567, width: 27, height: 27 },
+  { x: 47, y: 660, width: 27, height: 27 },
 
   { x: 97, y: 72, width: 27, height: 27 },
   { x: 97, y: 127, width: 27, height: 27 },
@@ -24,6 +25,7 @@ export const START_ENEMIES_POSITION: ElementPosition[] = [
   { x: 97, y: 457, width: 27, height: 27 },
   { x: 97, y: 512, width: 27, height: 27 },
   { x: 97, y: 567, width: 27, height: 27 },
+  { x: 97, y: 660, width: 27, height: 27 },
 ];
 
 export const START_ENEMIES_POSITION_2: ElementPosition[] = [

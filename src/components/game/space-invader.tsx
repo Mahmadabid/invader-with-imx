@@ -7,11 +7,12 @@ import {
   START_ENEMIES_POSITION_3,
   START_POSITION,
 } from './constants';
-import { handlePlayerCollision, respawnPlayer, useMovePlayer } from './Player';
+import { handlePlayerCollision, movePlayerBullets, respawnPlayer, useMovePlayer } from './Player';
 import { useGameLogic } from './gameLogic';
 import { GameConstantsProps } from './gameConstants';
 import { useJWT } from '../key';
 import { UserProps, UserProvider } from '@/utils/immutable';
+import { moveEnemiesAndFireBullets, moveEnemyBullets } from './Enemy';
 
 export interface ElementPosition {
   x: number;
@@ -183,29 +184,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     }
   }, [gameLogic.Health])
 
-  const moveEnemyBullets = () => {
-    if (gameConst.start && !gameLogic.gameover) {
-      setEnemyBullets((enemyBullets) =>
-        enemyBullets
-          .map((bullet) => ({
-            x: bullet.x + 5,
-            y: bullet.y,
-            width: bullet.width,
-            height: bullet.height,
-            collided: collide(bullet, playerPosition),
-            isFired: bullet.isFired || bullet.x >= bullet.initialX,
-            initialX: bullet.initialX || bullet.x,
-          }))
-          .filter((bullet) => {
-            if (bullet.collided) {
-              handlePlayerCollision(setPlayerPosition, gameConst, gameLogic, setGameLogic);
-            }
-            return bullet.x >= 0 && bullet.x + bullet.height < 504 && !bullet.collided;
-          })
-      );
-    }
-  };
-
   useEffect(() => {
     if (enemies.length === 0 && !gameLogic.gameover && gameConst.start) {
       setGameLogic((prevGameLogic) => ({
@@ -216,75 +194,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       }));
     }
   }, [enemies])
-
-  const moveEnemiesAndFireBullets = () => {
-    if (gameConst.start && !gameLogic.gameover) {
-      setEnemies((currentEnemies: ElementPosition[]) => {
-
-        const updatedEnemies = currentEnemies.map((enemy) => {
-          let updatedEnemy: ElementPosition;
-          if (enemy.y < 10) {
-            updatedEnemy = { x: enemy.x + 35, y: 600, width: 27, height: 27 };
-          } else {
-            updatedEnemy = { x: enemy.x, y: enemy.y - (gameConst.Level === 1 ? 7 : gameConst.Level === 2 ? 9 : 11), width: 27, height: 27 };
-          }
-
-          updatedEnemy.x = Math.max(0, Math.min(504 - updatedEnemy.height, updatedEnemy.x));
-          updatedEnemy.y = Math.max(0, Math.min(613 - updatedEnemy.width, updatedEnemy.y));
-
-          if (collide(playerPosition, updatedEnemy)) {
-            handlePlayerCollision(setPlayerPosition, gameConst, gameLogic, setGameLogic);
-            return null;
-          }
-
-          if (Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : gameConst.Level === 2 ? (0.03 - gameConst.enemyFire) : (0.0325 - gameConst.enemyFire)) && enemyCanFire) {
-            setEnemyCanFire(false);
-
-            setTimeout(() => {
-              setEnemyCanFire(true);
-            }, ENEMY_FIRE_INTERVAL);
-
-            setEnemyBullets((enemyBullets) => [
-              ...enemyBullets,
-              { x: updatedEnemy.x, y: updatedEnemy.y, width: ENEMY_BULLET_WIDTH, height: ENEMY_BULLET_HEIGHT, isFired: false, initialX: updatedEnemy.x },
-            ]);
-          }
-
-          return updatedEnemy;
-
-        });
-
-        const filteredEnemies = updatedEnemies.filter((enemy) => enemy !== null) as ElementPosition[];
-
-        return filteredEnemies;
-      });
-    }
-  };
-
-  const movePlayerBullets = () => {
-    setPlayerBulletPosition((bullets) =>
-      bullets
-        .map((bullet) => ({
-          x: bullet.x - 5,
-          y: bullet.y,
-          width: bullet.width,
-          height: bullet.height,
-          collided: enemies.some((enemy) => collide(enemy, bullet)),
-        }))
-        .filter((bullet) => {
-          if (bullet.x <= 0 || bullet.collided) {
-            setEnemies((enemies) => enemies.filter((enemy) => !collide(enemy, bullet)));
-            setGameLogic((prevGameLogic) => ({
-              ...prevGameLogic,
-              TotalPoints: prevGameLogic.TotalPoints + 0.5,
-            }));
-            return false;
-          }
-          return true;
-        })
-    );
-  };
-
+  
   const collide = (element1: ElementPosition, element2: ElementPosition) => {
     return (
       element1.x < element2.x + element2.width &&
@@ -293,7 +203,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       element1.y + element1.height > element2.y
     );
   };
-
+  
   const moveDebris = (debrisArray: Debris[]): Debris[] => {
     return debrisArray.map((debris) => {
       const updatedDebris = {
@@ -314,9 +224,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const gameLoop = () => {
     if (gameConst.start && !gameLogic.gameover) {
       movePlayer();
-      moveEnemiesAndFireBullets();
-      movePlayerBullets();
-      moveEnemyBullets();
+      moveEnemiesAndFireBullets(ENEMY_BULLET_HEIGHT, ENEMY_BULLET_WIDTH, ENEMY_FIRE_INTERVAL, enemyCanFire, setEnemyCanFire, setPlayerBulletPosition, playerBulletsPosition, setPlayerPosition, setEnemies, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
+      movePlayerBullets(setPlayerBulletPosition, enemies, collide);
+      moveEnemyBullets(setPlayerPosition, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
 
       if (gameConst.Level === 3) {
         if (Math.random() < 1) {

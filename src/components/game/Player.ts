@@ -54,3 +54,21 @@ export const handlePlayerCollision = (setPlayerPosition: React.Dispatch<React.Se
         respawnPlayer(setPlayerPosition);
     };
 };
+
+export const movePlayerBullets = (setPlayerBulletPosition: React.Dispatch<React.SetStateAction<ElementPosition[]>>, enemies: ElementPosition[], collide: (element1: ElementPosition, element2: ElementPosition) => boolean) => {
+    setPlayerBulletPosition((bullets) =>
+        bullets.map((bullet) => ({
+            x: bullet.x - 5,
+            y: bullet.y,
+            width: bullet.width,
+            height: bullet.height,
+            collided: enemies.some((enemy) => collide(enemy, bullet)),
+        })).filter((bullet) => {
+            if (bullet.x === 0) {
+                return false;
+            }
+
+            return true;
+        })
+    );
+};
