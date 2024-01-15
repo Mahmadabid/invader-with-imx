@@ -1,3 +1,4 @@
+import { enemyFirepowerupsABI, enemyFirepowerupsAddress } from "@/components/Contracts/EnemyFirePowerupsContract";
 import { firepowerupsABI, firepowerupsAddress } from "@/components/Contracts/FirePowerupsContract";
 import { healthpowerupsABI, healthpowerupsAddress } from "@/components/Contracts/HealthPowerupsContract";
 import { timerpowerupsAddress, timerpowerupsABI } from "@/components/Contracts/TimerPowerupsContract";
@@ -44,7 +45,7 @@ const Market = () => {
     async function getNextTokenId(contractType: string) {
         try {
 
-            const contract = new ethers.Contract(contractType === 'health'? healthpowerupsAddress: firepowerupsAddress, contractType === 'health'? healthpowerupsABI: firepowerupsABI, signer);
+            const contract = new ethers.Contract(contractType === 'health'? healthpowerupsAddress: contractType === 'fire'? firepowerupsAddress: contractType === 'timer'? timerpowerupsAddress: enemyFirepowerupsAddress, contractType === 'health'? healthpowerupsABI: contractType === 'fire'? firepowerupsABI: contractType === 'timer'? timerpowerupsABI: enemyFirepowerupsABI, signer);
     
             const totalSupply = await contract.getTotalMint();
             return totalSupply.toNumber() + 1;
@@ -139,7 +140,7 @@ const Market = () => {
 
             setApprove(false);
 
-            const TokenID = getNextTokenId('health')
+            const TokenID = getNextTokenId('timer')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
                 gasPrice: gasPrice,
@@ -189,6 +190,55 @@ const Market = () => {
             setApprove(false);
 
             const TokenID = getNextTokenId('fire')
+
+            const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
+                gasPrice: gasPrice,
+            });
+            const receipt = await transaction.wait();
+
+            setHash(await receipt.transactionHash)
+
+            console.log('Sell successful!');
+        } catch (error: any) {
+            setTxnError(error.message)
+        }
+    };
+
+    const handleEnemyFireBuy = async () => {
+        setTxn(true);
+
+        if (!signer) {
+            console.error('Signer not available');
+            return;
+        }
+
+        try {
+            const contract = new ethers.Contract(enemyFirepowerupsAddress, enemyFirepowerupsABI, signer);
+            const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+
+            const burnToken = ethers.utils.parseEther('30');
+            const burnApprove = ethers.utils.parseEther('31');
+
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
+
+            if (parseFloat(walletIPX) < 30) {
+                setTxnError('You dont have enough IPX');
+                return;
+              }
+        
+              if (parseFloat(walletBalance) < 0.013) {
+                setTxnError('You dont have enough tIMX');
+                return;
+              }
+
+            setApprove(true);
+
+            const approveTx = await gameToken.approve(enemyFirepowerupsAddress, burnApprove);
+            await approveTx.wait();
+
+            setApprove(false);
+
+            const TokenID = getNextTokenId('enemy')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
                 gasPrice: gasPrice,
@@ -257,6 +307,7 @@ const Market = () => {
                         <Card image="/health.png" name="Extra Heatlh" price="30" onButtonClick={handleHealthBuy} />
                         <Card image="/Bullets.png" name="Faster Firing" price="30" onButtonClick={handleFireBuy} />
                         <Card image="/time.png" name="Extra Time +5 sec" price="30" onButtonClick={handleTimeBuy} />
+                        <Card image="/EnemyBullet.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
                         <Card image="/gray.png" name="Coimg Soon" price="0" onButtonClick={() => { }} />
                     </div>
                 </div>

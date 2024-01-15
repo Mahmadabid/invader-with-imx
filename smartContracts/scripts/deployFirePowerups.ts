@@ -19,7 +19,7 @@ async function deploy() {
   const factory = await ethers.deployContract(
     "PowerupsMint",[deployer.address,
       "Pixels Invader Fire Powerups",
-      "PXH",
+      "PXF",
       "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmcAfFLSNRdLiTsy6P3oUQgn8TLd8FkdsJeqdk9WJE6ntz/",
       "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmfBzg6zmvJ4SsFHuZYhukT48ZLYVQapxPcUBgjvLmZvJM/",
       operatorAllowlist,

@@ -1,3 +1,4 @@
+import { enemyFirepowerupsAddress } from '@/components/Contracts/EnemyFirePowerupsContract';
 import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract';
 import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
 import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
@@ -94,13 +95,17 @@ async function getNftByAddress(accountAddress: string) {
 
     const fireContractAddress = firepowerupsAddress;
 
-    const fireFesponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
+    const fireResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
+
+    const enemyFireContractAddress = enemyFirepowerupsAddress;
+
+    const enemyFireResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: enemyFireContractAddress });
 
     const timerContractAddress = timerpowerupsAddress;
 
     const timerResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
 
-    return [...shipResponse.result, ...healthResponse.result, ...fireFesponse.result, ...timerResponse.result];
+    return [...shipResponse.result, ...healthResponse.result, ...fireResponse.result, ...timerResponse.result, ...enemyFireResponse.result];
   } catch (error) {
     console.log(error)
   }
@@ -131,6 +136,10 @@ async function getNftByCollection(User: UserProps) {
 
     const healthresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
 
+    const enemyFireContractAddress = enemyFirepowerupsAddress;
+
+    const enemyFireResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: enemyFireContractAddress });
+
     const fireContractAddress = firepowerupsAddress;
 
     const fireresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: fireContractAddress });
@@ -139,7 +148,7 @@ async function getNftByCollection(User: UserProps) {
 
     const timerresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
 
-    const PowerupsResult = [...healthresponse.result, ...fireresponse.result, ...timerresponse.result]
+    const PowerupsResult = [...healthresponse.result, ...fireresponse.result, ...timerresponse.result, ...enemyFireResponse.result]
 
     return {
       responseResult,

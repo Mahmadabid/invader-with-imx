@@ -18,10 +18,10 @@ async function deploy() {
     
   const factory = await ethers.deployContract(
     "PowerupsMint",[deployer.address,
-      "Pixels Invader Timer Powerups",
-      "PXT",
-      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmS7xuucHMgTroQGCC8MqYXU2q9QDeNfe8xPuvSYf1a8fQ/",
-      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmPVUzE6E8SRwMe3otPe2KqjPm7CyokoGbgYA1sgoWPzrf/",
+      "Pixels Invader Enemy Fire Powerups",
+      "PXE",
+      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmUzj33XWs9pSCk7bp1ywPnKkaxZobhJLzz5JrogcPqKZq/",
+      "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmexEGdzskWZuB7oks9Zg2jmUYM1qeqrxeJSbqnfwJfrJy/",
       operatorAllowlist,
       deployer.address,
       ethers.toBigInt("2000"),

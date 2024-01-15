@@ -108,6 +108,15 @@ const Home = () => {
       }));
     }
 
+    const enemyFireNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Slower Enemy Firing');
+
+    if (enemyFireNFTPowerups && enemyFireNFTPowerups.length > 0) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        enemyFire: 0.005,
+      }));
+    }
+
     const timerNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Extra Time');
 
     if (timerNFTPowerups && timerNFTPowerups.length > 0) {

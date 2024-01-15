@@ -1,12 +1,12 @@
-export const timerpowerupsAddress = '0xe92d501447b32e259B4C5c072f8474c46127Cc18';
+export const enemyFirepowerupsAddress = '0xAb5c590021461AD8583B610aEaad96c2f0829718';
 
-export const timerBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmS7xuucHMgTroQGCC8MqYXU2q9QDeNfe8xPuvSYf1a8fQ/';
+export const enemyFireBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmUzj33XWs9pSCk7bp1ywPnKkaxZobhJLzz5JrogcPqKZq/';
 
-export const timerContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmPVUzE6E8SRwMe3otPe2KqjPm7CyokoGbgYA1sgoWPzrf/';
+export const enemyFireContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmexEGdzskWZuB7oks9Zg2jmUYM1qeqrxeJSbqnfwJfrJy/';
 
-export const newTimerBaseURI = '';
+export const newEnemyFireBaseURI = '';
 
-export const timerpowerupsABI = [
+export const enemyFirepowerupsABI = [
   {
     "inputs": [
       {

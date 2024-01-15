@@ -141,8 +141,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
   const BULLET_WIDTH = 13;
   const BULLET_HEIGHT = 13;
-  const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 10 : gameConst.Level === 2 ? 12 : 12;
-  const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 10 : gameConst.Level === 2 ? 12 : 12;
+  const ENEMY_BULLET_WIDTH = gameConst.Level === 1 ? 16 : gameConst.Level === 2 ? 19 : 19;
+  const ENEMY_BULLET_HEIGHT = gameConst.Level === 1 ? 16 : gameConst.Level === 2 ? 19 : 19;
   const ENEMY_FIRE_INTERVAL = gameConst.Level === 1 ? 950 : gameConst.Level === 2 ? 850 : 700;
 
   const [canFire, setCanFire] = useState(true);
@@ -445,7 +445,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
               {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
               {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-              {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+              {gameConst.enemyFire === 0.005 ? <img src='/EnemyBullet.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+              {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
             </div>
           </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
@@ -459,7 +460,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+                {gameConst.enemyFire === 0.005 ? <img src='/EnemyBullet.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
             <p className='font-medium mt-2 mb-4'></p>
@@ -521,7 +523,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               <img
                 key={'enemyBullet' + index}
                 className="absolute"
-                src="/bullet.png"
+                src="/EnemyBullet.png"
                 style={{
                   top: bullet.x,
                   left: bullet.y,
