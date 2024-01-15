@@ -18,7 +18,6 @@ const Header = () => {
     setMenuOpen((prevMenuOpen) => !prevMenuOpen);
   };
   
-
   const closeMenu = () => {
     setMenuOpen(false);
   };

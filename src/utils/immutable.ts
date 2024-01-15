@@ -221,7 +221,7 @@ const ethersTransfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDR
   const contract = await ethersContractInstance(signer, CONTRACT_ADDRESS);
 
   const transaction = await contract.safeTransferFrom(sender, RECIPIENT, TOKEN_ID, {
-    maxPriorityFeePerGas: 10e9,
+    maxPriorityFeePerGas: 100e9,
     maxFeePerGas: 150e9,
     gasLimit: 2000000,
   });

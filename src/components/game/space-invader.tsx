@@ -428,11 +428,13 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-      <h1 className="flex items-center justify-center z-0 absolute top-0 bottom-0 left-0 right-0 font-bold text-xl text-white">
-        In case of any error. Please reload
-      </h1>
+      <div>
+        <h1 className="z-0 text-center absolute top-60 left-52 right-52 font-bold text-xl text-white">
+          In case of any error. Please reload
+        </h1>
+      </div>
       {gameLogic.gameover && gameConst.start ?
-        <div className="w-[612px] h-[504px] mt-2 z-50 text-white text-center bg-black">
+        <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black">
           <h1 className='text-2xl font-bold my-4'>{gameLogic.win ? 'You Won!' : 'Game Over!'}</h1>
           <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
@@ -448,7 +450,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
         </div> : !gameLogic.gameover && !gameConst.start ?
-          <div className="w-[612px] h-[504px] mt-2 z-50 text-white text-center bg-black">
+          <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black">
             <h1 className='text-2xl font-bold my-4'>Ready!</h1>
             <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
             <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
@@ -464,7 +466,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
           </div> :
           <div
-            className="w-[612px] h-[504px] mt-2 z-50 relative bg-game border-none"
+            className="w-[612px] h-[504px] mt-2 z-30 relative bg-game border-none"
             onKeyDown={(e) => pressed(e)}
             role="button"
             tabIndex={0}
@@ -484,7 +486,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="red"
-                  className="w-6 h-6 inline-block z-50"
+                  className="w-6 h-6 inline-block z-40"
                 >
                   <path fillRule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 0 1 9.75 22.5a.75.75 0 0 1-.75-.75v-4.131A15.838 15.838 0 0 1 6.382 15H2.25a.75.75 0 0 1-.75-.75 6.75 6.75 0 0 1 7.815-6.666ZM15 6.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" clipRule="evenodd" />
                   <path d="M5.26 17.242a.75.75 0 1 0-.897-1.203 5.243 5.243 0 0 0-2.05 5.022.75.75 0 0 0 .625.627 5.243 5.243 0 0 0 5.022-2.051.75.75 0 1 0-1.202-.897 3.744 3.744 0 0 1-3.008 1.51c0-1.23.592-2.323 1.51-3.008Z" />
