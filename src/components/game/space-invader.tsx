@@ -215,6 +215,15 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     });
   };
 
+  useEffect(() => {
+    if (enemies.length === 0 && !gameLogic.gameover && gameConst.start) {
+      setGameLogic((prevGameLogic) => ({
+        ...prevGameLogic,
+        gameover: true,
+      }));
+    }
+  }, [enemies])
+
   const moveEnemiesAndFireBullets = () => {
     if (gameConst.start && !gameLogic.gameover) {
       setEnemies((currentEnemies: ElementPosition[]) => {
@@ -246,13 +255,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               ...enemyBullets,
               { x: updatedEnemy.x, y: updatedEnemy.y, width: ENEMY_BULLET_WIDTH, height: ENEMY_BULLET_HEIGHT, isFired: false, initialX: updatedEnemy.x },
             ]);
-          }
-
-          if (!updatedEnemy) {
-            setGameLogic((prevGameLogic) => ({
-              ...prevGameLogic,
-              gameover: true,
-            }));
           }
 
           return updatedEnemy;
@@ -288,10 +290,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           collided: enemies.some((enemy) => collide(enemy, bullet)),
         }))
         .filter((bullet) => {
-          if (bullet.x === 0) {
-            return false
-          }
-          if (bullet.collided) {
+          if (bullet.x <= 0 || bullet.collided) {
             setEnemies((enemies) => enemies.filter((enemy) => !collide(enemy, bullet)));
             setGameLogic((prevGameLogic) => ({
               ...prevGameLogic,
