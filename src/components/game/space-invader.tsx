@@ -292,7 +292,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             return false
           }
           if (bullet.collided) {
-            setEnemies((enemies) => enemies.filter((enemy) => !collide(bullet, enemy)));
+            setEnemies((enemies) => enemies.filter((enemy) => !collide(enemy, bullet)));
             setGameLogic((prevGameLogic) => ({
               ...prevGameLogic,
               TotalPoints: prevGameLogic.TotalPoints + 0.5,
@@ -429,6 +429,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
   return (
     <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
+      <h1 className="flex items-center justify-center z-0 absolute top-0 bottom-0 left-0 right-0 font-bold text-xl text-white">
+        In case of any error. Please reload
+      </h1>
       {gameLogic.gameover && gameConst.start ?
         <div className="w-[612px] h-[504px] mt-2 text-white text-center bg-black">
           <h1 className='text-2xl font-bold my-4'>{gameLogic.win ? 'You Won!' : 'Game Over!'}</h1>

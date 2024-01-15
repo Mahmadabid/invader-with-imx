@@ -67,7 +67,8 @@ const Bridge = () => {
                 <button onClick={() => setBridgeOpen(true)} className="font-bold text-xl bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600 transition duration-300">Bridge</button>
                 <h1 className='font-medium text-lg text-red-600 py-5'>It may take an hour to bridge.</h1>
                 <div className='my-6' id="bridge" />
-                <h1 className='font-bold text-2xl py-10'>Swap IMX for other tokens</h1>
+                <h1 className='font-bold text-2xl pt-10'>Swap IMX for other tokens</h1>
+                <h1 className='font-medium text-red-500 py-5'><span className='font-bold text-white'>Note: </span>&nbsp;Some pairs might not be swapped due to lack of liquidity</h1>
                 <button onClick={() => setSwapOpen(true)} className="font-bold text-xl bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition duration-300">Swap</button>
                 <div className='my-6' id="swap" />
             </div>

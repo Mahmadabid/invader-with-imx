@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.Box.css-1wbf20m {
+    text-align: left !important;
+}
+
+.Box.css-1wbf20m>h1.css-ou80zt {
+    text-align: center;
+}
