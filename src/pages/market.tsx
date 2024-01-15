@@ -336,7 +336,7 @@ const Market = () => {
                         <Card image="/health.png" name="Extra Heatlh" price="30" onButtonClick={handleHealthBuy} />
                         <Card image="/Bullets.png" name="Faster Firing" price="30" onButtonClick={handleFireBuy} />
                         <Card image="/time.png" name="Extra Time +5 sec" price="30" onButtonClick={handleTimeBuy} />
-                        <Card image="/EnemyBullet.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
+                        <Card image="/EnemiesBullets.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
                         <Card image="/gray.png" name="Coimg Soon" price="0" onButtonClick={() => { }} />
                     </div>
                 </div>

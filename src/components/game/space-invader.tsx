@@ -7,7 +7,7 @@ import {
   START_ENEMIES_POSITION_3,
   START_POSITION,
 } from './constants';
-import { useMovePlayer } from './movePlayer';
+import { handlePlayerCollision, respawnPlayer, useMovePlayer } from './Player';
 import { useGameLogic } from './gameLogic';
 import { GameConstantsProps } from './gameConstants';
 import { useJWT } from '../key';
@@ -198,7 +198,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           }))
           .filter((bullet) => {
             if (bullet.collided) {
-              handlePlayerCollision();
+              handlePlayerCollision(setPlayerPosition, gameConst, gameLogic, setGameLogic);
             }
             return bullet.x >= 0 && bullet.x + bullet.height < 504 && !bullet.collided;
           })
@@ -206,20 +206,13 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     }
   };
 
-  const respawnPlayer = () => {
-    setPlayerPosition({
-      x: START_POSITION.x,
-      y: START_POSITION.y,
-      width: 36,
-      height: 36,
-    });
-  };
-
   useEffect(() => {
     if (enemies.length === 0 && !gameLogic.gameover && gameConst.start) {
       setGameLogic((prevGameLogic) => ({
         ...prevGameLogic,
+        win: true,
         gameover: true,
+        IPXUnclaimed: (gameConst.Level === 1 ? 1 : gameConst.Level === 2 ? 2 : 3)
       }));
     }
   }, [enemies])
@@ -240,7 +233,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           updatedEnemy.y = Math.max(0, Math.min(613 - updatedEnemy.width, updatedEnemy.y));
 
           if (collide(playerPosition, updatedEnemy)) {
-            handlePlayerCollision();
+            handlePlayerCollision(setPlayerPosition, gameConst, gameLogic, setGameLogic);
             return null;
           }
 
@@ -262,17 +255,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
         });
 
         const filteredEnemies = updatedEnemies.filter((enemy) => enemy !== null) as ElementPosition[];
-
-        const allEnemiesDead = filteredEnemies.every((enemy) => enemy.y >= 490);
-
-        if (allEnemiesDead) {
-          setGameLogic((prevGameLogic) => ({
-            ...prevGameLogic,
-            win: true,
-            gameover: true,
-            IPXUnclaimed: (gameConst.Level === 1 ? 1 : gameConst.Level === 2 ? 2 : 3)
-          }));
-        }
 
         return filteredEnemies;
       });
@@ -321,23 +303,12 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       };
 
       if (collide(playerPosition, updatedDebris)) {
-        handlePlayerCollision();
+        handlePlayerCollision(setPlayerPosition, gameConst, gameLogic, setGameLogic);
         return null;
       }
 
       return updatedDebris;
     }).filter((debris): debris is Debris => debris !== null && debris.active);
-  };
-
-  const handlePlayerCollision = () => {
-    if (gameConst.start && !gameLogic.gameover) {
-      setGameLogic((prevGameLogic) => ({
-        ...prevGameLogic,
-        Health: prevGameLogic.Health - 1,
-      }));
-
-      respawnPlayer();
-    };
   };
 
   const gameLoop = () => {
@@ -395,7 +366,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     setPlayerBulletPosition([]);
     setDebris([]);
 
-    respawnPlayer();
+    respawnPlayer(setPlayerPosition);
     setGameConst((prevGameConst) => ({
       ...prevGameConst,
       start: true
@@ -421,7 +392,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     setDebris([]);
     setPlayerBulletPosition([]);
 
-    respawnPlayer();
+    respawnPlayer(setPlayerPosition);
   }
 
   const headerHeight = 4.65;
@@ -445,7 +416,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
               {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
               {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-              {gameConst.enemyFire === 0.005 ? <img src='/EnemyBullet.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+              {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
               {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
             </div>
           </div>
@@ -460,7 +431,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.enemyFire === 0.005 ? <img src='/EnemyBullet.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
@@ -482,7 +453,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               Time Left: {gameLogic.timer}s
             </div>
             <div className="absolute top-0 right-0 mt-4">
-              {[...Array(gameLogic.Health)].map((_, index) =>
+              {gameLogic.Health > 0 && [...Array(gameLogic.Health)].map((_, index) =>
                 <svg
                   key={index}
                   xmlns="http://www.w3.org/2000/svg"
