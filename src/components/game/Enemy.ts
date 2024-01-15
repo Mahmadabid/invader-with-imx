@@ -67,7 +67,7 @@ export const moveEnemiesAndFireBullets = (ENEMY_BULLET_HEIGHT: number, ENEMY_BUL
                 })
 
                 if (
-                    Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : gameConst.Level === 2 ? (0.03 - gameConst.enemyFire) : (0.0325 - gameConst.enemyFire))
+                    Math.random() < (gameConst.Level === 1 ? (0.025 - gameConst.enemyFire) : gameConst.Level === 2 ? (0.032 - gameConst.enemyFire) : (0.0345 - gameConst.enemyFire))
                     && enemyCanFire
                 ) {
                     setEnemyCanFire(false);
