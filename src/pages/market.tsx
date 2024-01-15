@@ -8,6 +8,7 @@ import Load from "@/components/utils/Load";
 import { UserContext } from "@/utils/Context";
 import { getWalletInfo } from "@/utils/immutable";
 import { ethers } from "ethers";
+import Image from "next/image";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 
@@ -26,30 +27,30 @@ const Market = () => {
 
     const fetchWalletInfo = async () => {
         try {
-          const info = await getWalletInfo(User);
-          setWalletBalance(info.balanceInEther || '');
-          setWalletIPX(info.tokenBalance || '');
-          setSigner(info.signer);
-          setWalletAddress(info.walletAddress || '')
-          setLoading(false);
+            const info = await getWalletInfo(User);
+            setWalletBalance(info.balanceInEther || '');
+            setWalletIPX(info.tokenBalance || '');
+            setSigner(info.signer);
+            setWalletAddress(info.walletAddress || '')
+            setLoading(false);
         } catch (error) {
-          console.error('Error fetching wallet info:', error);
-          setLoading(false);
+            console.error('Error fetching wallet info:', error);
+            setLoading(false);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         fetchWalletInfo();
-      }, []);
+    }, []);
 
     async function getNextTokenId(contractType: string) {
         try {
 
-            const contract = new ethers.Contract(contractType === 'health'? healthpowerupsAddress: contractType === 'fire'? firepowerupsAddress: contractType === 'timer'? timerpowerupsAddress: enemyFirepowerupsAddress, contractType === 'health'? healthpowerupsABI: contractType === 'fire'? firepowerupsABI: contractType === 'timer'? timerpowerupsABI: enemyFirepowerupsABI, signer);
-    
+            const contract = new ethers.Contract(contractType === 'health' ? healthpowerupsAddress : contractType === 'fire' ? firepowerupsAddress : contractType === 'timer' ? timerpowerupsAddress : enemyFirepowerupsAddress, contractType === 'health' ? healthpowerupsABI : contractType === 'fire' ? firepowerupsABI : contractType === 'timer' ? timerpowerupsABI : enemyFirepowerupsABI, signer);
+
             const totalSupply = await contract.getTotalMint();
             return totalSupply.toNumber() + 1;
-    
+
         } catch (error) {
             console.error('Error getting next token ID:', error);
             return null;
@@ -76,12 +77,12 @@ const Market = () => {
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
-              }
-        
-              if (parseFloat(walletBalance) < 0.013) {
+            }
+
+            if (parseFloat(walletBalance) < 0.013) {
                 setTxnError('You dont have enough tIMX');
                 return;
-              }
+            }
 
             setApprove(true);
 
@@ -95,7 +96,7 @@ const Market = () => {
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
                 gasPrice: gasPrice,
             });
-            
+
             const receipt = await transaction.wait();
 
             setHash(await receipt.transactionHash)
@@ -126,12 +127,12 @@ const Market = () => {
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
-              }
-        
-              if (parseFloat(walletBalance) < 0.013) {
+            }
+
+            if (parseFloat(walletBalance) < 0.013) {
                 setTxnError('You dont have enough tIMX');
                 return;
-              }
+            }
 
             setApprove(true);
 
@@ -175,12 +176,12 @@ const Market = () => {
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
-              }
-        
-              if (parseFloat(walletBalance) < 0.013) {
+            }
+
+            if (parseFloat(walletBalance) < 0.013) {
                 setTxnError('You dont have enough tIMX');
                 return;
-              }
+            }
 
             setApprove(true);
 
@@ -224,12 +225,12 @@ const Market = () => {
             if (parseFloat(walletIPX) < 30) {
                 setTxnError('You dont have enough IPX');
                 return;
-              }
-        
-              if (parseFloat(walletBalance) < 0.013) {
+            }
+
+            if (parseFloat(walletBalance) < 0.013) {
                 setTxnError('You dont have enough tIMX');
                 return;
-              }
+            }
 
             setApprove(true);
 
@@ -266,7 +267,7 @@ const Market = () => {
                                     TxnError ? (
                                         <div className="flex flex-col font-bold text-center items-center justify-center">
                                             <p className="text-xl text-red-600">{TxnError}</p>
-                                            <p className="mt-4 text-blue-800 text-xl">Please Try Again <br/> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
+                                            <p className="mt-4 text-blue-800 text-xl">Please Try Again <br /> <span className="text-orange-600 text-lg">Make Sure you have allowed pop-ups</span></p>
                                         </div>
                                     ) : !Approve ? (
                                         <div className="flex flex-col font-bold items-center mb-2">
@@ -300,8 +301,36 @@ const Market = () => {
                         </div>
                     </div>
                 </>
-            ) : loading? <div className="justify-center flex mt-20"><Load className="w-8 h-8 fill-black" /></div>:
+            ) : loading ? <div className="justify-center flex mt-20"><Load className="w-8 h-8 fill-black" /></div> :
                 <div className="text-center">
+                    <div className="flex flex-row space-x-4 justify-center mx-2 items-center xb:flex-col">
+                        <div className='flex flex-row mb-1 mt-3 bg-gray-950 p-2 rounded'>
+                            <Image
+                                src="/tIMX.svg"
+                                alt="tIMX Logo"
+                                width={28}
+                                height={28}
+                                priority
+                            />
+                            <div className='font-extrabold text-white ml-1'>
+                                tIMX
+                            </div>
+                            <p className="font-medium pl-6 text-[#b7b7b7]">{walletBalance}</p>
+                        </div>
+                        <div className='flex flex-row mb-1 mt-3 bg-gray-950 p-2 rounded'>
+                            <Image
+                                src="/IPX.png"
+                                alt="IPX Logo"
+                                width={28}
+                                height={28}
+                                priority
+                            />
+                            <div className='font-extrabold text-white ml-1'>
+                                IPX
+                            </div>
+                            <p className="font-medium pl-6 text-[#b7b7b7]">{walletIPX}</p>
+                        </div>
+                    </div>
                     <h1 className="text-6xl font-bold mt-5 mb-10">Market</h1>
                     <div className="flex flex-wrap justify-center">
                         <Card image="/health.png" name="Extra Heatlh" price="30" onButtonClick={handleHealthBuy} />

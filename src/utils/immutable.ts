@@ -167,6 +167,9 @@ async function getInventoryData(User: UserProps) {
 
   const walletAddress = await signer.getAddress();
 
+  const IMXBalance = await signer.getBalance();
+  const balanceInEther = ethers.utils.formatEther(IMXBalance);
+
   const tokenContract = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
   const tokenBalance = await tokenContract.balanceOf(walletAddress);
 
@@ -186,7 +189,7 @@ async function getInventoryData(User: UserProps) {
   const response = await fetch(url);
   const data = await response.json();
 
-  return { data, balance }
+  return { data, balance, balanceInEther }
 }
 
 const getProfileInfo = async (User: UserProps) => {
