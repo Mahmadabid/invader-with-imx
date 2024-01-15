@@ -297,7 +297,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               ...prevGameLogic,
               TotalPoints: prevGameLogic.TotalPoints + 0.5,
             }));
-
+            return false;
           }
           return true;
         })
