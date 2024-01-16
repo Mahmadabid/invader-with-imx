@@ -14,7 +14,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [shipLoading, setShipLoading] = useState(false);
   const [Address, setAddress] = useState('');
-  const [Levels, setLevels] = useState('1');
+  const [Levels, setLevels] = useState(1);
   const { gameConst, setGameConst } = useGameConstants();
   const [User, _] = useContext(UserContext);
 
@@ -28,13 +28,10 @@ const Home = () => {
         const NftwithAddress = await getNftByCollection(User);
         const NftByAddress: NFTProps[] | undefined = NftwithAddress?.responseResult;
         const NftPowerupsByAddress: NFTProps[] | undefined = NftwithAddress?.PowerupsResult;
-        const LevelbyID = NftwithAddress?.LevelbyTokenID;
 
         setAddress(NftwithAddress?.accountAddress);
         setNFTstate(NftByAddress);
         setNFTPowerupsstate(NftPowerupsByAddress);
-        setLevels(LevelbyID || '1');
-
       } catch (error) {
         console.error('Error fetching NFTs:', error);
       } finally {
@@ -78,16 +75,28 @@ const Home = () => {
   useEffect(() => {
     setGameConst((prevGameConst) => ({
       ...prevGameConst,
-      Level: parseInt(Levels)
-    }));
-  }, [Levels, SpaceInvader])
-
-  useEffect(() => {
-    setGameConst((prevGameConst) => ({
-      ...prevGameConst,
       Address: Address
     }));
   }, [Address])
+
+  const extractLevels = (Name: string) => {
+    const matches = Name.match(/\d+/);
+    return matches ? parseInt(matches[0], 10) : 1;
+  };
+
+  useEffect(() => {
+    const shipLevel = NFTstate?.filter((nft) => {
+      const Level = extractLevels(nft.name || 'Level 1 Ship')
+      setLevels(Level)
+    });
+
+    if (shipLevel) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        Level: Levels,
+      }));
+    }
+  }, [NFTstate, Levels])
 
   useEffect(() => {
     const healthNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Extra Health');
@@ -169,7 +178,7 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <SpaceInvader User={User} gameConst={gameConst} levels={Levels} setGameConst={setGameConst} />
+          <SpaceInvader User={User} gameConst={gameConst} levels={Levels.toString()} setGameConst={setGameConst} />
         </div>
       )}
     </div>

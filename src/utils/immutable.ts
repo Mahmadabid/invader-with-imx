@@ -124,14 +124,6 @@ async function getNftByCollection(User: UserProps) {
 
     const responseResult = response.result;
 
-    const contract = new ethers.Contract(shipAddress, shipABI, browserSigner);
-
-    let LevelbyTokenID = ''
-
-    if (responseResult.length !== 0) {
-      LevelbyTokenID = await contract.getTokenLevel(responseResult[0].token_id);
-    }
-
     const healthContractAddress = healthpowerupsAddress;
 
     const healthresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: healthContractAddress });
@@ -152,7 +144,6 @@ async function getNftByCollection(User: UserProps) {
 
     return {
       responseResult,
-      LevelbyTokenID,
       PowerupsResult,
       accountAddress
     };

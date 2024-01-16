@@ -28,12 +28,12 @@ export const moveEnemyBullets = (setPlayerPosition: React.Dispatch<React.SetStat
 
 const enemyCollide = (element1: ElementPosition, element2: ElementPosition) => {
     return (
-      element1.x < element2.x + element2.width &&
-      element1.x + element1.width > element2.x &&
-      (element1.y + 2) < (element2.y) + element2.height &&
-      element1.y + element1.height > element2.y
+        element1.x < element2.x + element2.width &&
+        element1.x + element1.width > element2.x &&
+        (element1.y + 5) < (element2.y) + element2.height &&
+        element1.y + element1.height - 5 > element2.y
     );
-  };
+};
 
 export const moveEnemiesAndFireBullets = (ENEMY_BULLET_HEIGHT: number, ENEMY_BULLET_WIDTH: number, ENEMY_FIRE_INTERVAL: number, enemyCanFire: boolean, setEnemyCanFire: React.Dispatch<React.SetStateAction<boolean>>, setPlayerBulletPosition: React.Dispatch<React.SetStateAction<ElementPosition[]>>, playerBulletsPosition: ElementPosition[], setPlayerPosition: React.Dispatch<React.SetStateAction<ElementPosition>>, setEnemies: React.Dispatch<React.SetStateAction<ElementPosition[]>>, playerPosition: ElementPosition, setEnemyBullets: React.Dispatch<React.SetStateAction<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>>, gameConst: GameConstantsProps, gameLogic: GAMELOGIC, setGameLogic: React.Dispatch<React.SetStateAction<GAMELOGIC>>, collide: (element1: ElementPosition, element2: ElementPosition) => boolean) => {
     if (gameConst.start && !gameLogic.gameover) {
