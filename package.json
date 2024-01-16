@@ -2,6 +2,7 @@
   "name": "invader-with-imx",
   "version": "0.1.0",
   "private": true,
+  "author": "Muhammad Ahmad",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
