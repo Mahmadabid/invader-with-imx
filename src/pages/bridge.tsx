@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { checkout, config } from '@imtbl/sdk';
-import { UserProvider, passportInstance } from '@/utils/immutable';
+import { passportInstance } from '@/utils/immutable';
 
 const checkoutSDK = new checkout.Checkout({
     baseConfig: {
