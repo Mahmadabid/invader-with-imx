@@ -184,7 +184,7 @@ It mints IPX. It is used to claim unclaimed IPX.
 ## Game
 [Code](https://github.com/Mahmadabid/invader-with-imx/tree/master/src/components/game)
 
-The game is a space Invaders style game. There is a feature of level. That determines the difficulty and the ship capability. Next Level gives you an upgraded ship. The level and Powerups NFTs are fetched by ```getNftByCollection()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
+The game is a space Invaders style game. There is a feature of level. That determines the difficulty and the ship capability. Next Level gives you an upgraded ship. The Ship and Powerups NFTs are fetched by ```getNftByCollection()``` function from [immutable.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/utils/immutable.ts).
 
 You get 0.5 score for shooting 1 alien. Aliens will move from right to left. Shoot them before they kill you or before time runs out. You will only get IPX if you win. Losers will only get the score. You can add powerups from Market.
 
