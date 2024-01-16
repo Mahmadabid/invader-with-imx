@@ -1,7 +1,7 @@
 import { enemyFirepowerupsAddress } from '@/components/Contracts/EnemyFirePowerupsContract';
 import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract';
 import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
-import { shipABI, shipAddress } from '@/components/Contracts/ShipContract';
+import { shipAddress } from '@/components/Contracts/ShipContract';
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
 import { timerpowerupsAddress } from '@/components/Contracts/TimerPowerupsContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
