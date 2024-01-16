@@ -42,11 +42,6 @@ const Home = () => {
     fetchNFTs();
   }, []);
 
-  const dataToSend = {
-    address: Address,
-    userProvider: User
-  };
-
   const getUserID = async () => {
     try {
       if (User === 'passport') {
@@ -137,6 +132,11 @@ const Home = () => {
 
   }, [NFTPowerupsstate]);
 
+  
+  const dataToSend = {
+    address: Address,
+    userProvider: User
+  };
 
   const sendData = async () => {
     try {

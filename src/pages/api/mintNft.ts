@@ -120,20 +120,13 @@ export default async function handler(
 
                 const TOKEN_ID = await getNextTokenId(provider);
 
-                const requests = [
-                    {
-                        to: address,
-                        tokenIds: [TOKEN_ID],
-                    },
-                ];
-
                 const gasOverrides = {
                     maxPriorityFeePerGas: 100e9,
                     maxFeePerGas: 150e9,
                     gasLimit: 200000,
                 };
 
-                const populatedTransaction = await contract.populateMintBatch(requests, gasOverrides);
+                const populatedTransaction = await contract.populateMint(address, TOKEN_ID, gasOverrides);
 
                 await wallet.sendTransaction(populatedTransaction);
 

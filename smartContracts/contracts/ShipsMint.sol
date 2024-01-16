@@ -77,6 +77,7 @@ contract ShipsMint is ImmutableERC721Base {
      */
     function safeMintBatch(IDMint[] calldata mintRequests) external onlyRole(MINTER_ROLE) {
         for (uint256 i = 0; i < mintRequests.length; i++) {
+            _totalMint++;
             _safeBatchMint(mintRequests[i]);
         }
     }
@@ -126,6 +127,7 @@ contract ShipsMint is ImmutableERC721Base {
      */
     function mintBatch(IDMint[] calldata mintRequests) external onlyRole(MINTER_ROLE) {
         for (uint256 i = 0; i < mintRequests.length; i++) {
+            _totalMint++;
             _batchMint(mintRequests[i]);
         }
     }
