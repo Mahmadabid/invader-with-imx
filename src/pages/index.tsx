@@ -173,8 +173,8 @@ const Home = () => {
     <div>
       {loading || shipLoading ? (
         <div className="flex flex-col justify-center items-center my-20">
-          <h1 className="text-xl font-medium text-slate-700">{shipLoading ? 'Minting your ship' : 'Fetching your ship'}</h1>
-          <Load className="w-8 h-8 my-3" />
+          <h1 className="text-xl font-medium text-white">{shipLoading ? 'Minting your ship' : 'Fetching your ship'}</h1>
+          <Load className="w-8 h-8 my-3 fill-white" />
         </div>
       ) : (
         <div>

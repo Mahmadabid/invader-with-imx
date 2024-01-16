@@ -305,17 +305,15 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     respawnPlayer(setPlayerPosition);
   }
 
-  const headerHeight = 4.65;
-
   return (
-    <div className='flex justify-center bg-gray-950' style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
+    <div className='flex justify-center rounded'>
       <div>
         <h1 className="z-0 text-center absolute top-60 left-52 right-52 font-bold text-xl text-white">
           In case of any error. Please reload
         </h1>
       </div>
       {gameLogic.gameover && gameConst.start ?
-        <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black">
+        <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
           <h1 className='text-2xl font-bold my-4'>{gameLogic.win ? 'You Won!' : 'Game Over!'}</h1>
           <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
           <p className='font-medium mt-2 mb-4'>Your score: {gameLogic.TotalPoints}</p>
@@ -332,7 +330,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
         </div> : !gameLogic.gameover && !gameConst.start ?
-          <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black">
+          <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
             <h1 className='text-2xl font-bold my-4'>Ready!</h1>
             <p className='font-medium mt-2 mb-4'>Your Level: {levels}</p>
             <div className='text-xl font-medium text-white my-2 flex items-center justify-center'>
@@ -349,7 +347,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
           </div> :
           <div
-            className="w-[612px] h-[504px] mt-2 z-30 relative bg-game border-none"
+            className="w-[612px] h-[504px] mt-2 z-30 relative bg-game border-none rounded"
             onKeyDown={(e) => pressed(e)}
             role="button"
             tabIndex={0}

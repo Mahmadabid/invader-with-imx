@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { checkout, config } from '@imtbl/sdk';
-import { passportInstance } from '@/utils/immutable';
+import { UserProvider, passportInstance } from '@/utils/immutable';
 
 const checkoutSDK = new checkout.Checkout({
     baseConfig: {
@@ -36,6 +36,7 @@ const Bridge = () => {
                 setSwap(swap);
                 swap.mount("swap");
             }
+
         })();        
 
     }, [bridgeOpen, swapOpen]);
@@ -47,6 +48,7 @@ const Bridge = () => {
             bridge.unmount();
             setBridgeOpen(false);
         });
+
     }, [bridge])
 
     useEffect(() => {
@@ -56,6 +58,7 @@ const Bridge = () => {
           swap.unmount();
           setSwapOpen(false);
         });
+        
       }, [swap])
     
     const headerHeight = 4.6;

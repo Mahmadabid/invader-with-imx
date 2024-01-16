@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Header from "./Header";
 
 interface LayoutProps {
@@ -5,8 +6,11 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+
+    const router = useRouter();
+
     return (
-        <div>
+        <div className={router.pathname === '/'? ' bg-gray-950 h-screen': ''}>
             <Header />
             {children}
         </div>
