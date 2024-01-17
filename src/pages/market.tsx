@@ -1,6 +1,7 @@
 import { enemyFirepowerupsABI, enemyFirepowerupsAddress } from "@/components/Contracts/EnemyFirePowerupsContract";
 import { firepowerupsABI, firepowerupsAddress } from "@/components/Contracts/FirePowerupsContract";
 import { healthpowerupsABI, healthpowerupsAddress } from "@/components/Contracts/HealthPowerupsContract";
+import { teleportpowerupsABI, teleportpowerupsAddress } from "@/components/Contracts/TeleportPowerupsContract";
 import { timerpowerupsAddress, timerpowerupsABI } from "@/components/Contracts/TimerPowerupsContract";
 import { gameTokenAddress, gameTokenABI } from "@/components/Contracts/TokenContract";
 import Card from "@/components/market/Card";
@@ -46,7 +47,7 @@ const Market = () => {
     async function getNextTokenId(contractType: string) {
         try {
 
-            const contract = new ethers.Contract(contractType === 'health' ? healthpowerupsAddress : contractType === 'fire' ? firepowerupsAddress : contractType === 'timer' ? timerpowerupsAddress : enemyFirepowerupsAddress, contractType === 'health' ? healthpowerupsABI : contractType === 'fire' ? firepowerupsABI : contractType === 'timer' ? timerpowerupsABI : enemyFirepowerupsABI, signer);
+            const contract = new ethers.Contract(contractType === 'health' ? healthpowerupsAddress : contractType === 'fire' ? firepowerupsAddress : contractType === 'timer' ? timerpowerupsAddress : contractType === 'teleport' ? teleportpowerupsAddress : enemyFirepowerupsAddress, contractType === 'health' ? healthpowerupsABI : contractType === 'fire' ? firepowerupsABI : contractType === 'timer' ? timerpowerupsABI : contractType === 'teleport' ? teleportpowerupsABI : enemyFirepowerupsABI, signer);
 
             const totalSupply = await contract.getTotalMint();
             return totalSupply.toNumber() + 1;
@@ -263,7 +264,7 @@ const Market = () => {
         }
 
         try {
-            const contract = new ethers.Contract(firepowerupsAddress, firepowerupsABI, signer);
+            const contract = new ethers.Contract(teleportpowerupsAddress, teleportpowerupsABI, signer);
             const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
 
             const burnToken = ethers.utils.parseEther('30');
@@ -283,12 +284,12 @@ const Market = () => {
 
             setApprove(true);
 
-            const approveTx = await gameToken.approve(firepowerupsAddress, burnApprove);
+            const approveTx = await gameToken.approve(teleportpowerupsAddress, burnApprove);
             await approveTx.wait();
 
             setApprove(false);
 
-            const TokenID = getNextTokenId('fire')
+            const TokenID = getNextTokenId('teleport')
 
             const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
                 gasPrice: gasPrice,
@@ -385,8 +386,8 @@ const Market = () => {
                         <Card image="/health.png" name="Extra Heatlh" price="30" onButtonClick={handleHealthBuy} />
                         <Card image="/Bullets.png" name="Faster Firing" price="30" onButtonClick={handleFireBuy} />
                         <Card image="/time.png" name="Extra Time +5 sec" price="30" onButtonClick={handleTimeBuy} />
-                        <Card image="/EnemiesBullets.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
                         <Card image="/Teleport.png" name="Teleport" price="30" onButtonClick={handleTeleportBuy} />
+                        <Card image="/EnemiesBullets.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
                         <Card image="/gray.png" name="Coimg Soon" price="0" onButtonClick={() => { }} />
                     </div>
                 </div>
