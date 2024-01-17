@@ -120,7 +120,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   }
 
   const sendData = async () => {
-    console.log(gameLogic.IPXUnclaimed, gameConst.Level, dataToSend.data.IPX)
 
     try {
       const response = await fetch('/api/data', {

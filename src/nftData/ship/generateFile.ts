@@ -45,8 +45,29 @@ const generateNFTFile = (id: string, tokenId: string, name: string, description:
 
 const generateNFTFiles = async () => {
 
+  const provider = new ethers.providers.JsonRpcProvider('https://rpc.testnet.immutable.com');
+  const privateKey = PrivateKey;
+
+  const wallet = new ethers.Wallet(privateKey, provider);
+
+  const contract = new ethers.Contract(shipAddress, shipABI, wallet);
+
+  const IDLevels = await contract.getAllTokenLevelsAndIds();
+
+  for (let i = 0; i < IDLevels[0].length; i++) {
+    const level = IDLevels[1][i].toString();
+    
+    generateNFTFile(
+      IDLevels[0][i].toString(),
+      IDLevels[0][i].toString(),
+      `Level ${level} Ship`,
+      `This NFT represents your ship at level ${level}. Also, it's your profile ship.`,
+      level,
+    );
+  }
+
   for (let i = 0; i < 50; i++) {
-    const newFileId = (i + 1).toString();
+    const newFileId = (IDLevels[0].length + i + 1).toString();
     const level = '1';
     generateNFTFile(
       newFileId,
