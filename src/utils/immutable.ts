@@ -3,6 +3,7 @@ import { firepowerupsAddress } from '@/components/Contracts/FirePowerupsContract
 import { healthpowerupsAddress } from '@/components/Contracts/HealthPowerupsContract';
 import { shipAddress } from '@/components/Contracts/ShipContract';
 import { swapABI, swapAddress } from '@/components/Contracts/SwapContract';
+import { teleportpowerupsAddress } from '@/components/Contracts/TeleportPowerupsContract';
 import { timerpowerupsAddress } from '@/components/Contracts/TimerPowerupsContract';
 import { gameTokenAddress, gameTokenABI } from '@/components/Contracts/TokenContract';
 import { ERC721Client } from '@imtbl/contracts';
@@ -105,7 +106,11 @@ async function getNftByAddress(accountAddress: string) {
 
     const timerResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
 
-    return [...shipResponse.result, ...healthResponse.result, ...fireResponse.result, ...timerResponse.result, ...enemyFireResponse.result];
+    const teleportContractAddress = teleportpowerupsAddress;
+
+    const teleportResponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: teleportContractAddress });
+
+    return [...shipResponse.result, ...healthResponse.result, ...fireResponse.result, ...timerResponse.result, ...enemyFireResponse.result, ...teleportResponse.result];
   } catch (error) {
     console.log(error)
   }
@@ -140,7 +145,11 @@ async function getNftByCollection(User: UserProps) {
 
     const timerresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: timerContractAddress });
 
-    const PowerupsResult = [...healthresponse.result, ...fireresponse.result, ...timerresponse.result, ...enemyFireResponse.result]
+    const teleportContractAddress = teleportpowerupsAddress;
+
+    const teleportresponse = await client.listNFTsByAccountAddress({ chainName, accountAddress, contractAddress: teleportContractAddress });
+
+    const PowerupsResult = [...healthresponse.result, ...fireresponse.result, ...timerresponse.result, ...enemyFireResponse.result, ...teleportresponse.result]
 
     return {
       responseResult,
