@@ -49,6 +49,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const [enemyBullets, setEnemyBullets] = useState<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>([]);
   const [enemyCanFire, setEnemyCanFire] = useState(true);
   const [debris, setDebris] = useState<Debris[]>([]);
+  const [background, setBackground] = useState('bg-game')
   const [playerPosition, setPlayerPosition] = useState<ElementPosition>({
     x: START_POSITION.x,
     y: START_POSITION.y,
@@ -231,11 +232,11 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       movePlayer();
       moveEnemiesAndFireBullets(ENEMY_BULLET_HEIGHT, ENEMY_BULLET_WIDTH, ENEMY_FIRE_INTERVAL, enemyCanFire, setEnemyCanFire, setPlayerBulletPosition, playerBulletsPosition, setPlayerPosition, setEnemies, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
       movePlayerBullets(setPlayerBulletPosition, enemies, collide);
-      // moveEnemyBullets(setPlayerPosition, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
+      moveEnemyBullets(setPlayerPosition, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
 
       if (gameConst.Level > 2) {
         if (Math.random() < 1) {
-          // setDebris((currentDebris) => moveDebris(currentDebris));
+          setDebris((currentDebris) => moveDebris(currentDebris));
         }
       }
     }
@@ -331,6 +332,14 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
             </div>
           </div>
+          <div className='text-xl font-medium text-white my-4 flex items-center justify-center'>
+              <p className='mr-1'>Select Background:</p>
+              <div className='flex flex-row items-center justify-center'>
+                <img src='/background.png' onClick={() => setBackground('bg-game')} alt='background' width={60} height={60} className={`mx-1 ${background === 'bg-game'? 'border-4 border-white': ''}`} />
+                <img src='/background1.png' onClick={() => setBackground('bg-game1')} alt='background1' width={60} height={60} className={`mx-1 ${background === 'bg-game1'? 'border-4 border-white': ''}`} />
+                <img src='/background2.png' onClick={() => setBackground('bg-game2')} alt='background2' width={60} height={60} className={`mx-1 ${background === 'bg-game2'? 'border-4 border-white': ''}`} />
+              </div>
+            </div>
           <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
         </div> : !gameLogic.gameover && !gameConst.start ?
           <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
@@ -346,11 +355,19 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
+            <div className='text-xl font-medium text-white my-4 flex items-center justify-center'>
+              <p className='mr-1'>Select Background:</p>
+              <div className='flex flex-row items-center justify-center'>
+                <img src='/background.png' onClick={() => setBackground('bg-game')} alt='background' width={60} height={60} className={`mx-1 ${background === 'bg-game'? 'border-4 border-white': ''}`} />
+                <img src='/background1.png' onClick={() => setBackground('bg-game1')} alt='background1' width={60} height={60} className={`mx-1 ${background === 'bg-game1'? 'border-4 border-white': ''}`} />
+                <img src='/background2.png' onClick={() => setBackground('bg-game2')} alt='background2' width={60} height={60} className={`mx-1 ${background === 'bg-game2'? 'border-4 border-white': ''}`} />
+              </div>
+            </div>
             <p className='font-medium mt-2 mb-4'></p>
             <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Start</button>
           </div> :
           <div
-            className="w-[612px] h-[504px] mt-2 z-30 relative bg-game border-none rounded"
+            className={`w-[612px] h-[504px] mt-2 z-30 relative ${background} border-none rounded`}
             onKeyDown={(e) => pressed(e)}
             role="button"
             tabIndex={0}
