@@ -13,6 +13,7 @@ import { GameConstantsProps } from './gameConstants';
 import { useJWT } from '../key';
 import { UserProps, UserProvider } from '@/utils/immutable';
 import { moveEnemiesAndFireBullets, moveEnemyBullets } from './Enemy';
+import Link from 'next/link';
 
 export interface ElementPosition {
   x: number;
@@ -318,13 +319,17 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       {keyView ?
         <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
           <h1 className='text-2xl font-bold my-4'>Keys</h1>
+          <p className='font-medium mt-2 mb-2'>Shoot Bullets: <span className='font-normal text-[#30e9eb]'>Space Bar</span></p>
           <p className='font-medium mt-2 mb-2'>Move Left: <span className='font-normal text-[#30e9eb]'>Arrow Left</span></p>
           <p className='font-medium mt-2 mb-2'>Move Right: <span className='font-normal text-[#30e9eb]'>Arrow Right</span></p>
           <p className='font-medium mt-4 mb-2 text-slate-500'>These key unlock at level 2</p>
           <p className='font-medium mt-2 mb-2'>Move Left: <span className='font-normal text-[#30e9eb]'>Arrow Left</span></p>
           <p className='font-medium mt-2 mb-2'>Move Right: <span className='font-normal text-[#30e9eb]'>Arrow Right</span></p>
-          <p className='font-medium mt-4 mb-2 text-slate-500'>This key will unlock with Teleport NFT</p>
+          <p className='font-medium mt-4 mb-2 text-slate-500'>This key will unlock with Teleport Powerups NFT</p>
           <p className='font-medium mt-2 mb-2'>Teleport: <span className='font-normal text-[#30e9eb]'>M</span></p>
+          <p className='font-medium mt-2 mb-2'>Upgrade ypur ship in Inventory Page</p>
+          <Link href="/inventory"><button className="font-bold my-3 text-xl bg-orange-500 text-white px-4 py-1 rounded-full hover:bg-orange-600 transition duration-300">Inventory</button></Link>
+          <br />
           <button onClick={() => setKeyView(false)} className="font-bold my-4 text-xl bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-600 transition duration-300">Menu</button>
         </div>
         :
@@ -354,7 +359,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               </div>
             </div>
             <button onClick={() => setKeyView(true)} className="font-bold my-2 text-xl bg-[#008b8b] text-white px-4 pb-2 pt-1 rounded-full hover:bg-[#008b8b] transition duration-300">Keys</button>
-            <br/>
+            <br />
             <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
           </div> : !gameLogic.gameover && !gameConst.start ?
             <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
@@ -367,9 +372,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                   {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
                   {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
                   {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Enemy Fire' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.respawn === true ? <img src='/Teleport.png' alt='Teleport' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 || gameConst.respawn === true ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
-              </div>
+                  {gameConst.respawn === true ? <img src='/Teleport.png' alt='Teleport' width={30} height={30} className='mx-1' /> : null}
+                  {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 || gameConst.respawn === true ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+                </div>
               </div>
               <div className='text-xl font-medium text-white my-4 flex items-center justify-center'>
                 <p className='mr-1'>Select Background:</p>
