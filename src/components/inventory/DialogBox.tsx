@@ -43,7 +43,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
         setLevel(parseInt(extractNumberAsString(name)))
     }, [])
 
-    const LevelUpgrade = Level === 3 ? 3 : (Level + 1)
+    const LevelUpgrade = Level === 4 ? 4 : (Level + 1)
 
     const dataToSend = {
         id: tokenId,
@@ -110,7 +110,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                                 <h1 className='text-xl font-medium my-2 mb-7'>You can perform following actions.</h1>
                                 {contractAddress === shipAddress.toLowerCase() ? <button onClick={() => {
                                     setOption(2);
-                                    Level === 3 ? null : Level === 1 ? points < 200 || balance < 50 ? null : sendData() : Level === 2 ? points < 350 || balance < 100 ? null : sendData() : null;
+                                    Level === 4 ? null : Level === 1 ? points < 200 || balance < 50 ? null : sendData() : Level === 2 ? points < 300 || balance < 100 ? null : sendData() : Level === 3 ? points < 400 || balance < 150 ? null: sendData(): null;
                                 }} className='px-2 py-2 font-medium text-white bg-black hover:bg-gray-800 rounded mx-2'>Upgrade</button> : null}
                                 <button onClick={() => {
                                     setOption(1)
@@ -146,10 +146,15 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
 
                                             {Level === 2 ?
                                                 <div>
-                                                    {balance < 100 || points < 350 ? <p className='my-2 text-red-500 font-medium'>You need to hold 100 $IPX and have 350 points to upgrade to Level 3.</p> : null}
+                                                    {balance < 100 || points < 300 ? <p className='my-2 text-red-500 font-medium'>You need to hold 100 $IPX and have 300 points to upgrade to Level 3.</p> : null}
                                                 </div> : null}
 
-                                            {Level === 3 ?
+                                                {Level === 3 ?
+                                                <div>
+                                                    {balance < 150 || points < 400 ? <p className='my-2 text-red-500 font-medium'>You need to hold 150 $IPX and have 400 points to upgrade to Level 4.</p> : null}
+                                                </div> : null}
+
+                                            {Level === 4 ?
                                                 <div>
                                                     <p className='my-2 text-red-500 font-medium'>Your ship is at max level.</p>
                                                 </div> : null}

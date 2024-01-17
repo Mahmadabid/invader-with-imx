@@ -73,7 +73,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
       const debrisInterval = setInterval(() => {
         setDebris((prevDebris) => [...prevDebris, generateRandomDebris()]);
-      }, 1200);
+      }, gameConst.Level === 3? 1200: 800);
 
       return () => clearInterval(debrisInterval);
     }
@@ -111,7 +111,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const dataToSend = {
     userId: gameConst.userId,
     data: {
-      IPX: gameLogic.win ? gameConst.Level === 1 ? 1 : gameConst.Level === 2 ? 2 : 3 : 0,
+      IPX: gameLogic.win ? gameLogic.IPXUnclaimed : 0,
       TotalPoints: gameLogic.TotalPoints,
       Address: gameConst.Address,
     },
@@ -119,6 +119,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   }
 
   const sendData = async () => {
+    console.log(gameLogic.IPXUnclaimed, gameConst.Level, dataToSend.data.IPX)
+
     try {
       const response = await fetch('/api/data', {
         method: 'POST',
@@ -153,11 +155,15 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
   const pressed = ({ code }: React.KeyboardEvent) => {
 
+    if (code === 'KeyM') {
+      respawnPlayer(setPlayerPosition, gameConst)
+    }
+
     if (code === 'Space' && canFire) {
-      const bulletsToFire = gameConst.Level;
+      const bulletsToFire = gameConst.Level < 4? gameConst.Level: 3;
       const newBullets = Array.from({ length: bulletsToFire }, (_, index) => ({
         ...playerPosition,
-        y: gameConst.Level === 1 ? playerPosition.y + 25 * (index + 0.85) : gameConst.Level === 2 ? playerPosition.y + 25 * (index + 0.35) : playerPosition.y + 25 * (index - 0.2),
+        y: gameConst.Level === 1 ? playerPosition.y + 25 * (index + 1.15) : gameConst.Level === 2 ? playerPosition.y + 25 * (index + 0.38): gameConst.Level === 3 ? playerPosition.y + 25 * (index - 0.1): playerPosition.y + 25 * (index - 0.23),
         width: BULLET_WIDTH,
         height: BULLET_HEIGHT,
       }));
@@ -171,7 +177,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
 
       setTimeout(() => {
         setCanFire(true);
-      }, (1000 - gameConst.fireSpeed));
+      }, (gameConst.Level === 4? (800 - gameConst.fireSpeed): (1000 - gameConst.fireSpeed)));
     }
   };
 
@@ -190,11 +196,10 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
         ...prevGameLogic,
         win: true,
         gameover: true,
-        IPXUnclaimed: (gameConst.Level === 1 ? 1 : gameConst.Level === 2 ? 2 : 3)
       }));
     }
   }, [enemies])
-  
+
   const collide = (element1: ElementPosition, element2: ElementPosition) => {
     return (
       element1.x < element2.x + element2.width &&
@@ -203,7 +208,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       element1.y + element1.height > element2.y
     );
   };
-  
+
   const moveDebris = (debrisArray: Debris[]): Debris[] => {
     return debrisArray.map((debris) => {
       const updatedDebris = {
@@ -226,11 +231,11 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       movePlayer();
       moveEnemiesAndFireBullets(ENEMY_BULLET_HEIGHT, ENEMY_BULLET_WIDTH, ENEMY_FIRE_INTERVAL, enemyCanFire, setEnemyCanFire, setPlayerBulletPosition, playerBulletsPosition, setPlayerPosition, setEnemies, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
       movePlayerBullets(setPlayerBulletPosition, enemies, collide);
-      moveEnemyBullets(setPlayerPosition, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
+      // moveEnemyBullets(setPlayerPosition, playerPosition, setEnemyBullets, gameConst, gameLogic, setGameLogic, collide);
 
-      if (gameConst.Level === 3) {
+      if (gameConst.Level > 2) {
         if (Math.random() < 1) {
-          setDebris((currentDebris) => moveDebris(currentDebris));
+          // setDebris((currentDebris) => moveDebris(currentDebris));
         }
       }
     }
@@ -263,7 +268,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       gameover: false,
       TotalPoints: 0,
       Health: gameConst.Health,
-      IPXUnclaimed: 0,
       timer: gameConst.Level === 1 ? gameConst.timer + 4 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
       win: false,
       interval: (prevGameLogic.interval + 1)
@@ -276,7 +280,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     setPlayerBulletPosition([]);
     setDebris([]);
 
-    respawnPlayer(setPlayerPosition);
+    respawnPlayer(setPlayerPosition, gameConst);
     setGameConst((prevGameConst) => ({
       ...prevGameConst,
       start: true
@@ -289,7 +293,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
       gameover: false,
       TotalPoints: 0,
       Health: gameConst.Health,
-      IPXUnclaimed: 0,
       timer: gameConst.Level === 1 ? gameConst.timer + 4 : gameConst.Level === 2 ? gameConst.timer - 6 : gameConst.timer - 10,
       win: false,
       interval: (prevGameLogic.interval + 1)
@@ -302,7 +305,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
     setDebris([]);
     setPlayerBulletPosition([]);
 
-    respawnPlayer(setPlayerPosition);
+    respawnPlayer(setPlayerPosition, gameConst);
   }
 
   return (
@@ -375,9 +378,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               )}
             </div>
             <img
-              className="absolute"
-              src={gameConst.Level === 1 ? '/player.png' : gameConst.Level === 2 ? '/playerv2.png' : '/playerv3.png'}
-              style={{ top: playerPosition.x, left: playerPosition.y, width: gameConst.Level === 3 ? 50 : 56, height: gameConst.Level === 3 ? 50 : 56 }}
+              className="absolute z-50"
+              src={gameConst.Level === 1 ? '/player.png' : gameConst.Level === 2 ? '/playerv2.png' : gameConst.Level === 3 ? '/playerv3.png' : '/playerv4.png'}
+              style={{ top: playerPosition.x, left: playerPosition.y, width: gameConst.Level === 4 ? 50 : gameConst.Level === 1 ? 70 : 56, height: gameConst.Level === 4 ? 50 : gameConst.Level === 1 ? 70 : 56 }}
               alt="Player"
             />
             {enemies.map((enemy, index) => (
@@ -413,7 +416,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 alt={`Enemy Bullet ${index}`}
               />
             ))}
-            {!gameLogic.gameover && gameConst.Level === 3 ? debris.map((debris, index) => (
+            {!gameLogic.gameover && gameConst.Level > 2 ? debris.map((debris, index) => (
               <img
                 key={`debris${index}`}
                 className="absolute"

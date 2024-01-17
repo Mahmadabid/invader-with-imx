@@ -118,7 +118,7 @@ export default async function handler(
                     {
                         name: `Level ${levels} Ship`,
                         animation_url: null,
-                        image: parseInt(levels) === 2? "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZK7p8KTitDc1vxz23Xd83Ddo7jxrnebsjf8FKhc3AQh6/": 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTqceHT2tadsC89vFimny7Y5Di8DnQ2mdASodYzMsytCR/',
+                        image: parseInt(levels) === 3? "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmZK7p8KTitDc1vxz23Xd83Ddo7jxrnebsjf8FKhc3AQh6/": parseInt(levels) === 4? 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTqceHT2tadsC89vFimny7Y5Di8DnQ2mdASodYzMsytCR/': 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmRn5a6ZGXbJMhLKFomKGFBLZ8zrMyMBvgrU39tzrsUGpu/',
                         external_url: null,
                         youtube_url: null,
                         description: `This NFT represents your ship at level ${levels}. Also, it's your profile ship.`,
