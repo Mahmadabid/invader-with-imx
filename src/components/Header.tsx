@@ -117,19 +117,19 @@ const Header = () => {
         {router.pathname === '/' ?
           <button
             onClick={() => setHeaderVisible(false)}
-            className="text-white ml-4 absolute -bottom-6 px-1 pt-1 bg-black rounded left-5 transform -translate-x-1/2 focus:outline-none transition-transform duration-300 ease-in-out"
+            className="text-white ml-4 absolute -bottom-7 px-1 pt-1 bg-white rounded left-5 transform -translate-x-1/2 focus:outline-none transition-transform duration-300 ease-in-out"
           >
             <svg
               className={`w-7 h-7 inline-block`}
               fill="none"
-              stroke="currentColor"
+              stroke="black"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="4"
                 d="M5 15l7-7 7 7"
               />
             </svg>
@@ -138,19 +138,19 @@ const Header = () => {
     ) : router.pathname === '/' ? <header className="bg-black py-2 relative text-white shadow-md">
       <button
         onClick={() => setHeaderVisible(true)}
-        className="text-white ml-4 absolute -bottom-6 px-1 pt-1 bg-black rounded left-5 transform -translate-x-1/2 focus:outline-none transition-transform duration-300 ease-in-out"
+        className="text-white ml-4 absolute -bottom-7 px-1 pt-1 bg-white rounded left-5 transform -translate-x-1/2 focus:outline-none transition-transform duration-300 ease-in-out"
       >
         <svg
           className='w-7 h-7 inline-block'
           fill="none"
-          stroke="currentColor"
+          stroke="black"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2"
+            strokeWidth="4"
             d="M19 9l-7 7-7-7"
           />
         </svg>
