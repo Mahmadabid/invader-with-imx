@@ -340,8 +340,9 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                 {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
                 {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+                {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Enemy Fire' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.respawn === true ? <img src='/Teleport.png' alt='Teleport' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 || gameConst.respawn === true ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
               </div>
             </div>
             <div className='text-xl font-medium text-white my-4 flex items-center justify-center'>
@@ -365,9 +366,10 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
                   {gameConst.Health === 4 ? <img src='/health.png' alt='Bullets' width={30} height={30} className='mx-1' /> : null}
                   {gameConst.fireSpeed === 100 ? <img src='/Bullets.png' alt='Health' width={30} height={30} className='mx-1' /> : null}
                   {gameConst.timer === 35 ? <img src='/time.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                  {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Time' width={30} height={30} className='mx-1' /> : null}
-                  {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
-                </div>
+                  {gameConst.enemyFire === 0.005 ? <img src='/EnemiesBullets.png' alt='Enemy Fire' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.respawn === true ? <img src='/Teleport.png' alt='Teleport' width={30} height={30} className='mx-1' /> : null}
+                {gameConst.Health === 4 || gameConst.fireSpeed === 100 || gameConst.timer === 35 || gameConst.enemyFire === 0.005 || gameConst.respawn === true ? null : <p className='text-slate-400 font-medium ml-2'>Buy some Powerups in Market</p>}
+              </div>
               </div>
               <div className='text-xl font-medium text-white my-4 flex items-center justify-center'>
                 <p className='mr-1'>Select Background:</p>
