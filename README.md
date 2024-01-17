@@ -1,6 +1,7 @@
 # Pixels Invader
 
-## [Game](https://pixels-invader.vercel.app/)
+### Play the Game
+[Game App](https://pixels-invader.vercel.app/)
 
 ![image](https://github.com/Mahmadabid/invader-with-imx/assets/75790323/ebc638a6-538a-4109-8ed6-adbcb39f2aff)
 
