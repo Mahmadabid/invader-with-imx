@@ -50,7 +50,7 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
   const [enemyBullets, setEnemyBullets] = useState<{ x: number; y: number; width: number; height: number; isFired: boolean, initialX: number }[]>([]);
   const [enemyCanFire, setEnemyCanFire] = useState(true);
   const [debris, setDebris] = useState<Debris[]>([]);
-  const [background, setBackground] = useState('bg-game');
+  const [background, setBackground] = useState('bg-game2');
   const [keyView, setKeyView] = useState(false);
   const [playerPosition, setPlayerPosition] = useState<ElementPosition>({
     x: START_POSITION.x,
@@ -327,9 +327,6 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
           <p className='font-medium mt-2 mb-2'>Move Right: <span className='font-normal text-[#30e9eb]'>Arrow Right</span></p>
           <p className='font-medium mt-4 mb-2 text-slate-500'>This key will unlock with Teleport Powerups NFT</p>
           <p className='font-medium mt-2 mb-2'>Teleport: <span className='font-normal text-[#30e9eb]'>M</span></p>
-          <p className='font-medium mt-2 mb-2'>Upgrade ypur ship in Inventory Page</p>
-          <Link href="/inventory"><button className="font-bold my-3 text-xl bg-orange-500 text-white px-4 py-1 rounded-full hover:bg-orange-600 transition duration-300">Inventory</button></Link>
-          <br />
           <button onClick={() => setKeyView(false)} className="font-bold my-4 text-xl bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-600 transition duration-300">Menu</button>
         </div>
         :
@@ -361,6 +358,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
             <button onClick={() => setKeyView(true)} className="font-bold my-2 text-xl bg-[#008b8b] text-white px-4 pb-2 pt-1 rounded-full hover:bg-[#008b8b] transition duration-300">Keys</button>
             <br />
             <button onClick={handleStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300">Start Again</button>
+            <br />
+            <Link href="/inventory"><button className="font-bold my-4 text-xl bg-orange-500 text-white px-4 pt-1 pb-2 rounded-full hover:bg-orange-600 transition duration-300">Upgrade Ship</button></Link>
           </div> : !gameLogic.gameover && !gameConst.start ?
             <div className="w-[612px] h-[504px] mt-2 z-30 text-white text-center bg-black rounded">
               <h1 className='text-2xl font-bold my-4'>Ready!</h1>
@@ -388,6 +387,8 @@ export const SpaceInvader: React.FC<SpaceInvadersProps> = ({ gameConst, setGameC
               <button onClick={() => setKeyView(true)} className="font-bold my-2 text-xl bg-[#008b8b] text-white px-4 pb-2 pt-1 rounded-full hover:bg-[#008b8b] transition duration-300">Keys</button>
               <br />
               <button onClick={handleFirstStart} className="font-bold mt-3 text-2xl bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300">Start</button>
+              <br />
+              <Link href="/inventory"><button className="font-bold my-4 text-xl bg-orange-500 text-white px-4 pt-1 pb-2 rounded-full hover:bg-orange-600 transition duration-300">Upgrade Ship</button></Link>
             </div> :
             <div
               className={`w-[612px] h-[504px] mt-2 z-30 relative ${background} border-none rounded`}
