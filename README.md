@@ -46,6 +46,7 @@ Replace FolderName with the name of folder:
 ./node_modules/.bin/ts-node src/nftData/ship/generateFile.ts
 ./node_modules/.bin/ts-node src/nftData/timer/generateFile.ts
 ./node_modules/.bin/ts-node src/nftData/health/generateFile.ts
+./node_modules/.bin/ts-node src/nftData/teleport/generateFile.ts
 ./node_modules/.bin/ts-node src/nftData/firing/generateFile.ts
 ./node_modules/.bin/ts-node src/nftData/enemyFiring/generateFile.ts
 ```
@@ -54,13 +55,15 @@ Fire Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-
 
 Health Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/generateFile.ts). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
 
+Teleport Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/teleport/generateFile.ts). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
+
 Timer Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/generateFile.ts). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
 
 Enemy Fire Powerups Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/enemyFiring/generateFile.ts). It fetches the total number of NFTs minted and generate their files and add additional 50 files to accomodate new players.
 
-Ships Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/generateFile.ts). It fetches the total number of NFTs minted and the tokenID and their Level and generates their files by their level to upgrade Ships to Level 2 and 3 and add additional 50 files to accomodate new players.
+Ships Contract [generateFiles.ts](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/generateFile.ts). It fetches the total number of NFTs minted and the tokenID and their Level and generates their files by their level to upgrade Ships to Level 2, 3 and 4 and add additional 50 files to accomodate new players.
 
-Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/metadataRefresh.ts), [Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/firing/metadataRefresh.ts), [Enemy Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/enemyFiring/metadataRefresh.ts), [Health](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/metadataRefresh.ts), [Timer](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/metadataRefresh.ts)
+Metadata is Refreshed using ```metadataRefresh.ts``` of each contract, [Ship](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/ship/metadataRefresh.ts), [Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/firing/metadataRefresh.ts), [Enemy Fire](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/enemyFiring/metadataRefresh.ts), [Health](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/health/metadataRefresh.ts), [Timer](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/timer/metadataRefresh.ts), [Teleport](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/nftData/tteleport/metadataRefresh.ts)
 
 Use this command
 ```
@@ -137,6 +140,11 @@ This contract is Immutable prebuilt ERC721 contract. It was modified to track to
 
 This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Extra Health NFT by burning IPX.
 
+#### Teleport Smart Contract
+[Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
+
+This contract is Immutable prebuilt ERC721 contract. It was modified to track total Mint amount and mint the Teleport NFT by burning IPX.
+
 #### Timer Smart Contract
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/smartContracts/contracts/PowerupsMint.sol)
 
@@ -172,7 +180,7 @@ It mints Ship for new player using immutable sdk mint function. It also sets the
 #### Upgrade API
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/api/upgrade.ts)
 
-It upgrades Ship to Level 2 and 3. It also uses metadata refresh from immutable and refreshes the data of NFT.
+It upgrades Ship to Level 2, 3 and 4. It also uses metadata refresh from immutable and refreshes the data of NFT.
 
 
 #### Web3 API
@@ -213,15 +221,28 @@ Level upgrades your ship. Level also determines difficulty level.
 - Ship can move in all directions. 
 - It shoots 3 bullets.
 - Aliens Firing is faster
-- On winning 3 IPX is awarded.
+- On winning 2.5 IPX is awarded.
 - Debris starts coming.
 
+**Level 4** 
+- Aliens are same in number as Level 3. 
+- Time is 20sec. 
+- Ship can move in all directions. 
+- It shoots 3 bullets.
+- Aliens Firing is faster
+- On winning 3 IPX is awarded.
+- Debris appears more frequently.
+- Ship fires faster.
+- Ship moves faster.
+- Ship can move through right border to left border and vice versa (no horizontal barrier for ship).
+
 #### Powerups
-There are three powerups in this game. Extra Health, Extra Time and Faster Firing. These can be bought in market. 
+There are five powerups in this game. Extra Health, Extra Time, Teleport, Slower Enemy Firing and Faster Firing. These can be bought in market. 
 - Extra Health gives 1 extra health.
 - Extra Time gives 5 extra seconds.
 - Faster Firing speed up Players Firing by 100 milliseconds or 0.1 seconds
 - Slower Enemy Firing slows down Enemy Firing.
+- Teleport allows you to teleport at Starting Position.
 
 
 ## Pages
