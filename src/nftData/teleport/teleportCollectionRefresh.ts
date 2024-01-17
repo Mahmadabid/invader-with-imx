@@ -1,9 +1,9 @@
 import { blockchainData } from '@imtbl/sdk';
 import { client } from '../utils';
-import { enemyFirepowerupsAddress, newEnemyFireBaseURI } from '../../components/Contracts/EnemyFirePowerupsContract';
+import { newTeleportBaseURI, teleportpowerupsAddress } from '../../components/Contracts/TeleportPowerupsContract';
 
-const CONTRACT_ADDRESS = enemyFirepowerupsAddress;
-const NEW_BASE_URI = newEnemyFireBaseURI;
+const CONTRACT_ADDRESS = teleportpowerupsAddress;
+const NEW_BASE_URI = newTeleportBaseURI;
 
 const refreshCollectionMetadata = async (client: blockchainData.BlockchainData, chainName: string, contractAddress: string) => {
   const collection = await client.getCollection({ chainName: chainName, contractAddress: contractAddress })

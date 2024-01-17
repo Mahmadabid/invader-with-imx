@@ -254,6 +254,55 @@ const Market = () => {
         }
     };
 
+    const handleTeleportBuy = async () => {
+        setTxn(true);
+
+        if (!signer) {
+            console.error('Signer not available');
+            return;
+        }
+
+        try {
+            const contract = new ethers.Contract(firepowerupsAddress, firepowerupsABI, signer);
+            const gameToken = new ethers.Contract(gameTokenAddress, gameTokenABI, signer);
+
+            const burnToken = ethers.utils.parseEther('30');
+            const burnApprove = ethers.utils.parseEther('31');
+
+            const gasPrice = ethers.utils.parseUnits('10', 'gwei');
+
+            if (parseFloat(walletIPX) < 30) {
+                setTxnError('You dont have enough IPX');
+                return;
+            }
+
+            if (parseFloat(walletBalance) < 0.013) {
+                setTxnError('You dont have enough tIMX');
+                return;
+            }
+
+            setApprove(true);
+
+            const approveTx = await gameToken.approve(firepowerupsAddress, burnApprove);
+            await approveTx.wait();
+
+            setApprove(false);
+
+            const TokenID = getNextTokenId('fire')
+
+            const transaction = await contract.mint(walletAddress, TokenID, burnToken, {
+                gasPrice: gasPrice,
+            });
+            const receipt = await transaction.wait();
+
+            setHash(await receipt.transactionHash)
+
+            console.log('Sell successful!');
+        } catch (error: any) {
+            setTxnError(error.message)
+        }
+    };
+
     return (
         <div>
             {Txn ? (
@@ -337,6 +386,7 @@ const Market = () => {
                         <Card image="/Bullets.png" name="Faster Firing" price="30" onButtonClick={handleFireBuy} />
                         <Card image="/time.png" name="Extra Time +5 sec" price="30" onButtonClick={handleTimeBuy} />
                         <Card image="/EnemiesBullets.png" name="Slower Enemy Firing" price="30" onButtonClick={handleEnemyFireBuy} />
+                        <Card image="/Teleport.png" name="Teleport" price="30" onButtonClick={handleTeleportBuy} />
                         <Card image="/gray.png" name="Coimg Soon" price="0" onButtonClick={() => { }} />
                     </div>
                 </div>

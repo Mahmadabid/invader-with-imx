@@ -1,0 +1,13 @@
+{
+  "id": "49",
+  "image": "https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmR4fgNC2GFnWn2yadUZfsmeS5ZgRuEcJwCXaEWFiyjPqV/",
+  "token_id": "49",
+  "name": "Teleport",
+  "description": "This NFT allows your ship to teleport to starting position.",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    }
+  ]
+}

@@ -2,12 +2,12 @@ import { getDefaultProvider, Wallet } from 'ethers';
 import { Provider, TransactionResponse } from '@ethersproject/providers';
 import { ERC721Client } from '@imtbl/contracts';
 import { PrivateKey } from '../utils';
-import { enemyFirepowerupsAddress, newEnemyFireBaseURI } from '../../components/Contracts/EnemyFirePowerupsContract';
+import { newTeleportBaseURI, teleportpowerupsAddress } from '../../components/Contracts/TeleportPowerupsContract';
 
-const CONTRACT_ADDRESS = enemyFirepowerupsAddress;
+const CONTRACT_ADDRESS = teleportpowerupsAddress;
 const PRIVATE_KEY = PrivateKey;
 const provider = getDefaultProvider('https://rpc.testnet.immutable.com');
-const NEW_BASE_URI = newEnemyFireBaseURI;
+const NEW_BASE_URI = newTeleportBaseURI;
 
 const updateCollectionBaseURI = async (
   provider: Provider

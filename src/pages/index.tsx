@@ -130,6 +130,15 @@ const Home = () => {
       }));
     }
 
+    const teleportNFTPowerups = NFTPowerupsstate?.filter((nft) => nft.name === 'Teleport');
+
+    if (teleportNFTPowerups && teleportNFTPowerups.length > 0) {
+      setGameConst((prevGameConst) => ({
+        ...prevGameConst,
+        respawn: true,
+      }));
+    }
+
   }, [NFTPowerupsstate]);
 
   

@@ -7,6 +7,7 @@ export interface GameConstantsProps {
   start: boolean;
   timer: number;
   enemyFire: number;
+  respawn: boolean;
   Address: string;
   userId: string;
 }
@@ -19,6 +20,7 @@ export const useGameConstants = () => {
     start: false,
     timer: 30,
     enemyFire: 0,
+    respawn: false,
     Address: '',
     userId: '',
   };
