@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [localProvider, setLocalProvider] = useState<'passport' | 'metamask' | undefined>(undefined);
   const [userLoading, setUserLoading] = useState(true);
   const router = useRouter();
-
+console.log(userLoading)
   useEffect(() => {
     const userStorageData = localStorage.getItem('user_provider_pixels_invader');
     const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
