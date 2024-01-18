@@ -28,30 +28,24 @@ export default function App({ Component, pageProps }: AppProps) {
             setUserLoading(false);
             return;
           }
-          else {
-            setUserLoading(false);
-          }
         }
 
         if (userParsedData === 'metamask') {
-          console.log('hhhhhhh')
+          console.log('hello')
           const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
           console.log(accounts, accounts.length)
           if (accounts.length > 0) {
             setUser('metamask');
             setUserLoading(false);
             return;
-          } else {
-            setUserLoading(false);
           }
         }
       }
     } catch (error) {
+      console.log('hssi')
       console.error('Error checking user login:', error);
     } finally {
-      console.log('hi')
       setUserLoading(false);
-      console.log('bye')
     }
   };
 
