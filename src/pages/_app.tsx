@@ -34,6 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
         }
 
         if (userParsedData === 'metamask') {
+          console.log('hhhhhhh')
           const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
           console.log(accounts, accounts.length)
           if (accounts.length > 0) {
