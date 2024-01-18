@@ -13,12 +13,10 @@ export default function App({ Component, pageProps }: AppProps) {
   const [User, setUser] = useState<'passport' | 'metamask' | undefined>(undefined);
   const [userLoading, setUserLoading] = useState(true);
   const router = useRouter();
+  const userStorageData = localStorage.getItem('user_provider_pixels_invader');
+  const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
 
   const checkUserLoggedIn = async () => {
-    const userStorageData = localStorage.getItem('user_provider_pixels_invader');
-
-    const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
-
     try {
       if (userParsedData) {
         if (userParsedData === 'passport') {
@@ -31,7 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
         }
 
         if (userParsedData === 'metamask') {
-          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' }).then(console.log('hhh'));
+          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
           console.log(accounts, accounts.length)
           if (accounts.length > 0) {
             setUser('metamask');
@@ -49,7 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     checkUserLoggedIn();
-  }, []);
+  }, [userParsedData]);
 
   return (
     <>
