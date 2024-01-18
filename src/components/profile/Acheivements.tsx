@@ -12,7 +12,7 @@ interface AchievementsProps {
 const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, walletIPX }) => {
 
     const getBurnBadgeCount = () => {
-        const balance = parseInt(burnBalance, 10);
+        const balance = parseFloat(burnBalance);
         if (balance >= 300) {
             return 3;
         } else if (balance >= 150) {
@@ -38,7 +38,7 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, w
     };
 
     const getHolderBadgeCount = () => {
-        const balance = parseInt(walletIPX, 10);
+        const balance = parseFloat(walletIPX);
         if (balance >= 300) {
             return 3;
         } else if (balance >= 150) {
@@ -62,10 +62,10 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, w
                 <>
                     {badgeCount < 3 && (
                         <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">
-                            {parseInt(burnBalance) < 50 ?
-                                `Burn ${50 - parseInt(burnBalance)} $IPX for level 1` : parseInt(burnBalance) < 150 ?
-                                    `Burn ${150 - parseInt(burnBalance)} $IPX for level 2` : parseInt(burnBalance) < 300 ?
-                                        `Burn ${300 - parseInt(burnBalance)} $IPX for level 3` : null}
+                            {parseFloat(burnBalance) < 50 ?
+                                `Burn ${50 - parseFloat(burnBalance)} $IPX for level 1` : parseFloat(burnBalance) < 150 ?
+                                    `Burn ${150 - parseFloat(burnBalance)} $IPX for level 2` : parseFloat(burnBalance) < 300 ?
+                                        `Burn ${300 - parseFloat(burnBalance)} $IPX for level 3` : null}
                         </div>
                     )}
 
@@ -138,10 +138,10 @@ const Achievements: React.FC<AchievementsProps> = ({ burnBalance, TotalPoints, w
                 <>
                     {HolderBadgeCount < 3 && (
                         <div className="mt-4 text-xl bg-black opacity-70 w-fit px-2 mx-auto">
-                            {parseInt(walletIPX) < 50 ?
-                                `Hold ${50 - parseInt(walletIPX)} $IPX for level 1` : parseInt(walletIPX) < 150 ?
-                                    `Hold ${150 - parseInt(walletIPX)} $IPX for level 2` : parseInt(walletIPX) < 300 ?
-                                        `Hold ${300 - parseInt(walletIPX)} $IPX for level 3` : null}
+                            {parseFloat(walletIPX) < 50 ?
+                                `Hold ${50 - parseFloat(walletIPX)} $IPX for level 1` : parseFloat(walletIPX) < 150 ?
+                                    `Hold ${150 - parseFloat(walletIPX)} $IPX for level 2` : parseFloat(walletIPX) < 300 ?
+                                        `Hold ${300 - parseFloat(walletIPX)} $IPX for level 3` : null}
                         </div>
                     )}
 

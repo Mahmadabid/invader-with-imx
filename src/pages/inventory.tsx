@@ -19,8 +19,8 @@ const Inventory = () => {
     const fetchData = async () => {
       setInfoLoading(true);
       const result = await getInventoryData(User);
-      setBalance(parseInt(result.balance));
-      setIMX(parseInt(result.balanceInEther));
+      setBalance(parseFloat(result.balance));
+      setIMX(parseFloat(result.balanceInEther));
       try {
         setPoints(result.data.entries[0].data.TotalPoints);
       } catch {
