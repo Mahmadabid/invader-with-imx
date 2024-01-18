@@ -134,7 +134,7 @@ const DialogBox: React.FC<DialogProps> = ({ handleClose, name, tokenId, contract
                                                     setLoading(true);
                                                     transfer(inputValue, tokenId ? tokenId : '', contractAddress ? contractAddress : '', setTxn, User)
                                                 }} className='bg-blue-500 hover:bg-teal-500 rounded text-white mt-3 p-2'>Transfer</button>
-                                                {userProvider === 'passport'? <p className='mt-2 font-bold text-2xl text-sky-700'>Note: <span className='text-xl font-semibold text-red-700'>Immutable Passport Wallet may cause error.</span><br /><span className='text-xl font-bold text-cyan-600'>Use Metamask</span></p>: null}
+                                                {userProvider === 'passport'? <p className='mt-2 font-bold text-2xl text-sky-700'>Note: <span className='text-xl font-semibold text-red-700'>Immutable passport wallets may cause error on NFT transfers.</span><br /><span className='text-xl font-bold text-cyan-600'>Use Metamask</span></p>: null}
                                             </div>
                                         }
                                     </div>
