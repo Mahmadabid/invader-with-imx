@@ -15,7 +15,7 @@ https://github.com/Mahmadabid/invader-with-imx/assets/75790323/add1ccd9-5f1b-49d
 - mongodb
 - nextjs
 - pinata
-- open graph
+- open
 
 ## Immutable zkevm
 Following Products of immutable zkevm were used
@@ -313,5 +313,5 @@ This page displays the info about IPX token also it fetches total burned amount 
 #### 9. Root Page 
 [Code](https://github.com/Mahmadabid/invader-with-imx/blob/master/src/pages/_app.tsx)
 
-This page fetches User Data and handles login ensuring page remains the same after reload It handles both metamask and immutable passport.
+This page fetches User Data and handles login ensuring page remains the same after reload It handles both metamask and immutable passport. It also handles open graph for social media cards.
 
