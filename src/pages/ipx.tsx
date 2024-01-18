@@ -111,7 +111,7 @@ const IPXPage = () => {
     return (
         <div className="bg-gray-950 text-white flex flex-col items-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
 
-            <h1 className="text-4xl md:text-5xl my-6 font-extrabold">IPX Token Details</h1>
+            <h1 className="text-4xl xb:text-3xl md:text-5xl py-6 font-extrabold">IPX Token Details</h1>
 
             <div className="flex flex-col md:flex-row items-center justify-center my-4">
                 <div className="mr-4">
@@ -179,8 +179,8 @@ const IPXPage = () => {
                 </Link>
             </div>
 
-            <p className="text-lg my-2">
-                Contract Address: <span className="font-mono">{gameTokenAddress}</span>
+            <p className="text-xl my-3 mx-1 font-semibold">
+                Contract Address: <span className="font-normal text-lg break-all">{gameTokenAddress}</span>
             </p>
         </div>
     );

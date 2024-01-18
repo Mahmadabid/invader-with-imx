@@ -99,7 +99,7 @@ const Leaderboard = () => {
 
     return (
         <div className="bg-gray-950 text-white text-center pb-1" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
-            <h1 className="text-6xl py-10 font-bold">Leaderboard</h1>
+            <h1 className="text-6xl xb:text-3xl py-10 font-bold">Leaderboard</h1>
             <button onClick={() => setActiveTab(0)} className="font-bold text-2xl bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300">Player</button>
             <button onClick={() => setActiveTab(1)} className="font-bold m-2 text-2xl bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition duration-300">Burn</button>
             <button onClick={() => setActiveTab(2)} className="font-bold text-2xl bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300">Buyer</button>
