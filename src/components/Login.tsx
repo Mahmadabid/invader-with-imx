@@ -57,7 +57,7 @@ function Login({ userLoading }: LoadProps) {
   }, [connect]);
 
   const headerHeight = 4.6;
-console.log(loading, userLoading)
+
   return (
     <div className="flex items-center bg-gray-950 text-white justify-center" style={{ minHeight: `calc(100vh - ${headerHeight}rem)` }}>
       <div className="text-center">
