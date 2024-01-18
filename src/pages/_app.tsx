@@ -20,15 +20,16 @@ export default function App({ Component, pageProps }: AppProps) {
     const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
 
     try {
-      console.log('opn')
       if (userParsedData) {
-        console.log(userParsedData)
         if (userParsedData === 'passport') {
           const userProfile = await passportInstance.getUserInfo();
           if (userProfile !== undefined) {
             setUser('passport');
             setUserLoading(false);
             return;
+          }
+          else {
+            setUserLoading(false);
           }
         }
 
@@ -39,6 +40,8 @@ export default function App({ Component, pageProps }: AppProps) {
             setUser('metamask');
             setUserLoading(false);
             return;
+          } else {
+            setUserLoading(false);
           }
         }
       }
