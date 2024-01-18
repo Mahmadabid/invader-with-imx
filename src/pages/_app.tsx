@@ -31,8 +31,8 @@ export default function App({ Component, pageProps }: AppProps) {
         }
 
         if (userParsedData === 'metamask') {
-
           const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+          console.log(accounts, accounts.length)
           if (accounts.length > 0) {
             setUser('metamask');
             setUserLoading(false);
@@ -43,7 +43,9 @@ export default function App({ Component, pageProps }: AppProps) {
     } catch (error) {
       console.error('Error checking user login:', error);
     } finally {
+      console.log('hi')
       setUserLoading(false);
+      console.log('bye')
     }
   };
 
