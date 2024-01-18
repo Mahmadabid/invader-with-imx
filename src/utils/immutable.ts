@@ -213,38 +213,6 @@ const getProfileInfo = async (User: UserProps) => {
   };
 }
 
-const ethersContractInstance = async (signer: Signer, CONTRACT_ADDRESS: string) => {
-
-  return new ethers.Contract(
-    CONTRACT_ADDRESS,
-    [
-      'function safeTransferFrom(address from, address to, uint256 tokenId)',
-    ],
-    signer,
-  );
-};
-
-const ethersTransfer = async (RECIPIENT: string, TOKEN_ID: string, CONTRACT_ADDRESS: string, setTxn: (value: React.SetStateAction<any>) => void, User: UserProps) => {
-
-  const signer = await signerFetch(User);
-
-  const sender = await signer.getAddress();
-
-  const contract = await ethersContractInstance(signer, CONTRACT_ADDRESS);
-
-  const transaction = await contract.safeTransferFrom(sender, RECIPIENT, TOKEN_ID, {
-    maxPriorityFeePerGas: 100e9,
-    maxFeePerGas: 150e9,
-    gasLimit: 2000000,
-  });
-
-  await transaction.wait();
-
-  setTxn(transaction.hash);
-
-  return;
-}
-
 const contractInstance = (CONTRACT_ADDRESS: string) => {
 
   return new ERC721Client(CONTRACT_ADDRESS);
