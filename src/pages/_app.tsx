@@ -32,12 +32,19 @@ export default function App({ Component, pageProps }: AppProps) {
 
         if (userParsedData === 'metamask') {
           console.log('hello')
-          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-          console.log(accounts, accounts.length)
-          if (accounts.length > 0) {
-            setUser('metamask');
-            setUserLoading(false);
-            return;
+          try {
+            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+            console.log(accounts, accounts.length)
+            if (accounts.length > 0) {
+              setUser('metamask');
+              setUserLoading(false);
+              return;
+            }
+          } catch (error) {
+            console.log('hasda')
+            console.log(error)
+          } finally {
+            setUserLoading(false)
           }
         }
       }
@@ -55,12 +62,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-     <Head>
+      <Head>
         <meta property="og:title" content="Pixels Invader" key="ogtitle" />
         <meta property="og:description" content="A web3 version of Space Invaders game built on Nextjs and Immutable Zkevm" key="ogdesc" />
         <meta property="og:image" content="/background2.png" key="ogimage" />
         <meta property="og:url" content="https://pixels-invader.vercel.app/" key="ogurl" />
-        
+
         <meta name="twitter:title" content="Pixels Invader" key="twittertitle" />
         <meta name="twitter:description" content="A web3 version of Space Invaders game built on Nextjs and Immutable Zkevm" key="twitterdesc" />
         <meta name="twitter:image" content="/background2.png" key="twitterimage" />
