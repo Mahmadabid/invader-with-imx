@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const userStorageData = localStorage.getItem('user_provider_pixels_invader');
 
     const userParsedData = userStorageData?.toString() as 'metamask' | 'passport' | undefined;
-
+    console.log(userParsedData)
     try {
       if (userParsedData) {
         if (userParsedData === 'passport') {
@@ -50,7 +50,9 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => {
+    console.log('check')
     checkUserLoggedIn();
+    console.log('checked')
   }, []);
 
   return (
