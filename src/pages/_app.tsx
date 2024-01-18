@@ -4,13 +4,9 @@ import '@/styles/globals.css'
 import { UserContext } from '@/utils/Context';
 import { passportInstance } from '@/utils/immutable';
 import type { AppProps } from 'next/app'
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-interface localStorageProps {
-  isMetaMask: boolean;
-  isPassportWallet: boolean;
-}
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -56,14 +52,26 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <UserContext.Provider value={[User, setUser]}>
-      <Layout>
-        {!User && router.pathname !== '/auth/callback' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
-          <Login userLoading={userLoading} />
-          :
-          <Component {...pageProps} />}
-      </Layout>
-    </UserContext.Provider>
-
+    <>
+     <Head>
+        <meta property="og:title" content="Pixels Invader" key="ogtitle" />
+        <meta property="og:description" content="A web3 version of Space Invaders game built on Nextjs and Immutable Zkevm" key="ogdesc" />
+        <meta property="og:image" content="/background2.png" key="ogimage" />
+        <meta property="og:url" content="https://pixels-invader.vercel.app/" key="ogurl" />
+        
+        <meta name="twitter:title" content="Pixels Invader" key="twittertitle" />
+        <meta name="twitter:description" content="A web3 version of Space Invaders game built on Nextjs and Immutable Zkevm" key="twitterdesc" />
+        <meta name="twitter:image" content="/background2.png" key="twitterimage" />
+        <meta name="twitter:card" content="Pixels Invaders" key="twittercard" />
+      </Head>
+      <UserContext.Provider value={[User, setUser]}>
+        <Layout>
+          {!User && router.pathname !== '/auth/callback' && router.pathname !== '/ipx' && router.pathname !== '/leaderboard' ?
+            <Login userLoading={userLoading} />
+            :
+            <Component {...pageProps} />}
+        </Layout>
+      </UserContext.Provider>
+    </>
   )
 }
