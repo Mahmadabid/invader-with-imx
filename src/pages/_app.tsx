@@ -31,24 +31,16 @@ export default function App({ Component, pageProps }: AppProps) {
         }
 
         if (userParsedData === 'metamask') {
-          try {
-            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' }).then(() => console.log('hhh'));
-            console.log(accounts, accounts.length)
-            if (accounts.length > 0) {
-              setUser('metamask');
-              setUserLoading(false);
-              return;
-            }
-          } catch (error) {
-            console.log('hasda')
-            console.log(error)
-          } finally {
-            setUserLoading(false)
+          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' }).then(console.log('hhh'));
+          console.log(accounts, accounts.length)
+          if (accounts.length > 0) {
+            setUser('metamask');
+            setUserLoading(false);
+            return;
           }
         }
       }
     } catch (error) {
-      console.log('hssi')
       console.error('Error checking user login:', error);
     } finally {
       setUserLoading(false);
