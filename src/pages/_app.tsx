@@ -31,9 +31,8 @@ export default function App({ Component, pageProps }: AppProps) {
         }
 
         if (userParsedData === 'metamask') {
-          console.log('hello')
           try {
-            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+            const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' }).then(() => console.log('hhh'));
             console.log(accounts, accounts.length)
             if (accounts.length > 0) {
               setUser('metamask');
