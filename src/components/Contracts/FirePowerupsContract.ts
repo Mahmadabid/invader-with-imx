@@ -1,4 +1,4 @@
-export const firepowerupsAddress = '0x5ac257bad33f641BB285af5218acc2C04CA3Cb13';
+export const firepowerupsAddress = '0xf26a7278d7291D402A0D22bdB4a284D4Cf0390Fa';
 
 export const fireBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmcAfFLSNRdLiTsy6P3oUQgn8TLd8FkdsJeqdk9WJE6ntz/';
 

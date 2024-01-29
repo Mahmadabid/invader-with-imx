@@ -1,4 +1,4 @@
-export const teleportpowerupsAddress = '0xD992fd072B9AbD5eBDA035287f440fE75C11AaEb';
+export const teleportpowerupsAddress = '0x62a11dbeEec7343721646Cc758C705649CAC7EFF';
 
 export const teleportBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmVrSZtZWFA31UxUY4Na3hLniL8ifbfoXoh1rKjpPn5Gtc/';
 

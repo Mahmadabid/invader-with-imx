@@ -1,4 +1,4 @@
-export const timerpowerupsAddress = '0xe92d501447b32e259B4C5c072f8474c46127Cc18';
+export const timerpowerupsAddress = '0x59ABc88557Eccf6982bA504BE083c32C7A709099';
 
 export const timerBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmS7xuucHMgTroQGCC8MqYXU2q9QDeNfe8xPuvSYf1a8fQ/';
 

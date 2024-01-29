@@ -8,6 +8,7 @@ import "./GameToken.sol";
 contract PowerupsMint is ImmutableERC721Base {
     uint256 private _totalMint;
     GameToken public gameToken;
+    uint256 public tokenAmountToSell; 
 
     ///     =====   Constructor  =====
 
@@ -35,7 +36,10 @@ contract PowerupsMint is ImmutableERC721Base {
         address tokenAddress
     )
         ImmutableERC721Base(owner_, name_, symbol_, baseURI_, contractURI_, operatorAllowlist_, royaltyReceiver_, feeNumerator_)
-    {gameToken = GameToken(tokenAddress);}
+    {
+        gameToken = GameToken(tokenAddress);
+        tokenAmountToSell = 30000000000000000000;
+    }
 
     /** @notice Allows minter to mint `tokenID` to `to`
      *  @param to the address to mint the token to
@@ -47,15 +51,20 @@ contract PowerupsMint is ImmutableERC721Base {
         _safeMint(to, tokenID, "");
     }
 
+    function setTokenAmountToSell(uint256 newTokenAmountToSell) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        tokenAmountToSell = newTokenAmountToSell;
+    }
+
     /** @notice Allows minter to mint `tokenID` to `to`
      *  @param to the address to mint the token to
      *  @param tokenID the ID of the token to mint
      */
-    function mint(address to, uint256 tokenID, uint256 tokenAmountToSell) external {
+    function mint(address to, uint256 tokenID, uint256 tokenValueToSell) external {
+        require(tokenValueToSell >= tokenAmountToSell, "Token amount to sell must be greater than zero");
         _totalMint++;
         _totalSupply++;
         _mint(to, tokenID);
-        gameToken.burnFrom(msg.sender, tokenAmountToSell);
+        gameToken.burnFrom(msg.sender, tokenValueToSell);
     }
 
     /**

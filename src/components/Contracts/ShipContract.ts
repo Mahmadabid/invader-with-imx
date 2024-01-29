@@ -1,10 +1,10 @@
-export const shipAddress = '0xF42FD209a9aC9f47A378981755909E71d0c6170C';
+export const shipAddress = '0xFd62D8ba703B3a6D1Ab5d2a67668904b8ABEee42';
 
-export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmVGaQRAJTVHnAUGidpUWc2aHyT4TZveYs4mvUK1p7sXe7/';
+export const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmXrdRoe2NHNQXwRNdzLt3XmnAE5UPgVGS1YFV6w6vMecP/';
 
 export const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQK9yBb8EFPd1Rf4u9TANbpVPLtRtrJb6LAVHrp9JMgPY/';
 
-export const newShipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmTf7fzWuXeiUDXnS3o81Punm7D2Ui3MpFMevNidG6YrMo/';
+export const newShipBaseURI = '';
 
 export const shipABI = [
   {
