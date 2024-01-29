@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 
 async function deploy() {
 
-  const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmXrdRoe2NHNQXwRNdzLt3XmnAE5UPgVGS1YFV6w6vMecP/';
+  const shipBaseURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQAUh4b3aqL3QN7WKtfd2MzxMimw3eEagk9PY2cQgsA8T/';
 
   const shipContractURI = 'https://blush-accepted-turkey-504.mypinata.cloud/ipfs/QmQK9yBb8EFPd1Rf4u9TANbpVPLtRtrJb6LAVHrp9JMgPY/';
 
